@@ -4,9 +4,10 @@ import type { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { HealthModule } from './health/health.module.js';
 import { HttpErrorFilter } from './common/http-error.filter.js';
 import { RequestContextMiddleware } from './common/request-context.middleware.js';
+import { GeographyModule } from './geography/geography.module.js';
 
 @Module({
-  imports: [HealthModule],
+  imports: [HealthModule, GeographyModule],
   providers: [
     HttpErrorFilter,
     {

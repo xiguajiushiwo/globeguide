@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Place {
+  id           String         @id @default(uuid()) @db.Uuid
+  kind         String
+  countryCode  String         @db.VarChar(2)
+  latitude     Float
+  longitude    Float
+  timeZone     String
+  currency     String         @db.VarChar(3)
+  dataRegion   String         @default("global")
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  names        PlaceName[]
+  relations    PlaceRelation[] @relation("parent")
+  children     PlaceRelation[] @relation("child")
+  sources      Source[]
+  facts        FactVersion[]
+
+  @@index([countryCode, kind])
+  @@index([updatedAt, id])
+}
+
+model PlaceName {
+  id          String   @id @default(uuid()) @db.Uuid
+  placeId     String   @db.Uuid
+  locale      String
+  value       String
+  isPreferred Boolean  @default(false)
+  place       Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@unique([placeId, locale, value])
+  @@index([locale, value])
+}
+
+model PlaceRelation {
+  id       String @id @default(uuid()) @db.Uuid
+  parentId String @db.Uuid
+  childId  String @db.Uuid
+  kind     String
+  parent   Place  @relation("parent", fields: [parentId], references: [id], onDelete: Cascade)
+  child    Place  @relation("child", fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([parentId, childId, kind])
+}
+
+model Source {
+  id          String         @id @default(uuid()) @db.Uuid
+  placeId     String?        @db.Uuid
+  label       String
+  url         String?
+  sourceType  String
+  license     String?
+  collectedAt DateTime       @default(now())
+  place       Place?         @relation(fields: [placeId], references: [id], onDelete: SetNull)
+  facts       FactVersion[]
+}
+
+model FactVersion {
+  id          String    @id @default(uuid()) @db.Uuid
+  placeId     String    @db.Uuid
+  sourceId    String?   @db.Uuid
+  key         String
+  valueJson   Json
+  validFrom   DateTime?
+  validUntil  DateTime?
+  confirmedAt DateTime?
+  status      String    @default("pending")
+  createdAt   DateTime  @default(now())
+  place       Place     @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  source      Source?   @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+
+  @@index([placeId, key, status])
+}
