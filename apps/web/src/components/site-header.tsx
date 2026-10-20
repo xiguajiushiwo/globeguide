@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Compass, Bookmark } from 'lucide-react';
+import { Compass, Bookmark, Route } from 'lucide-react';
 
 import { copy } from '@/lib/copy';
 
@@ -13,7 +13,8 @@ export function SiteHeader() {
         </Link>
         <nav aria-label="Main navigation" className="main-nav">
           <Link href="/#destinations">{copy.explore}</Link>
-          <Link href="/saved"><Bookmark size={17} strokeWidth={2} aria-hidden="true" /><span>{copy.saved}</span></Link>
+          <Link href="/saved" aria-label={copy.saved}><Bookmark size={17} strokeWidth={2} aria-hidden="true" /><span>{copy.saved}</span></Link>
+          <Link href="/trips" aria-label={copy.trips}><Route size={17} strokeWidth={2} aria-hidden="true" /><span>{copy.trips}</span></Link>
         </nav>
       </div>
     </header>

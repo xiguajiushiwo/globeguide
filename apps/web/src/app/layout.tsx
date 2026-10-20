@@ -8,8 +8,13 @@ import { copy } from '@/lib/copy';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://globeguide.pages.dev'),
   title: { default: 'GlobeGuide | Explore destinations', template: '%s | GlobeGuide' },
   description: 'Explore destinations and save places for your next journey.',
+  alternates: { canonical: '/' },
+  manifest: '/manifest.webmanifest',
+  applicationName: 'GlobeGuide',
+  appleWebApp: { capable: true, title: 'GlobeGuide', statusBarStyle: 'default' },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

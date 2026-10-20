@@ -7,7 +7,7 @@ import { copy } from '@/lib/copy';
 import { featured } from '@/lib/places';
 
 export default function HomePage() {
-  const heroSlides = [...featured.slice(1), featured[0]];
+  const heroSlides = [...featured.slice(1), featured[0]].filter((slide): slide is (typeof featured)[number] => Boolean(slide));
 
   return (
     <>

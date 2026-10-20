@@ -1,3 +1,4 @@
+import { placeSummarySchema } from '@globeguide/domain';
 import type { PlaceSummary } from '@globeguide/domain';
 
 const KEY = 'globeguide:saved-places';
@@ -5,7 +6,11 @@ const KEY = 'globeguide:saved-places';
 export function readSaved(): PlaceSummary[] {
   try {
     const value: unknown = JSON.parse(localStorage.getItem(KEY) ?? '[]');
-    return Array.isArray(value) ? value as PlaceSummary[] : [];
+    if (!Array.isArray(value)) return [];
+    return value.flatMap((item: unknown) => {
+      const parsed = placeSummarySchema.safeParse(item);
+      return parsed.success ? [parsed.data] : [];
+    });
   } catch {
     return [];
   }
