@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-10-20-globeguide-beta-design.md`
 
+**Status (2026-10-20):** Beta deployed at `https://globeguide.pages.dev/`. Desktop and mobile browser flows, private collaborator CLI, and the repository checks passed. The hosted beta uses browser-local saved data and trips.
+
 ## Global Constraints
 
 - Keep `xiguajiushiwo/globeguide` and installable source private.
@@ -36,12 +38,12 @@
 - `CityGuide` contains `place: PlaceSummary`, `intro`, `sections`, `highlights`, and source records `{ label, url, checkedAt }`.
 - `getGuide(placeId: string): CityGuide | undefined` and `searchGuides(query: string): CityGuide[]` power the static routes.
 
-- [ ] Add a failing test that requires three unique guide IDs, valid HTTPS source links for factual items, and useful results for city names and common aliases.
-- [ ] Add the three guide records with source links and checked dates; mark unsourced recommendations as editorial.
-- [ ] Render guide content and source attribution on destination pages. Generate all three route params and retain metadata/JSON-LD.
-- [ ] Make search use bundled guides, including empty and no-results states. Remove production reliance on `127.0.0.1:3001`.
-- [ ] Set Next.js `output: 'export'`, use compatible image settings, and verify `pnpm --filter @globeguide/web build` creates `apps/web/out`.
-- [ ] Run guide tests, lint, typecheck, and build; commit the focused change.
+- [x] Add a failing test that requires three unique guide IDs, valid HTTPS source links for factual items, and useful results for city names and common aliases.
+- [x] Add the three guide records with source links and checked dates; mark unsourced recommendations as editorial.
+- [x] Render guide content and source attribution on destination pages. Generate all three route params and retain metadata/JSON-LD.
+- [x] Make search use bundled guides, including empty and no-results states. Remove production reliance on `127.0.0.1:3001`.
+- [x] Set Next.js `output: 'export'`, use compatible image settings, and verify `pnpm --filter @globeguide/web build` creates `apps/web/out`.
+- [x] Run guide tests, lint, typecheck, and build; commit the focused change.
 
 ### Task 2: Browser-Local Trip Planner
 
@@ -59,11 +61,11 @@
 - `Trip` has schema version, ID, title, destination ID, start/end dates, notes, ordered highlight IDs, and update timestamp.
 - `readTrips`, `saveTrip`, `deleteTrip`, `exportTrips`, and `importTrips` validate local data and preserve existing trips on invalid input.
 
-- [ ] Add failing tests for trip creation/edit, date validation, ordered stops, reload round-trip, and rejected malformed import.
-- [ ] Implement schema-validated storage and versioned export/import.
-- [ ] Build the trip list/editor with add, remove, reorder, notes, date editing, import/export, and clear browser-local labeling.
-- [ ] Link the planner from navigation and destination guides. Keep all controls keyboard accessible and responsive.
-- [ ] Run tests, lint, typecheck, and build; commit the focused change.
+- [x] Add failing tests for trip creation/edit, date validation, ordered stops, reload round-trip, and rejected malformed import.
+- [x] Implement schema-validated storage and versioned export/import.
+- [x] Build the trip list/editor with add, remove, reorder, notes, date editing, import/export, and clear browser-local labeling.
+- [x] Link the planner from navigation and destination guides. Keep all controls keyboard accessible and responsive.
+- [x] Run tests, lint, typecheck, and build; commit the focused change.
 
 ### Task 3: Private Collaborator Install and README
 
@@ -78,10 +80,10 @@
 - `npm exec --yes --package=git+https://github.com/xiguajiushiwo/globeguide.git -- gbg init <directory>` clones the private repository after GitHub authentication and installs workspace dependencies.
 - `gbg doctor` reports Node, Git, Corepack/pnpm, and PostgreSQL readiness without printing secrets.
 
-- [ ] Add tests for CLI help, invalid arguments, existing target directory, and prerequisite diagnostics.
-- [ ] Add a dependency-free root CLI and package bin mapping; never place credentials in arguments or logs.
-- [ ] Write README sections for product scope, tester URL, private access, one-command download, local DB setup, migration/seed, running Web/API, test gates, and data privacy.
-- [ ] Test the npm Git package command with existing repository credentials in a temporary directory, plus local test and typecheck; commit the focused change.
+- [x] Add tests for CLI help, invalid arguments, existing target directory, and prerequisite diagnostics.
+- [x] Add a dependency-free root CLI and package bin mapping; never place credentials in arguments or logs.
+- [x] Write README sections for product scope, tester URL, private access, one-command download, local DB setup, migration/seed, running Web/API, test gates, and data privacy.
+- [x] Test the npm Git package command with existing repository credentials in a temporary directory, plus local test and typecheck; commit the focused change.
 
 ### Task 4: Cloudflare Release and End-to-End Gate
 
@@ -95,14 +97,14 @@
 - The Cloudflare Pages project serves `apps/web/out` at a stable `pages.dev` URL.
 - Browser smoke covers Explore -> search -> destination -> save -> create/edit trip -> reload -> export/import.
 
-- [ ] Add a Playwright browser test against the static export served locally; assert desktop and mobile flows.
-- [ ] Add the browser test to CI with an explicit static-site start step.
-- [ ] Authenticate Wrangler to the user's Cloudflare account, create the Pages project, and deploy `apps/web/out` without exposing repository secrets.
-- [ ] Run browser smoke against the public URL and verify responsive screenshots, correct source links, private GitHub visibility, and green CI.
-- [ ] Record the final URL, exact installer command, limitations, and release checks in README; commit and push.
+- [x] Add a Playwright browser test against the static export served locally; assert desktop and mobile flows.
+- [x] Add the browser test to CI with an explicit static-site start step.
+- [x] Authenticate Wrangler to the user's Cloudflare account, create the Pages project, and deploy `apps/web/out` without exposing repository secrets.
+- [x] Run browser smoke against the public URL and verify responsive screenshots, correct source links, private GitHub visibility, and green CI.
+- [x] Record the final URL, exact installer command, limitations, and release checks in README; commit and push.
 
 ## Review
 
 - Every beta capability in the spec maps to a task above.
-- Deployment depends on Cloudflare account authorization; Tasks 1-3 and local Task 4 testing can proceed independently.
+- Cloudflare Pages is authorized and serving the static beta.
 - External publication is limited to the user-requested beta site. No source or package is published to a public registry.

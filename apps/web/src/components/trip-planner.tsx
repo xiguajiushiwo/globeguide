@@ -43,6 +43,7 @@ export function TripPlanner() {
     setDraft(trip);
     setStopToAdd('');
     setStatus('');
+    window.history.replaceState(window.history.state, '', '/trips/');
   }
 
   function startNew() {
@@ -60,6 +61,7 @@ export function TripPlanner() {
       setSelectedId(saved.id);
       setDraft(saved);
       setStatus(copy.tripSaved);
+      window.history.replaceState(window.history.state, '', '/trips/');
     } catch {
       setStatus(copy.tripSaveError);
     }
@@ -130,7 +132,7 @@ export function TripPlanner() {
       <div className="trip-planner__file-actions">
         <button type="button" onClick={download} disabled={trips.length === 0}><Download size={17} aria-hidden="true" />{copy.exportTrips}</button>
         <button type="button" onClick={() => importInput.current?.click()}><Upload size={17} aria-hidden="true" />{copy.importTrips}</button>
-        <input ref={importInput} className="sr-only" type="file" accept=".json,application/json" aria-label={copy.importTrips} onChange={upload} />
+        <input ref={importInput} className="sr-only" type="file" accept=".json,application/json" aria-hidden="true" tabIndex={-1} onChange={upload} />
       </div>
     </div>
     <p className="trip-planner__status" role="status" aria-live="polite">{status}</p>
