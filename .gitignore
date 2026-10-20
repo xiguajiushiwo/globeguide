@@ -2,6 +2,8 @@ node_modules/
 .turbo/
 dist/
 .next/
+.playwright-cli/
+*.tsbuildinfo
 coverage/
 .expo/
 *.log
