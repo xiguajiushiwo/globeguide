@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { DomainError, parseLocaleCode, parsePlaceId } from '@globeguide/domain';
 import type { PlaceSummary } from '@globeguide/domain';
 import type { Place, PlaceName, Source } from '@prisma/client';
@@ -9,7 +9,7 @@ type PlaceWithNames = Place & { names: PlaceName[]; sources: Source[] };
 
 @Injectable()
 export class GeographyService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async getPlace(placeId: string, requestedLocale = 'en'): Promise<PlaceSummary> {
     const place = await this.prisma.place.findUnique({

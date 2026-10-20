@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 
+import { pathToFileURL } from 'node:url';
+
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
@@ -36,6 +38,6 @@ async function bootstrap(): Promise<void> {
   await app.listen(Number(process.env.API_PORT ?? 3001), '0.0.0.0');
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   await bootstrap();
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Headers, Param, Query } from '@nestjs/common';
+import { Controller, Get, Headers, Inject, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { GeographyService } from './geography.service.js';
@@ -6,7 +6,7 @@ import { GeographyService } from './geography.service.js';
 @ApiTags('places')
 @Controller('places')
 export class GeographyController {
-  constructor(private readonly geography: GeographyService) {}
+  constructor(@Inject(GeographyService) private readonly geography: GeographyService) {}
 
   @Get('search')
   @ApiOperation({ summary: 'Search globally addressable places' })
