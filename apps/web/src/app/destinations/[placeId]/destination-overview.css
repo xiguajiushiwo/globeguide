@@ -1,0 +1,49 @@
+.place-hero--plain {
+  height: clamp(300px, 35vw, 420px);
+  background: #17343a;
+}
+
+.place-hero__local-name {
+  margin: 12px 0 0;
+  color: #c6e7e3;
+  font-size: 25px;
+}
+
+.destination-overview__map-action {
+  padding-top: 30px;
+}
+
+.destination-overview__guide-note {
+  margin-top: 50px;
+  padding-block: 28px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.destination-overview__guide-note h2 {
+  margin-bottom: 10px;
+  font-size: 27px;
+}
+
+.destination-overview__guide-note p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.destination-overview__source {
+  margin-top: 50px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.destination-overview__source a {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .place-hero--plain { height: 300px; }
+  .place-hero__local-name { font-size: 20px; }
+}

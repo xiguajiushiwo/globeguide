@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-import { guides } from '@/lib/guides';
+import { destinationCatalog } from '@globeguide/domain';
 
 export const dynamic = 'force-static';
 
@@ -8,11 +8,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const origin = 'https://globeguide.pages.dev';
   return [
     { url: origin, changeFrequency: 'weekly', priority: 1 },
-    ...guides.map((guide) => ({
-      url: `${origin}/destinations/${guide.place.id}/`,
-      lastModified: guide.place.updatedAt,
+    { url: `${origin}/map/`, changeFrequency: 'monthly', priority: 0.8 },
+    ...destinationCatalog.map((destination) => ({
+      url: `${origin}/destinations/${destination.place.id}/`,
+      lastModified: destination.place.updatedAt,
       changeFrequency: 'monthly' as const,
-      priority: 0.8,
+      priority: destination.guideId ? 0.8 : 0.5,
     })),
   ];
 }

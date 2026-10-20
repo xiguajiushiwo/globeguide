@@ -6,6 +6,8 @@ import { SiteHeader } from '@/components/site-header';
 import { copy } from '@/lib/copy';
 
 import './globals.css';
+import './auth.css';
+import './stories/stories.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://globeguide.pages.dev'),

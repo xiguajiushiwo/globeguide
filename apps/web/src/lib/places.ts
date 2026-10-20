@@ -1,13 +1,15 @@
+import { destinationCatalog, getDestination, searchDestinations } from '@globeguide/domain';
 import type { PlaceSummary } from '@globeguide/domain';
 
-import { getGuide, guides, searchGuides } from './guides';
-
-export const featured = guides.map((guide) => ({
-  id: guide.place.id,
-  name: guide.place.name,
-  country: guide.country,
-  image: guide.image,
-}));
+import { searchGuides } from './guides';
+export const featured = destinationCatalog
+  .filter((destination) => destination.image)
+  .map((destination) => ({
+    id: destination.place.id,
+    name: destination.place.name,
+    country: countryName(destination.place.countryCode),
+    image: destination.image!,
+  }));
 
 export function cityPresentation(id: string) {
   return featured.find((city) => city.id === id);
@@ -22,9 +24,11 @@ export function countryName(code: string): string {
 }
 
 export function getPlace(id: string): PlaceSummary | null {
-  return getGuide(id)?.place ?? null;
+  return getDestination(id)?.place ?? null;
 }
 
 export function searchPlaces(query: string): PlaceSummary[] {
-  return searchGuides(query).map((guide) => guide.place);
+  const byId = new Map(searchDestinations(query).map((destination) => [destination.place.id, destination.place]));
+  searchGuides(query).forEach((guide) => byId.set(guide.place.id, guide.place));
+  return [...byId.values()];
 }

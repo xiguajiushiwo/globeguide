@@ -1,4 +1,4 @@
-import { featured } from './places';
+import { isDestinationId } from '@globeguide/domain';
 
 const STORAGE_KEY = 'globeguide:trips:v1';
 const VERSION = 1;
@@ -42,7 +42,7 @@ function parseTrip(value: unknown): Trip {
   if (typeof value.title !== 'string' || !value.title.trim() || value.title.length > 100) {
     throw new Error('Trip title must be 1 to 100 characters.');
   }
-  if (typeof value.destinationId !== 'string' || !featured.some((city) => city.id === value.destinationId)) {
+  if (typeof value.destinationId !== 'string' || !isDestinationId(value.destinationId)) {
     throw new Error('Choose a supported destination.');
   }
   if (!((value.startDate === null && value.endDate === null) ||

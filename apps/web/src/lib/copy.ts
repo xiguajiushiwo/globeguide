@@ -41,7 +41,7 @@ export const copy = {
   heroTitle: 'GlobeGuide',
   heroSubtitle: 'Your world, one place at a time.',
   featuredTitle: 'Where will you go?',
-  featuredIntro: 'Three cities to start exploring.',
+  featuredIntro: 'In-depth guides to Tokyo, Paris and New York.',
   allDestinations: 'Explore destinations',
   viewDestination: 'View destination',
   featuredLabel: 'Featured destinations',

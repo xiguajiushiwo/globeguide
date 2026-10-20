@@ -8,12 +8,15 @@ test('search, save and build a portable trip', async ({ page }, testInfo) => {
   await page.getByRole('button', { name: 'Search', exact: true }).click();
 
   await expect(page.getByRole('heading', { name: 'Results for “Louvre”' })).toBeVisible();
-  await page.getByRole('link').filter({ has: page.getByRole('heading', { name: 'Paris', exact: true }) }).click();
+  await page.locator('a[href="/destinations/22222222-2222-4222-8222-222222222222/"]').click();
   await expect(page.getByRole('heading', { name: 'Paris', exact: true, level: 1 })).toBeVisible();
   await expect(page.locator('a[href="https://www.louvre.fr/en"]')).toBeVisible();
 
   await page.getByRole('button', { name: 'Save place' }).click();
   await expect(page.getByRole('button', { name: 'Saved in this browser' })).toBeVisible();
+  if (testInfo.project.name === 'mobile-chromium') {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
   await page.getByRole('link', { name: 'Saved places' }).click();
   await expect(page.getByRole('heading', { name: 'Your saved places' })).toBeVisible();
   await page.getByRole('link').filter({ hasText: 'Paris' }).click();

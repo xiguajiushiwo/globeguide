@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import Link from 'next/link';
 import { ArrowDown, ArrowUp, ArrowUpRight, Download, Plus, Trash2, Upload } from 'lucide-react';
+import { destinationCatalog, getDestination } from '@globeguide/domain';
 
 import { copy } from '@/lib/copy';
-import { getGuide, guides } from '@/lib/guides';
+import { getGuide } from '@/lib/guides';
 import { deleteTrip, exportTrips, importTrips, readTrips, saveTrip, type Trip } from '@/lib/trips';
 
 type Draft = Pick<Trip, 'title' | 'destinationId' | 'startDate' | 'endDate' | 'notes' | 'highlightIds'>;
 
-function blankDraft(destinationId = guides[0]?.place.id ?? '11111111-1111-4111-8111-111111111111'): Draft {
+function blankDraft(destinationId = destinationCatalog[0]?.place.id ?? '11111111-1111-4111-8111-111111111111'): Draft {
   return { title: '', destinationId, startDate: null, endDate: null, notes: '', highlightIds: [] };
 }
 
@@ -28,7 +29,7 @@ export function TripPlanner() {
     const stored = readTrips();
     setTrips(stored);
     const requested = new URLSearchParams(window.location.search).get('destination');
-    if (requested && getGuide(requested)) {
+    if (requested && getDestination(requested)) {
       setDraft(blankDraft(requested));
       return;
     }
@@ -140,7 +141,7 @@ export function TripPlanner() {
       <aside className="trip-planner__list" aria-label={copy.tripsTitle}>
         {trips.length === 0 && <p className="trip-planner__empty">{copy.tripsEmpty}</p>}
         {trips.map((trip) => {
-          const city = getGuide(trip.destinationId);
+          const city = getDestination(trip.destinationId);
           return <button type="button" key={trip.id} className={`trip-planner__list-item${selectedId === trip.id ? ' trip-planner__list-item--active' : ''}`} aria-current={selectedId === trip.id ? 'true' : undefined} onClick={() => selectTrip(trip)}>
             <strong>{trip.title}</strong><span>{city?.place.name ?? trip.destinationId}</span>
             <small>{trip.startDate && trip.endDate ? `${trip.startDate} - ${trip.endDate}` : copy.tripDatesNotSet}</small>
@@ -151,7 +152,7 @@ export function TripPlanner() {
         <div className="trip-editor__heading"><h2>{selectedId ? copy.editTrip : copy.newTrip}</h2>{selectedId && <button type="button" className="trip-editor__delete" title={copy.deleteTrip} aria-label={copy.deleteTrip} onClick={removeSelected}><Trash2 size={18} aria-hidden="true" /></button>}</div>
         <div className="trip-editor__fields">
           <label className="trip-field trip-field--wide">{copy.tripTitle}<input required maxLength={100} value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} placeholder={copy.tripTitlePlaceholder} /></label>
-          <label className="trip-field trip-field--wide">{copy.tripDestination}<select value={draft.destinationId} onChange={(event) => { setDraft({ ...draft, destinationId: event.target.value, highlightIds: [] }); setStopToAdd(''); }}>{guides.map((item) => <option key={item.place.id} value={item.place.id}>{item.place.name}</option>)}</select></label>
+          <label className="trip-field trip-field--wide">{copy.tripDestination}<select value={draft.destinationId} onChange={(event) => { setDraft({ ...draft, destinationId: event.target.value, highlightIds: [] }); setStopToAdd(''); }}>{destinationCatalog.map((item) => <option key={item.place.id} value={item.place.id}>{item.place.name} · {item.nameZh}</option>)}</select></label>
           <label className="trip-field">{copy.tripStartDate}<input type="date" value={draft.startDate ?? ''} max={draft.endDate ?? undefined} onChange={(event) => setDraft({ ...draft, startDate: event.target.value || null })} /></label>
           <label className="trip-field">{copy.tripEndDate}<input type="date" value={draft.endDate ?? ''} min={draft.startDate ?? undefined} onChange={(event) => setDraft({ ...draft, endDate: event.target.value || null })} /></label>
         </div>

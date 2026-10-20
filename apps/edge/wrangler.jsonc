@@ -1,0 +1,12 @@
+{
+  "name": "globeguide",
+  "compatibility_date": "2026-10-20",
+  "pages_build_output_dir": "../web/out",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "globeguide-beta",
+      "database_id": "eedf9c1f-8c46-411f-9caa-724f50fa89e6"
+    }
+  ]
+}

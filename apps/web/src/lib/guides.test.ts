@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { getGuide, guides, searchGuides } from './guides';
+import { searchPlaces } from './places';
 
 describe('curated city guides', () => {
   it('has three unique, addressable cities and stops', () => {
@@ -36,5 +37,10 @@ describe('curated city guides', () => {
     expect(searchGuides('nyc').map((guide) => guide.place.name)).toEqual(['New York']);
     expect(searchGuides('  ')).toHaveLength(3);
     expect(searchGuides('nowhere nearby')).toEqual([]);
+  });
+
+  it('keeps deep-guide content searchable alongside the destination catalog', () => {
+    expect(searchPlaces('louvre').map((place) => place.name)).toEqual(['Paris']);
+    expect(searchPlaces('西安').map((place) => place.name)).toEqual(["Xi'an"]);
   });
 });

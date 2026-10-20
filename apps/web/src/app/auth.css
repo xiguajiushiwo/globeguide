@@ -1,0 +1,53 @@
+.header-links { display: flex; align-items: center; justify-content: flex-end; gap: 28px; min-width: 0; }
+.header-links .main-nav { gap: 19px; }
+.header-account { display: flex; align-items: center; gap: 10px; padding-left: 22px; border-left: 1px solid var(--line); font-size: 13px; font-weight: 700; white-space: nowrap; }
+.header-account a, .header-account button { min-height: 35px; display: inline-flex; align-items: center; gap: 6px; }
+.header-account button { border: 0; background: transparent; color: var(--muted); cursor: pointer; }
+.header-account a:hover, .header-account button:hover { color: var(--teal); }
+.header-account .header-signup { padding: 0 12px; border: 1px solid var(--teal); border-radius: 4px; color: var(--teal); }
+.header-account .header-signup:hover { color: #fff; background: var(--teal); }
+.nav-menu-button { display: none; width: 40px; height: 40px; border: 0; background: transparent; color: var(--ink); cursor: pointer; place-items: center; }
+.auth-page { display: flex; justify-content: center; align-items: flex-start; min-height: 65vh; padding-block: 70px 95px; }
+.auth-panel { width: min(100%, 460px); }
+.auth-eyebrow { margin: 0 0 10px; color: var(--teal); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+.auth-panel h1 { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 39px; font-weight: 500; line-height: 1.1; }
+.auth-intro { margin: 14px 0 30px; color: var(--muted); line-height: 1.55; }
+.auth-form { display: grid; gap: 18px; }
+.auth-form label { display: grid; gap: 8px; color: var(--ink); font-size: 14px; font-weight: 700; }
+.auth-form input { width: 100%; height: 45px; padding: 0 12px; border: 1px solid #adbfbe; border-radius: 4px; background: #fff; color: var(--ink); }
+.auth-form input:focus { border-color: var(--teal); }
+.auth-code-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px; }
+.auth-secondary { height: 45px; padding: 0 13px; border: 1px solid var(--teal); border-radius: 4px; background: white; color: var(--teal); font-weight: 700; cursor: pointer; }
+.auth-submit { height: 48px; border: 0; border-radius: 4px; background: var(--teal); color: white; font-weight: 700; cursor: pointer; }
+.auth-submit:hover { background: var(--teal-dark); }
+.auth-submit:disabled, .auth-secondary:disabled { cursor: not-allowed; opacity: .55; }
+.auth-hint { margin: -10px 0 0; color: var(--muted); font-size: 12px; }
+.auth-alert, .auth-error, .auth-success { margin: 0 0 20px; padding: 12px 14px; border-left: 3px solid var(--coral); background: #fff4ef; color: #723728; font-size: 14px; line-height: 1.5; }
+.auth-form .auth-error, .auth-form .auth-success { margin: 0; }
+.auth-success { border-color: var(--teal); background: var(--soft); color: var(--teal-dark); }
+.auth-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 23px; color: var(--muted); font-size: 13px; }
+.auth-links a { color: var(--teal-dark); font-weight: 700; }
+.auth-links a:hover { text-decoration: underline; }
+.account-details { max-width: 560px; margin: 25px 0; border-top: 1px solid var(--line); }
+.account-details div { display: grid; grid-template-columns: 125px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.account-details dt { color: var(--muted); }
+.account-details dd { margin: 0; overflow-wrap: anywhere; }
+.account-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.account-actions a { color: var(--teal-dark); font-weight: 700; }
+.account-local-note { margin-top: 38px; max-width: 560px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+@media (max-width: 1050px) {
+  .site-header__inner { position: relative; }
+  .nav-menu-button { display: grid; margin-left: auto; }
+  .header-links { display: none; position: absolute; top: 100%; left: -20px; right: -20px; padding: 16px 20px 23px; background: white; border: 1px solid var(--line); box-shadow: 0 12px 20px rgba(0,0,0,.09); }
+  .header-links--open { display: block; }
+  .header-links .main-nav { display: grid; gap: 0; }
+  .header-links .main-nav a { min-height: 44px; padding: 9px 0; }
+  .header-account { justify-content: flex-start; margin-top: 9px; padding: 14px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+}
+@media (max-width: 640px) {
+  .header-links .main-nav a span { display: inline; }
+  .auth-page { padding-block: 42px 70px; }
+  .auth-panel h1 { font-size: 33px; }
+  .auth-code-row { grid-template-columns: 1fr; }
+  .auth-secondary { width: fit-content; }
+}
