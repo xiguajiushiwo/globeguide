@@ -22,7 +22,7 @@ function points(destinations: Destination[]) {
     features: destinations.map((destination) => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [destination.place.longitude, destination.place.latitude] },
-      properties: { id: destination.place.id, name: destination.place.name },
+      properties: { id: destination.place.id, name: destination.place.name, nameZh: destination.nameZh },
     })),
   };
 }
@@ -66,6 +66,27 @@ export function WorldMapCanvas({ destinations, selectedId, onSelect, onError, ac
       map.addLayer({ id: 'clusters', type: 'circle', source: 'destinations', filter: ['has', 'point_count'], paint: { 'circle-color': '#126f72', 'circle-radius': ['step', ['get', 'point_count'], 20, 10, 25, 25, 30], 'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff' } });
       map.addLayer({ id: 'cluster-count', type: 'symbol', source: 'destinations', filter: ['has', 'point_count'], layout: { 'text-field': ['get', 'point_count_abbreviated'], 'text-size': 13, 'text-font': ['Noto Sans Bold'] }, paint: { 'text-color': '#ffffff' } });
       map.addLayer({ id: 'cities', type: 'circle', source: 'destinations', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': '#cf6952', 'circle-radius': 8, 'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff' } });
+      map.addLayer({
+        id: 'city-labels',
+        type: 'symbol',
+        source: 'destinations',
+        minzoom: 1,
+        filter: ['!', ['has', 'point_count']],
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-font': ['Noto Sans Bold'],
+          'text-size': 12,
+          'text-offset': [0, 1.7],
+          'text-anchor': 'top',
+          'text-allow-overlap': true,
+          'text-ignore-placement': true,
+        },
+        paint: {
+          'text-color': '#17343a',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 1.5,
+        },
+      });
       map.addLayer({ id: 'selected-city', type: 'circle', source: 'destinations', filter: ['==', ['get', 'id'], ''], paint: { 'circle-color': '#cf6952', 'circle-radius': 13, 'circle-stroke-width': 3, 'circle-stroke-color': '#17343a' } });
       map.on('click', 'clusters', (event) => {
         const feature = event.features?.[0];
