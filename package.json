@@ -1,6 +1,13 @@
 {
   "name": "globeguide",
+  "version": "0.1.0",
   "private": true,
+  "bin": {
+    "gbg": "./bin/gbg.mjs"
+  },
+  "files": [
+    "bin/gbg.mjs"
+  ],
   "packageManager": "pnpm@11.19.0",
   "engines": {
     "node": ">=22.0.0"
@@ -9,7 +16,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "test": "turbo run test",
+    "test": "node --test test/gbg.test.mjs && turbo run test",
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
