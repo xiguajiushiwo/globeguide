@@ -54,7 +54,7 @@ export function StoryComposer() {
         nextStatus = submitted.status;
       }
       setStatus(nextStatus);
-      setMessage(nextStatus === 'pending' ? 'Saved and awaiting moderator review.' : 'Draft saved. You can return to it from Your writing.');
+      setMessage(nextStatus === 'pending' ? 'Saved and awaiting moderator review.' : 'Draft saved. You can return to it from Your notes.');
       if (!editId) window.history.replaceState(null, '', `/stories/write/?id=${encodeURIComponent(result.id)}`);
     } catch (error) {
       setMessage(storyErrorMessage(error));
@@ -64,21 +64,21 @@ export function StoryComposer() {
   }
 
   if (authenticated === false) return <div className="shell story-compose">
-    <Link className="story-back" href="/stories/"><ArrowLeft size={17} aria-hidden="true" />All stories</Link>
-    <h1>Write a story</h1><p>Sign in to save a draft and submit it for review.</p>
+    <Link className="story-back" href="/stories/"><ArrowLeft size={17} aria-hidden="true" />All travel notes</Link>
+    <h1>Write a note</h1><p>Sign in to save a draft and submit it for review.</p>
     <Link className="story-primary" href="/login/?next=/stories/write/">Sign in to write</Link>
   </div>;
 
   return <div className="shell story-compose">
-    <Link className="story-back" href="/stories/mine/"><ArrowLeft size={17} aria-hidden="true" />Your writing</Link>
-    <div className="story-compose__heading"><div><p className="stories-eyebrow">Creator studio</p><h1>{editId ? 'Edit your story' : 'Write a story'}</h1></div>
+    <Link className="story-back" href="/stories/mine/"><ArrowLeft size={17} aria-hidden="true" />Your notes</Link>
+    <div className="story-compose__heading"><div><p className="stories-eyebrow">Creator studio</p><h1>{editId ? 'Edit your note' : 'Write a note'}</h1></div>
       {status && <span className="story-status-pill">{status}</span>}
     </div>
-    <p className="story-compose__intro">Share your own experience in plain text. Every story is reviewed before it appears publicly.</p>
+    <p className="story-compose__intro">Share your own experience in plain text. Every note is reviewed before it appears publicly.</p>
     <form onSubmit={(event) => { event.preventDefault(); void save(true); }}>
-      <fieldset className="story-type-picker"><legend>Story type</legend>
+      <fieldset className="story-type-picker"><legend>Note type</legend>
         <label><input type="radio" name="story-type" value="guide" checked={type === 'guide'} onChange={() => setType('guide')} />Guide</label>
-        <label><input type="radio" name="story-type" value="moment" checked={type === 'moment'} onChange={() => setType('moment')} />Travel journal</label>
+        <label><input type="radio" name="story-type" value="moment" checked={type === 'moment'} onChange={() => setType('moment')} />Moment</label>
       </fieldset>
       <div className="story-form-grid">
         <label>Destination <span aria-hidden="true">*</span>
@@ -96,7 +96,7 @@ export function StoryComposer() {
       <label>Title {type === 'moment' && <span className="story-optional">optional</span>}
         <input type="text" value={title} onChange={(event) => setTitle(event.target.value)} minLength={type === 'guide' ? 4 : undefined} maxLength={120} required={type === 'guide'} placeholder={type === 'guide' ? 'A useful title for your guide' : 'A moment worth remembering'} />
       </label>
-      <label>Story <span aria-hidden="true">*</span>
+      <label>Note <span aria-hidden="true">*</span>
         <textarea value={body} onChange={(event) => setBody(event.target.value)} minLength={20} maxLength={6000} required rows={13} placeholder="What did you discover? What would help another traveler?" />
         <span className="story-count">{body.length} / 6000</span>
       </label>

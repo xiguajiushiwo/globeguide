@@ -36,31 +36,31 @@ export function StoryDashboard() {
   }
 
   if (authenticated === false) return <div className="shell stories-page">
-    <h1>Your writing</h1><p>Sign in to manage your drafts and published stories.</p>
+    <h1>Your notes</h1><p>Sign in to manage your drafts and published travel notes.</p>
     <Link className="story-primary" href="/login/?next=/stories/mine/">Sign in</Link>
   </div>;
 
   return <div className="shell stories-page">
-    <div className="stories-heading"><div><p className="stories-eyebrow">Creator studio</p><h1>Your writing</h1>
-      <p>Drafts, reviews and published stories in one place.</p></div>
-      <Link className="story-primary" href="/stories/write/"><Plus size={18} aria-hidden="true" />New story</Link>
+    <div className="stories-heading"><div><p className="stories-eyebrow">Creator studio</p><h1>Your notes</h1>
+      <p>Drafts, reviews and published travel notes in one place.</p></div>
+      <Link className="story-primary" href="/stories/write/"><Plus size={18} aria-hidden="true" />New note</Link>
     </div>
     {message && <p className="story-notice" role="status">{message}</p>}
-    {authenticated === null && !message && <p className="story-status">Loading your stories…</p>}
+    {authenticated === null && !message && <p className="story-status">Loading your notes…</p>}
     {authenticated && items.length === 0 && <div className="story-empty"><FilePenLine size={30} aria-hidden="true" />
       <h2>No drafts yet</h2><p>Start a guide or write down a travel moment.</p>
-      <Link href="/stories/write/">Write your first story <ArrowUpRight size={17} aria-hidden="true" /></Link></div>}
+      <Link href="/stories/write/">Write your first note <ArrowUpRight size={17} aria-hidden="true" /></Link></div>}
     <div className="story-dashboard-list">{items.map((story) => {
       const place = getDestination(story.destinationId);
       return <article className="story-dashboard-row" key={story.id}>
-        <div><span className="story-status-pill">{story.status}</span><span className="story-row-kind">{story.type === 'guide' ? 'Guide' : 'Travel journal'}</span>
+        <div><span className="story-status-pill">{story.status}</span><span className="story-row-kind">{story.type === 'guide' ? 'Guide' : 'Moment'}</span>
           <h2>{story.title || story.body.slice(0, 55)}</h2>
           <p>{place?.place.name ?? 'Destination'} · Updated {new Date(story.updatedAt).toLocaleDateString('en')}</p></div>
         <div className="story-row-actions">
-          <Link href={`/stories/write/?id=${encodeURIComponent(story.id)}`} title="Edit story" aria-label="Edit story"><FilePenLine size={18} /></Link>
-          {story.status === 'published' && <Link href={`/stories/post/?id=${encodeURIComponent(story.id)}`} title="View published story" aria-label="View published story"><ArrowUpRight size={18} /></Link>}
-          {(story.status === 'pending' || story.status === 'published') && <button type="button" title="Withdraw story" aria-label="Withdraw story" disabled={workingId === story.id} onClick={() => void act(story, 'retract')}><Undo2 size={18} /></button>}
-          <button type="button" title="Delete story" aria-label="Delete story" disabled={workingId === story.id} onClick={() => void act(story, 'delete')}><Trash2 size={18} /></button>
+          <Link href={`/stories/write/?id=${encodeURIComponent(story.id)}`} title="Edit note" aria-label="Edit note"><FilePenLine size={18} /></Link>
+          {story.status === 'published' && <Link href={`/stories/post/?id=${encodeURIComponent(story.id)}`} title="View published note" aria-label="View published note"><ArrowUpRight size={18} /></Link>}
+          {(story.status === 'pending' || story.status === 'published') && <button type="button" title="Withdraw note" aria-label="Withdraw note" disabled={workingId === story.id} onClick={() => void act(story, 'retract')}><Undo2 size={18} /></button>}
+          <button type="button" title="Delete note" aria-label="Delete note" disabled={workingId === story.id} onClick={() => void act(story, 'delete')}><Trash2 size={18} /></button>
         </div>
       </article>;
     })}</div>

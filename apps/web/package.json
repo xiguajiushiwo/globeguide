@@ -9,8 +9,8 @@
     "test:e2e": "playwright test",
     "start": "npx --yes wrangler@4.151.2 pages dev out --port 3000",
     "serve:e2e": "npx --yes wrangler@4.151.2 pages dev out --port 4173",
-    "lint": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "lint": "next typegen && tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@globeguide/domain": "workspace:*",

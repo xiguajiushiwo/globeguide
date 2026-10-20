@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 import { SiteHeader } from '@/components/site-header';
+import { PageTransition } from '@/components/page-transition';
 import { copy } from '@/lib/copy';
 
 import './globals.css';
@@ -24,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body>
         <SiteHeader />
-        <main>{children}</main>
+        <main><PageTransition>{children}</PageTransition></main>
         <footer className="site-footer"><div className="shell site-footer__inner"><Link href="/" className="site-footer__brand">{copy.brand}</Link><span>{copy.footerLine}</span><span>{copy.photoCredit}</span></div></footer>
       </body>
     </html>

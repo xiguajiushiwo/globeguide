@@ -43,7 +43,7 @@ export function SiteHeader() {
           <nav aria-label="Main navigation" className="main-nav">
             <Link href="/#destinations" onClick={() => setOpen(false)}>{copy.explore}</Link>
             <Link href="/map/" onClick={() => setOpen(false)}>Map</Link>
-            <Link href="/stories/" onClick={() => setOpen(false)}>Stories</Link>
+            <Link href="/stories/" onClick={() => setOpen(false)}>Travel Notes</Link>
             <Link href="/saved/" aria-label={copy.saved} onClick={() => setOpen(false)}><Bookmark size={17} strokeWidth={2} aria-hidden="true" /><span>{copy.saved}</span></Link>
             <Link href="/trips/" aria-label={copy.trips} onClick={() => setOpen(false)}><Route size={17} strokeWidth={2} aria-hidden="true" /><span>{copy.trips}</span></Link>
           </nav>

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Extend the public GlobeGuide beta with a browsable world map, 37 city entries, secure account foundations, and moderated creator stories.
+**Goal:** Extend the public GlobeGuide beta with a browsable world map, 37 city entries, secure account foundations, and moderated creator Travel Notes.
 
 **Architecture:** Keep Next.js static export for public pages. Build a Cloudflare Pages advanced-mode Worker backed by D1 for same-origin authentication and creator data. Split the city catalog from the three existing deep guides; render public creator content from the API and leave a useful offline/empty state.
 
@@ -75,6 +75,6 @@
 
 - [ ] Extend CI to build the Worker and run API plus desktop/mobile smoke tests with a local D1 fixture.
 - [ ] Create a dedicated GlobeGuide D1 database, apply migration and bind it to the existing Pages project; preserve the private repository.
-- [ ] Deploy the static Web plus Worker, verify homepage, catalog, map, anonymous stories and account error states at the public URL.
+- [ ] Deploy the static Web plus Worker, verify homepage, catalog, map, anonymous Travel Notes and account error states at the public URL.
 - [ ] Document test-mail limitation, authentic sender setup, moderation/admin workflow, city-source attribution and data privacy.
 - [ ] Commit, push and confirm the new GitHub Actions run; leave the workspace clean.

@@ -34,15 +34,15 @@ export function StoryModeration() {
 
   return <div className="shell stories-page">
     <div className="stories-heading"><div><p className="stories-eyebrow">Moderation</p><h1>Review queue</h1>
-      <p>Only approved stories appear to the public. Decisions are recorded with the moderator and time.</p></div></div>
+      <p>Only approved notes appear to the public. Decisions are recorded with the moderator and time.</p></div></div>
     {message && <p className="story-notice" role="status">{message}</p>}
     {!queue && !message && <p className="story-status">Loading review queue…</p>}
     {queue && <>
       <h2 className="story-moderation-title">Awaiting review <span>{queue.items.length}</span></h2>
-      {queue.items.length === 0 && <p className="story-status">No stories are awaiting review.</p>}
+      {queue.items.length === 0 && <p className="story-status">No notes are awaiting review.</p>}
       <div className="story-review-list">{queue.items.map((story) => <article key={story.id} className="story-review-item">
-        <p className="story-review-item__meta">{story.type === 'guide' ? 'Guide' : 'Travel journal'} · {story.author.displayName} · {story.destinationId}</p>
-        <h3>{story.title || 'Travel journal'}</h3><p className="story-review-item__body">{story.body}</p>
+        <p className="story-review-item__meta">{story.type === 'guide' ? 'Guide' : 'Moment'} · {story.author.displayName} · {story.destinationId}</p>
+        <h3>{story.title || 'Travel moment'}</h3><p className="story-review-item__body">{story.body}</p>
         <label>Reason for rejection <span className="story-optional">required when rejecting</span>
           <input value={reasons[story.id] ?? ''} onChange={(event) => setReasons((current) => ({ ...current, [story.id]: event.target.value }))} maxLength={500} placeholder="Explain the decision to the author" />
         </label>
@@ -53,11 +53,11 @@ export function StoryModeration() {
       {queue.reports.length === 0 && <p className="story-status">No open reports.</p>}
       <div className="story-review-list">{queue.reports.map((report) => <article key={report.id} className="story-review-item">
         <p className="story-review-item__meta"><ShieldAlert size={16} aria-hidden="true" />Reported by {report.reporterName}</p>
-        <p>{report.reason}</p><a href={`/stories/post/?id=${encodeURIComponent(report.postId)}`} target="_blank" rel="noopener noreferrer">View story</a>
+        <p>{report.reason}</p><a href={`/stories/post/?id=${encodeURIComponent(report.postId)}`} target="_blank" rel="noopener noreferrer">View note</a>
         <label>Reason for removal
           <input value={reasons[report.postId] ?? ''} onChange={(event) => setReasons((current) => ({ ...current, [report.postId]: event.target.value }))} maxLength={500} placeholder="Explain the removal" />
         </label>
-        <button type="button" className="story-secondary" disabled={workingId === report.postId || (reasons[report.postId] ?? '').trim().length < 10} onClick={() => void act(report.postId, 'takedown')}>Take down story</button>
+        <button type="button" className="story-secondary" disabled={workingId === report.postId || (reasons[report.postId] ?? '').trim().length < 10} onClick={() => void act(report.postId, 'takedown')}>Take down note</button>
         <button type="button" className="story-tertiary" disabled={workingId === report.id || (reasons[report.postId] ?? '').trim().length < 10} onClick={() => void dismiss(report.id, report.postId)}>Dismiss report</button>
       </article>)}</div>
     </>}

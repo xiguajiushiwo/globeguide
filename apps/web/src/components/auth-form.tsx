@@ -71,7 +71,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
       <div className="auth-panel">
         <p className="auth-eyebrow">GlobeGuide account</p>
         <h1>{mode === 'register' ? 'Create your account' : mode === 'reset' ? 'Reset your password' : 'Welcome back'}</h1>
-        <p className="auth-intro">{mode === 'register' ? 'Verify your email to join the travel community.' : mode === 'reset' ? 'We will send a verification code to your email.' : 'Log in to write and manage your travel stories.'}</p>
+        <p className="auth-intro">{mode === 'register' ? 'Verify your email to join the travel community.' : mode === 'reset' ? 'We will send a verification code to your email.' : 'Log in to write and manage your Travel Notes.'}</p>
         {needsCode && available === false && <p className="auth-alert" role="status">Email verification is not available yet. You can keep exploring GlobeGuide without an account.</p>}
         <form onSubmit={submit} className="auth-form">
           {mode === 'register' && <label>Display name<input value={displayName} onChange={(event) => setDisplayName(event.target.value)} autoComplete="nickname" required minLength={2} maxLength={48} /></label>}

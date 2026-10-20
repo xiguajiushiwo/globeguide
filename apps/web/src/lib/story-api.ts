@@ -15,6 +15,9 @@ export type Story = {
   updatedAt: string;
   submittedAt: string | null;
   publishedAt: string | null;
+  coverImage?: string;
+  sourceLabel?: string;
+  sourceUrl?: string;
 };
 
 export type StoryInput = {
@@ -137,16 +140,16 @@ export function getModerationHistory(postId: string) {
 export function storyErrorMessage(error: unknown): string {
   if (!(error instanceof StoryApiError)) return 'Something went wrong. Please try again.';
   const messages: Record<string, string> = {
-    network_unavailable: 'The stories service is unavailable. Try again later.',
-    invalid_server_response: 'The stories service is not ready yet.',
+    network_unavailable: 'The Travel Notes service is unavailable. Try again later.',
+    invalid_server_response: 'The Travel Notes service is not ready yet.',
     login_required: 'Sign in to continue.',
     email_not_verified: 'Verify your email before publishing.',
     invalid_post: 'Check the city, title and body. Only plain text is supported.',
     invalid_report: 'Please add a reason of at least 10 characters.',
-    already_reported: 'You have already reported this story.',
+    already_reported: 'You have already reported this note.',
     report_limit: 'You have reached today’s report limit.',
-    invalid_transition: 'This story’s status has changed. Refresh and try again.',
-    post_not_found: 'This story is not available.',
+    invalid_transition: 'This note’s status has changed. Refresh and try again.',
+    post_not_found: 'This note is not available.',
     admin_required: 'Moderator access is required.',
   };
   return messages[error.code] ?? 'The request could not be completed. Try again.';

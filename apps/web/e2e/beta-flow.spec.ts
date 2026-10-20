@@ -62,3 +62,22 @@ test('search, save and build a portable trip', async ({ page }, testInfo) => {
     expect(width).toBeLessThanOrEqual((page.viewportSize()?.width ?? width) + 1);
   }
 });
+
+test('discover Travel Notes and open an editorial reference', async ({ page }, testInfo) => {
+  await page.goto('/stories/');
+  await expect(page.getByRole('heading', { name: 'Travel Notes', exact: true })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'Guides', exact: true })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'Moments', exact: true })).toBeVisible();
+  await expect(page.getByText('GlobeGuide editorial picks')).toBeVisible();
+
+  await page.getByRole('tab', { name: 'Guides', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Build a neighborhood day in Paris', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'Build a neighborhood day in Paris', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Build a neighborhood day in Paris', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Paris tourist information/ })).toBeVisible();
+
+  if (testInfo.project.name === 'mobile-chromium') {
+    const width = await page.evaluate(() => document.documentElement.scrollWidth);
+    expect(width).toBeLessThanOrEqual((page.viewportSize()?.width ?? width) + 1);
+  }
+});

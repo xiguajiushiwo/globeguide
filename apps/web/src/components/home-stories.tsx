@@ -19,9 +19,9 @@ export function HomeStories() {
   }, []);
   const visible = [...items, ...editorialExamples].slice(0, 3);
   return <section className="home-stories shell" aria-labelledby="home-stories-title">
-    <div className="destination-stories__heading"><div><p className="stories-eyebrow">The travel journal</p>
-      <h2 id="home-stories-title">Stories worth taking along</h2></div>
-      <Link href="/stories/">All stories <ArrowRight size={16} aria-hidden="true" /></Link></div>
+    <div className="destination-stories__heading"><div><p className="stories-eyebrow">Travel Notes</p>
+      <h2 id="home-stories-title">Notes worth taking along</h2></div>
+      <Link href="/stories/">All notes <ArrowRight size={16} aria-hidden="true" /></Link></div>
     <div className="stories-grid">{visible.map((story) => <StoryCard key={story.id} story={story} example={story.id.startsWith('editorial-')} />)}</div>
   </section>;
 }
