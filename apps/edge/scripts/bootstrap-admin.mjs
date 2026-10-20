@@ -18,8 +18,8 @@ if (process.argv[2] !== '--remote' || process.env.ADMIN_BOOTSTRAP_CONFIRM !== 'g
 
 const quote = (value) => `'${value.replaceAll("'", "''")}'`;
 const salt = randomBytes(16);
-const hash = pbkdf2Sync(password, salt, 600_000, 32, 'sha256');
-const stored = `pbkdf2-sha256$600000$${salt.toString('base64')}$${hash.toString('base64')}`;
+const hash = pbkdf2Sync(password, salt, 100_000, 32, 'sha256');
+const stored = `pbkdf2-sha256$100000$${salt.toString('base64')}$${hash.toString('base64')}`;
 const now = new Date().toISOString();
 const sql = `INSERT INTO users (id,email,display_name,role,password_hash,email_verified_at,created_at,updated_at)
 SELECT ${quote(randomUUID())},${quote(email)},${quote(name)},'admin',${quote(stored)},${quote(now)},${quote(now)},${quote(now)}

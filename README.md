@@ -98,8 +98,9 @@ corepack pnpm install --frozen-lockfile
 corepack pnpm --filter @globeguide/web build
 corepack pnpm --filter @globeguide/edge build
 npx wrangler login
-npx wrangler d1 migrations apply globeguide-beta --remote --config apps/edge/wrangler.jsonc
-npx wrangler pages deploy apps/web/out --project-name globeguide --branch main --commit-dirty=true
+cd apps/edge
+npx wrangler d1 migrations apply globeguide-beta --remote
+npx wrangler pages deploy ../web/out --project-name globeguide --branch main --commit-dirty=true
 ```
 
 Pages 项目 `globeguide` 已创建并部署在上方内测地址，无需再次执行 `pages project create`。`apps/edge/wrangler.jsonc` 将 `DB` 绑定到专用的 `globeguide-beta` D1，不会修改其他数据库。先设置生产密钥（不要写入仓库）：

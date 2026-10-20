@@ -14,7 +14,10 @@ type ChallengeRow = { id: string; code_hash: string; expires_at: number; attempt
 
 const encoder = new TextEncoder();
 const COOKIE = 'gg_session';
-const ITERATIONS = 600_000;
+// Cloudflare Workers' WebCrypto runtime can reject larger PBKDF2 workloads;
+// 100k remains the enforced minimum in verifyPassword and is compatible with
+// the production runtime and the local test adapter.
+const ITERATIONS = 100_000;
 const SESSION_SECONDS = 60 * 60 * 24 * 30;
 
 function reply(body: Record<string, unknown>, status = 200, cookie?: string): Response {
