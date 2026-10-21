@@ -11,6 +11,14 @@ type User = { id: string; email: string; displayName: string | null; role: 'memb
 export function SiteHeader() {
   const [user, setUser] = useState<User | null>(null);
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 10);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -30,7 +38,7 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="site-header">
+    <header className={`site-header${scrolled ? ' site-header--scrolled' : ''}`}>
       <div className="shell site-header__inner">
         <Link className="brand" href="/" aria-label={`${copy.brand} home`} onClick={() => setOpen(false)}>
           <span className="brand__mark"><Compass size={21} strokeWidth={2.4} aria-hidden="true" /></span>
