@@ -10,6 +10,8 @@ export function PageTransition({ children }: { children: ReactNode }) {
   useEffect(() => {
     const selector = [
       '.section-heading', '.destination-card', '.home-explore__inner',
+      '.home-explore__intro', '.home-explore__cities', '.home-explore__cities a',
+      '.home-stories', '.home-stories .destination-stories__heading',
       '.content-page', '.auth-page', '.map-page', '.place-content__heading', '.fact', '.guide-section',
       '.guide-entry', '.source-strip', '.saved-item', '.stories-heading',
       '.notes-featured', '.notes-latest', '.story-detail', '.story-compose',
