@@ -34,7 +34,9 @@ async function createConversation(request: Request, env: Env, user: SessionUser)
   const body = await readJson(request); if (!body) return error(400, 'invalid_conversation');
   const candidateMembers = Array.isArray(body.memberIds) ? body.memberIds : Array.isArray(body.members) ? body.members : Array.isArray(body.userIds) ? body.userIds : [];
   const rawMembers = candidateMembers.filter(validId) as string[];
-  const participant = validId(body.participantId) ? body.participantId : validId(body.userId) ? body.userId : null;
+  const participant = validId(body.participantId) ? body.participantId
+    : validId(body.userId) ? body.userId
+      : rawMembers.length === 1 ? rawMembers[0] : null;
   const kind = body.kind === 'group' || rawMembers.length > 1 || Boolean(body.name) ? 'group' : 'direct';
   const members = Array.from(new Set([user.id, ...(kind === 'direct' ? participant ? [participant] : [] : rawMembers)]));
   if (kind === 'direct' && members.length !== 2) return error(400, 'invalid_conversation');

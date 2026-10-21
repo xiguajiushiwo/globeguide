@@ -4,6 +4,7 @@ import { ArrowUpRight, Clock3, Compass, MapPin } from 'lucide-react';
 import { getDestination } from '@globeguide/domain';
 
 import type { Story } from '@/lib/story-api';
+import { SocialActions } from './social-actions';
 
 function readMinutes(body: string): number {
   return Math.max(1, Math.ceil(body.trim().split(/\s+/).filter(Boolean).length / 190));
@@ -16,7 +17,7 @@ function fallbackCover(id: string): string {
   return fallbackCovers[score % fallbackCovers.length] ?? '/images/paris.jpg';
 }
 
-export function StoryCard({ story, example = false, featured = false }: { story: Story; example?: boolean; featured?: boolean }) {
+export function StoryCard({ story, example = false, featured = false, authenticated = false }: { story: Story; example?: boolean; featured?: boolean; authenticated?: boolean }) {
   const destination = getDestination(story.destinationId);
   const title = story.title || story.body.slice(0, 60);
   const coverImage = story.coverImage ?? destination?.image ?? fallbackCover(story.destinationId);
@@ -33,9 +34,10 @@ export function StoryCard({ story, example = false, featured = false }: { story:
       <h3><Link href={`/stories/post/?id=${encodeURIComponent(story.id)}`}>{title}</Link></h3>
       <p>{story.body}</p>
       <div className="story-card__footer">
-        <span className="story-card__author"><span className={`story-card__avatar${example ? ' story-card__avatar--editorial' : ''}`} aria-hidden="true">{example ? <Compass size={15} strokeWidth={2.2} /> : authorName.slice(0, 1)}</span><Link href={example ? `/stories/post/?id=${encodeURIComponent(story.id)}` : `/stories/creator/?id=${encodeURIComponent(story.author.id)}`}>{authorName}</Link></span>
+        <span className="story-card__author"><span className={`story-card__avatar${example ? ' story-card__avatar--editorial' : ''}`} aria-hidden="true">{example ? <Compass size={15} strokeWidth={2.2} /> : authorName.slice(0, 1)}</span><Link href={example ? `/stories/post/?id=${encodeURIComponent(story.id)}` : `/profiles/${encodeURIComponent(story.author.id)}/`}>{authorName}</Link></span>
         <span className="story-card__read"><Clock3 size={13} aria-hidden="true" />{readMinutes(story.body)} min</span>
       </div>
+      {!example && <SocialActions postId={story.id} authenticated={authenticated} initial={{ liked: false, bookmarked: false, counts: { likes: 0, bookmarks: 0, shares: 0, comments: 0 } }} />}
     </div>
     {example && story.sourceUrl && <a className="story-card__source" href={story.sourceUrl} target="_blank" rel="noreferrer">{story.sourceLabel ?? 'Reference source'} <ArrowUpRight size={13} aria-hidden="true" /></a>}
   </article>;

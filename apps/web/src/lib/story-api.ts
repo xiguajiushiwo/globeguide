@@ -38,7 +38,7 @@ export class StoryApiError extends Error {
   }
 }
 
-async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
+export async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
     response = await fetch(path, { credentials: 'same-origin', cache: 'no-store', ...init });
@@ -63,12 +63,13 @@ function jsonInit(method: string, data: unknown): RequestInit {
   return { method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) };
 }
 
-export function listStories(filters: { destinationId?: string; type?: StoryType; authorId?: string; cursor?: string } = {}) {
+export function listStories(filters: { destinationId?: string; type?: StoryType; authorId?: string; cursor?: string; feed?: 'for-you' | 'following' | 'saved' } = {}) {
   const params = new URLSearchParams();
   if (filters.destinationId) params.set('destinationId', filters.destinationId);
   if (filters.type) params.set('type', filters.type);
   if (filters.authorId) params.set('authorId', filters.authorId);
   if (filters.cursor) params.set('cursor', filters.cursor);
+  if (filters.feed && filters.feed !== 'for-you') params.set('feed', filters.feed);
   return requestJson<StoryList>(`/api/posts${params.size ? `?${params}` : ''}`);
 }
 
@@ -148,6 +149,11 @@ export function storyErrorMessage(error: unknown): string {
     invalid_report: 'Please add a reason of at least 10 characters.',
     already_reported: 'You have already reported this note.',
     report_limit: 'You have reached today’s report limit.',
+    blocked: 'This action is unavailable because of a block.',
+    rate_limited: 'You are doing that too often. Try again later.',
+    profile_not_found: 'This profile is not available.',
+    invalid_comment: 'Keep comments plain text and under 2,000 characters.',
+    conversation_forbidden: 'You do not have access to this conversation.',
     invalid_transition: 'This note’s status has changed. Refresh and try again.',
     post_not_found: 'This note is not available.',
     admin_required: 'Moderator access is required.',

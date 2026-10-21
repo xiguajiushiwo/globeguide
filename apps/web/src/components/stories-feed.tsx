@@ -3,12 +3,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Compass, PenLine, Sparkles } from 'lucide-react';
+import { ArrowRight, BookOpen, Bookmark, Compass, Heart, PenLine, Sparkles } from 'lucide-react';
 import { destinationCatalog } from '@globeguide/domain';
 
 import { StoryCard } from './story-card';
 import { editorialExamples } from '@/lib/story-examples';
-import { listStories, storyErrorMessage } from '@/lib/story-api';
+import { getSession, listStories, storyErrorMessage } from '@/lib/story-api';
 import type { Story, StoryType } from '@/lib/story-api';
 
 type Props = { authorId?: string; onItemsChange?: (items: Story[]) => void };
@@ -17,8 +17,11 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
   const params = useSearchParams();
   const initialDestinationId = params.get('destinationId') ?? '';
   const initialType = params.get('type');
+  const initialFeed = params.get('feed');
   const [destinationId, setDestinationId] = useState(initialDestinationId);
   const [type, setType] = useState<'' | StoryType>(initialType === 'guide' || initialType === 'moment' ? initialType : '');
+  const [feed, setFeed] = useState<'for-you' | 'following' | 'saved'>(initialFeed === 'following' || initialFeed === 'saved' ? initialFeed : 'for-you');
+  const [authenticated, setAuthenticated] = useState(false);
   const [items, setItems] = useState<Story[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,7 +30,7 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
   useEffect(() => {
     let active = true;
     setLoading(true);
-    listStories({ ...(destinationId ? { destinationId } : {}), ...(type ? { type } : {}), ...(authorId ? { authorId } : {}) })
+    listStories({ ...(destinationId ? { destinationId } : {}), ...(type ? { type } : {}), ...(authorId ? { authorId } : {}), feed })
       .then((data) => {
         if (!active) return;
         setItems(data.items);
@@ -43,13 +46,15 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
       })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [destinationId, type, authorId, onItemsChange]);
+  }, [destinationId, type, authorId, feed, onItemsChange]);
+
+  useEffect(() => { getSession().then((user) => setAuthenticated(Boolean(user))).catch(() => setAuthenticated(false)); }, []);
 
   async function loadMore() {
     if (!cursor) return;
     setLoading(true);
     try {
-      const data = await listStories({ ...(destinationId ? { destinationId } : {}), ...(type ? { type } : {}), ...(authorId ? { authorId } : {}), cursor });
+      const data = await listStories({ ...(destinationId ? { destinationId } : {}), ...(type ? { type } : {}), ...(authorId ? { authorId } : {}), feed, cursor });
       setItems((current) => {
         const next = [...current, ...data.items];
         onItemsChange?.(next);
@@ -72,14 +77,27 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
     window.history.replaceState(window.history.state, '', url.pathname + url.search);
   }
 
-  const examples = useMemo(() => authorId ? [] : editorialExamples.filter((story) =>
-    (!destinationId || story.destinationId === destinationId) && (!type || story.type === type)), [authorId, destinationId, type]);
+  function selectFeed(value: 'for-you' | 'following' | 'saved') {
+    if (value !== 'for-you' && !authenticated) { setMessage('Sign in to see your personalized notes.'); return; }
+    setFeed(value);
+    const url = new URL(window.location.href);
+    if (value === 'for-you') url.searchParams.delete('feed'); else url.searchParams.set('feed', value);
+    window.history.replaceState(window.history.state, '', url.pathname + url.search);
+  }
+
+  const examples = useMemo(() => authorId || feed !== 'for-you' ? [] : editorialExamples.filter((story) =>
+    (!destinationId || story.destinationId === destinationId) && (!type || story.type === type)), [authorId, destinationId, type, feed]);
   const featured = examples.slice(0, 2);
   const remainingExamples = examples.slice(2);
 
   return <div className="notes-feed">
     {!authorId && <>
       <div className="notes-feed__controls">
+        <div className="notes-tabs notes-tabs--feed" role="tablist" aria-label="Travel note feed">
+          <button type="button" role="tab" aria-selected={feed === 'for-you'} className={feed === 'for-you' ? 'is-active' : ''} onClick={() => selectFeed('for-you')}><Compass size={16} aria-hidden="true" />For you</button>
+          <button type="button" role="tab" aria-selected={feed === 'following'} className={feed === 'following' ? 'is-active' : ''} onClick={() => selectFeed('following')}><Heart size={16} aria-hidden="true" />Following</button>
+          <button type="button" role="tab" aria-selected={feed === 'saved'} className={feed === 'saved' ? 'is-active' : ''} onClick={() => selectFeed('saved')}><Bookmark size={16} aria-hidden="true" />Saved</button>
+        </div>
         <div className="notes-tabs" role="tablist" aria-label="Travel note type">
           <button type="button" role="tab" aria-selected={!type} className={!type ? 'is-active' : ''} onClick={() => selectType('')}><Compass size={16} aria-hidden="true" />Discover</button>
           <button type="button" role="tab" aria-selected={type === 'guide'} className={type === 'guide' ? 'is-active' : ''} onClick={() => selectType('guide')}><BookOpen size={16} aria-hidden="true" />Guides</button>
@@ -105,7 +123,7 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
     <section className="notes-latest" aria-labelledby="latest-notes-title">
       <div className="notes-section-heading"><div><p className="stories-eyebrow">The community</p><h2 id="latest-notes-title">Latest travel notes</h2></div>{!authorId && <Link href="/stories/mine/">Your notes <ArrowRight size={16} aria-hidden="true" /></Link>}</div>
       <div className="stories-grid" aria-live="polite">
-        {items.map((story) => <StoryCard key={story.id} story={story} />)}
+        {items.map((story) => <StoryCard key={story.id} story={story} authenticated={authenticated} />)}
         {remainingExamples.map((story) => <StoryCard key={story.id} story={story} example />)}
       </div>
       {loading && <p className="story-status" role="status">Loading travel notes…</p>}

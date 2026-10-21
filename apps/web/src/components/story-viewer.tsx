@@ -7,8 +7,10 @@ import { ArrowLeft, ArrowUpRight, Flag, MapPin } from 'lucide-react';
 import { getDestination } from '@globeguide/domain';
 
 import { editorialExample, editorialExamples } from '@/lib/story-examples';
-import { getStory, listStories, reportStory, storyErrorMessage } from '@/lib/story-api';
+import { getSession, getStory, listStories, reportStory, storyErrorMessage } from '@/lib/story-api';
 import type { Story } from '@/lib/story-api';
+import { SocialActions } from './social-actions';
+import { CommentThread } from './comment-thread';
 
 export function StoryViewer() {
   const id = useSearchParams().get('id') ?? '';
@@ -19,7 +21,11 @@ export function StoryViewer() {
   const [reason, setReason] = useState('');
   const [reportMessage, setReportMessage] = useState('');
   const [related, setRelated] = useState<Story[]>([]);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [viewerId, setViewerId] = useState<string | null>(null);
   const example = id.startsWith('editorial-');
+
+  useEffect(() => { getSession().then((user) => { setAuthenticated(Boolean(user)); setViewerId(user?.id ?? null); }).catch(() => { setAuthenticated(false); setViewerId(null); }); }, []);
 
   useEffect(() => {
     let active = true;
@@ -70,7 +76,7 @@ export function StoryViewer() {
         {example && <span>GlobeGuide editorial example · not a traveler submission</span>}
       </div>
       <h1>{story.title || 'A travel note'}</h1>
-      <p className="story-detail__byline">By {example ? story.author.displayName : <Link href={`/stories/creator/?id=${encodeURIComponent(story.author.id)}`}>{story.author.displayName}</Link>}
+      <p className="story-detail__byline">By {example ? story.author.displayName : <Link href={`/profiles/${encodeURIComponent(story.author.id)}/`}>{story.author.displayName}</Link>}
         {story.publishedAt && <> · {new Date(story.publishedAt).toLocaleDateString('en', { year: 'numeric', month: 'long', day: 'numeric' })}</>}
         {story.visitedMonth && <> · Visited {story.visitedMonth}</>}
       </p>
@@ -78,6 +84,10 @@ export function StoryViewer() {
         <MapPin size={17} aria-hidden="true" />{destination.place.name} · {destination.nameZh}</Link>}
       <div className="story-detail__body">{story.body.split(/\n\s*\n/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
       {example && <div className="story-example-note"><p>This original platform example shows how notes will appear. It does not claim a personal visit or provide current opening hours or prices.</p>{story.sourceUrl && <a href={story.sourceUrl} target="_blank" rel="noreferrer">{story.sourceLabel ?? 'Reference source'} <ArrowUpRight size={14} aria-hidden="true" /></a>}</div>}
+      {!example && <>
+        <SocialActions postId={story.id} authenticated={authenticated} initial={{ liked: false, bookmarked: false, counts: { likes: 0, bookmarks: 0, shares: 0, comments: 0 } }} />
+        <CommentThread postId={story.id} authenticated={authenticated} viewerId={viewerId} />
+      </>}
       {!example && <div className="story-report">
         <button type="button" className="story-tertiary" onClick={() => { setReportOpen((open) => !open); setReportMessage(''); }}>
           <Flag size={16} aria-hidden="true" />Report note

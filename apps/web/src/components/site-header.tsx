@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Bookmark, Compass, LogOut, Menu, Route, UserRound, X } from 'lucide-react';
+import { Bookmark, Compass, Inbox, LogOut, Menu, Route, UserRound, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { copy } from '@/lib/copy';
@@ -58,6 +58,7 @@ export function SiteHeader() {
           <div className="header-account">
             {user ? <>
               <Link href="/account/" onClick={() => setOpen(false)}><UserRound size={17} aria-hidden="true" /><span>{user.displayName || 'Account'}</span></Link>
+              <Link href="/inbox/" onClick={() => setOpen(false)}><Inbox size={17} aria-hidden="true" /><span>Inbox</span></Link>
               <button type="button" onClick={logout} title="Log out"><LogOut size={17} aria-hidden="true" /><span>Log out</span></button>
             </> : <>
               <Link href="/login/" onClick={() => setOpen(false)}>Log in</Link>

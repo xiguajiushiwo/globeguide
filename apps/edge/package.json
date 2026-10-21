@@ -7,7 +7,8 @@
     "build": "esbuild src/index.ts --bundle --format=esm --platform=browser --target=es2022 --outfile=../web/out/_worker.js",
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "seed:social": "node scripts/seed-social-demo.mjs --remote"
   },
   "devDependencies": {
     "@globeguide/domain": "workspace:*",
