@@ -32,6 +32,10 @@ export function PageTransition({ children }: { children: ReactNode }) {
       page.style.setProperty('--explore-opacity', (0.12 + exploreProgress * 0.22).toFixed(3));
       page.style.setProperty('--explore-dot-opacity', (0.25 + exploreProgress * 0.75).toFixed(3));
       page.style.setProperty('--stories-progress', storiesProgress.toFixed(3));
+      const cityLinks = Array.from(page.querySelectorAll<HTMLElement>('.home-explore__cities a:not(.home-explore__all)'));
+      cityLinks.forEach((link, index) => {
+        link.style.setProperty('--line-progress', Math.min(1, Math.max(0, exploreProgress * cityLinks.length - index)).toFixed(3));
+      });
       frame = 0;
     }
 
@@ -57,6 +61,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
       page?.style.removeProperty('--explore-opacity');
       page?.style.removeProperty('--explore-dot-opacity');
       page?.style.removeProperty('--stories-progress');
+      page?.querySelectorAll<HTMLElement>('.home-explore__cities a').forEach((link) => link.style.removeProperty('--line-progress'));
     };
 
     const selector = [
@@ -99,11 +104,9 @@ export function PageTransition({ children }: { children: ReactNode }) {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
+        entry.target.classList.toggle('is-visible', entry.isIntersecting);
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
     elements.forEach((element) => observer.observe(element));
 
     return () => {

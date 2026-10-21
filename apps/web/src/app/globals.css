@@ -98,7 +98,8 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
 .home-explore__map-link { display: inline-flex; align-items: center; gap: 12px; min-height: 45px; padding: 0 17px; border-radius: 4px; background: var(--teal-dark); color: white; font-size: 14px; font-weight: 700; }
 .home-explore__map-link:hover { background: var(--ink); }
 .home-explore__cities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid #bfd1cd; }
-.home-explore__cities a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 76px; border-bottom: 1px solid #bfd1cd; font-size: 17px; font-weight: 700; }
+.home-explore__cities a { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 76px; border-bottom: 1px solid #bfd1cd; font-size: 17px; font-weight: 700; }
+.home-explore__cities a:not(.home-explore__all)::before { position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: var(--teal); content: ''; opacity: .7; transform: scaleX(var(--line-progress, 0)); transform-origin: left; transition: transform .16s linear; }
 .home-explore__cities a:nth-child(odd) { margin-right: 18px; }
 .home-explore__cities a:nth-child(even) { margin-left: 18px; }
 .home-explore__cities a:hover { color: var(--teal); }
