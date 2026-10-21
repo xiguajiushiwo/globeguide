@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowUpRight, Clock3, MapPin } from 'lucide-react';
+import { ArrowUpRight, Clock3, Compass, MapPin } from 'lucide-react';
 import { getDestination } from '@globeguide/domain';
 
 import type { Story } from '@/lib/story-api';
@@ -33,7 +33,7 @@ export function StoryCard({ story, example = false, featured = false }: { story:
       <h3><Link href={`/stories/post/?id=${encodeURIComponent(story.id)}`}>{title}</Link></h3>
       <p>{story.body}</p>
       <div className="story-card__footer">
-        <span className="story-card__author"><span className="story-card__avatar" aria-hidden="true">{authorName.slice(0, 1)}</span><Link href={example ? `/stories/post/?id=${encodeURIComponent(story.id)}` : `/stories/creator/?id=${encodeURIComponent(story.author.id)}`}>{authorName}</Link></span>
+        <span className="story-card__author"><span className={`story-card__avatar${example ? ' story-card__avatar--editorial' : ''}`} aria-hidden="true">{example ? <Compass size={15} strokeWidth={2.2} /> : authorName.slice(0, 1)}</span><Link href={example ? `/stories/post/?id=${encodeURIComponent(story.id)}` : `/stories/creator/?id=${encodeURIComponent(story.author.id)}`}>{authorName}</Link></span>
         <span className="story-card__read"><Clock3 size={13} aria-hidden="true" />{readMinutes(story.body)} min</span>
       </div>
     </div>
