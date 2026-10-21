@@ -72,8 +72,8 @@ export function MapExplorer() {
       <button className="map-toolbar__reset" type="button" onClick={resetView} title="Reset map and filters"><RotateCcw size={17} aria-hidden="true" /><span>Reset</span></button>
     </div>
     {locationState === 'idle' && !locationPromptDismissed && !mapFailed && <div className="map-location-prompt" role="status">
-      <div className="map-location-prompt__copy"><LocateFixed size={19} aria-hidden="true" /><div><strong>Allow GlobeGuide to access your location?</strong><p>We’ll show your position on the map and help you find nearby destinations.</p></div></div>
-      <div className="map-location-prompt__actions"><button type="button" className="map-location-prompt__allow" onClick={() => { setLocationPromptDismissed(true); setLocateRequest((value) => value + 1); }}>Allow location</button><button type="button" className="map-location-prompt__later" onClick={() => setLocationPromptDismissed(true)}>Later</button></div>
+      <div className="map-location-prompt__copy"><LocateFixed size={19} aria-hidden="true" /><div><strong>Use your location</strong><p>Show your position on the map. Your location is used only for this visit and is never saved.</p></div></div>
+      <div className="map-location-prompt__actions"><button type="button" className="map-location-prompt__allow" onClick={() => { setLocationPromptDismissed(true); setLocateRequest((value) => value + 1); }}>Allow location</button><button type="button" className="map-location-prompt__later" onClick={() => setLocationPromptDismissed(true)}>Not now</button></div>
     </div>}
     {locationState === 'denied' && <p className="map-location-notice" role="status">Location access was blocked. Allow it in your browser settings to show your position.</p>}
     {locationState === 'error' && <p className="map-location-notice" role="status">Your location could not be found. You can still browse every capital and city.</p>}
