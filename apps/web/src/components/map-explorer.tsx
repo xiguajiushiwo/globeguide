@@ -29,6 +29,7 @@ export function MapExplorer() {
   const [mapFailed, setMapFailed] = useState(false);
   const [locateRequest, setLocateRequest] = useState(0);
   const [locationState, setLocationState] = useState<'idle' | 'loading' | 'located' | 'denied' | 'error'>('idle');
+  const [locationPromptDismissed, setLocationPromptDismissed] = useState(false);
   const filtered = useMemo(() => searchDestinations(query).filter((destination) => matchesRegion(destination, region)), [query, region]);
   const selected = filtered.find((destination) => destination.place.id === selectedId) ?? null;
 
@@ -70,6 +71,10 @@ export function MapExplorer() {
       <button className="map-toolbar__locate" type="button" onClick={() => setLocateRequest((value) => value + 1)} disabled={mapFailed || locationState === 'loading'} title="Show my current location"><LocateFixed size={17} aria-hidden="true" /><span>{locationState === 'loading' ? 'Locating…' : 'My location'}</span></button>
       <button className="map-toolbar__reset" type="button" onClick={resetView} title="Reset map and filters"><RotateCcw size={17} aria-hidden="true" /><span>Reset</span></button>
     </div>
+    {locationState === 'idle' && !locationPromptDismissed && !mapFailed && <div className="map-location-prompt" role="status">
+      <div className="map-location-prompt__copy"><LocateFixed size={19} aria-hidden="true" /><div><strong>Allow GlobeGuide to access your location?</strong><p>We’ll show your position on the map and help you find nearby destinations.</p></div></div>
+      <div className="map-location-prompt__actions"><button type="button" className="map-location-prompt__allow" onClick={() => { setLocationPromptDismissed(true); setLocateRequest((value) => value + 1); }}>Allow location</button><button type="button" className="map-location-prompt__later" onClick={() => setLocationPromptDismissed(true)}>Later</button></div>
+    </div>}
     {locationState === 'denied' && <p className="map-location-notice" role="status">Location access was blocked. Allow it in your browser settings to show your position.</p>}
     {locationState === 'error' && <p className="map-location-notice" role="status">Your location could not be found. You can still browse every capital and city.</p>}
     <div className="map-mobile-tabs" role="group" aria-label="Map view">
