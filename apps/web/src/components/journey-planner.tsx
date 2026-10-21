@@ -9,7 +9,7 @@ const steps = [
     eyebrow: 'Discover',
     title: 'Start with a place that feels like you.',
     description: 'Browse a living map of cities, neighborhoods and local notes before you commit to a route.',
-    detail: '37 city entries ready to explore',
+    detail: '195 world capitals ready to explore',
   },
   {
     icon: CalendarDays,

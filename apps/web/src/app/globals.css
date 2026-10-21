@@ -43,10 +43,10 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
 .main-nav a:hover, .text-link:hover { color: var(--teal); }
 
 .home-hero { height: clamp(480px, 56vw, 620px); position: relative; display: flex; align-items: center; overflow: hidden; background: #293336; }
-.home-hero__slides, .home-hero__slide { position: absolute; inset: 0; }
-.home-hero__slide { opacity: 0; transition: opacity .8s ease; }
-.home-hero__slide--active { opacity: 1; }
-.home-hero__slide img { object-fit: cover; object-position: center 51%; transform: translate3d(0, var(--hero-shift, 0px), 0) scale(1.04); transition: opacity .8s ease, transform .12s linear; }
+.home-hero__slides { position: absolute; inset: 0; overflow: hidden; }
+.home-hero__track { display: flex; height: 100%; width: 100%; transition: transform .82s cubic-bezier(.22, .72, .2, 1); will-change: transform; }
+.home-hero__slide { position: relative; flex: 0 0 100%; height: 100%; }
+.home-hero__slide img { object-fit: cover; object-position: center 51%; transform: translate3d(0, var(--hero-shift, 0px), 0) scale(1.04); transition: transform .12s linear; }
 .home-hero__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8, 26, 31, .89) 0%, rgba(8, 26, 31, .62) 40%, rgba(8, 26, 31, .16) 85%); }
 .home-hero__content { position: relative; color: white; padding-block: 44px; }
 .home-hero h1 { margin: 0; max-width: 650px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(44px, 5.5vw, 76px); font-weight: 500; line-height: 1.04; }
@@ -353,7 +353,7 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
   .destination-card__image img { transition: none; }
-  .home-hero__slide { transition: none; }
+  .home-hero__track { transition: none; }
   .home-hero__slide img, .destination-card__image img { transform: none !important; }
   .journey-visual__terrain, .journey-visual__route-line, .journey-visual__pin, .journey-visual__place-card, .journey-visual__compass, .journey-visual__progress i, .journey-step__icon, .journey-step__mark { transition: none; }
 }

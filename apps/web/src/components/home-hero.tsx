@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { FocusEvent, TouchEvent } from 'react';
+import type { TouchEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
@@ -14,7 +14,6 @@ type HeroSlide = { id: string; name: string; country: string; image: string };
 export function HomeHero({ slides }: { slides: HeroSlide[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isInteracting, setIsInteracting] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -23,26 +22,21 @@ export function HomeHero({ slides }: { slides: HeroSlide[] }) {
   }, []);
 
   useEffect(() => {
-    if (!isPlaying || isInteracting || slides.length < 2) return;
+    if (!isPlaying || slides.length < 2) return;
     const timer = window.setInterval(() => {
       if (document.visibilityState === 'visible') {
         setActiveIndex((index) => (index + 1) % slides.length);
       }
     }, 6500);
     return () => window.clearInterval(timer);
-  }, [activeIndex, isPlaying, isInteracting, slides.length]);
+  }, [isPlaying, slides.length]);
 
   function move(direction: number) {
     setActiveIndex((index) => (index + direction + slides.length) % slides.length);
   }
 
   function togglePlayback() {
-    if (!isPlaying) setIsInteracting(false);
     setIsPlaying((value) => !value);
-  }
-
-  function handleBlur(event: FocusEvent<HTMLElement>) {
-    if (!event.currentTarget.contains(event.relatedTarget)) setIsInteracting(false);
   }
 
   function handleTouchStart(event: TouchEvent<HTMLElement>) {
@@ -68,19 +62,17 @@ export function HomeHero({ slides }: { slides: HeroSlide[] }) {
     <section
       className="home-hero"
       aria-labelledby="home-title"
-      onMouseEnter={() => setIsInteracting(true)}
-      onMouseLeave={() => setIsInteracting(false)}
-      onFocusCapture={() => setIsInteracting(true)}
-      onBlurCapture={handleBlur}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       <div className="home-hero__slides" aria-hidden="true">
-        {slides.map((slide, index) => (
-          <div className={`home-hero__slide${index === activeIndex ? ' home-hero__slide--active' : ''}`} key={slide.id}>
-            <Image src={slide.image} alt="" fill priority={index === 0} sizes="100vw" />
-          </div>
-        ))}
+        <div className="home-hero__track" style={{ transform: `translate3d(-${activeIndex * 100}%, 0, 0)` }}>
+          {slides.map((slide, index) => (
+            <div className="home-hero__slide" key={slide.id}>
+              <Image src={slide.image} alt="" fill priority={index === 0} sizes="100vw" />
+            </div>
+          ))}
+        </div>
       </div>
       <div className="home-hero__shade" />
       <div className="shell home-hero__content">
