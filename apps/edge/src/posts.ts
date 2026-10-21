@@ -118,14 +118,17 @@ function requireWriter(request: Request, user: SessionUser | null): Response | n
   return null;
 }
 
-async function publicList(url: URL, env: Env): Promise<Response> {
+async function publicList(url: URL, env: Env, user: SessionUser | null): Promise<Response> {
   const destinationId = url.searchParams.get('destinationId');
   const type = url.searchParams.get('type');
   const authorId = url.searchParams.get('authorId');
+  const feed = url.searchParams.get('feed') ?? 'for-you';
   const cursor = Number(url.searchParams.get('cursor') ?? '0');
   if (destinationId && !isDestinationId(destinationId)) return error(400, 'invalid_destination');
   if (type && type !== 'guide' && type !== 'moment') return error(400, 'invalid_type');
   if (authorId && (authorId.length > 80 || !/^[\w-]+$/.test(authorId))) return error(400, 'invalid_author');
+  if (feed !== 'for-you' && feed !== 'following' && feed !== 'saved') return error(400, 'invalid_feed');
+  if ((feed === 'following' || feed === 'saved') && !user) return error(401, 'login_required');
   if (!Number.isSafeInteger(cursor) || cursor < 0 || cursor > 10000) return error(400, 'invalid_cursor');
 
   const conditions = ["p.status = 'published'"];
@@ -133,6 +136,12 @@ async function publicList(url: URL, env: Env): Promise<Response> {
   if (destinationId) { conditions.push('p.destination_id = ?'); bindings.push(destinationId); }
   if (type) { conditions.push('p.type = ?'); bindings.push(type); }
   if (authorId) { conditions.push('p.author_id = ?'); bindings.push(authorId); }
+  if (feed === 'following') { conditions.push('EXISTS (SELECT 1 FROM follows f WHERE f.follower_id = ? AND f.following_id = p.author_id)'); bindings.push(user!.id); }
+  if (feed === 'saved') { conditions.push('EXISTS (SELECT 1 FROM post_bookmarks b WHERE b.actor_id = ? AND b.post_id = p.id)'); bindings.push(user!.id); }
+  if (user) {
+    conditions.push('NOT EXISTS (SELECT 1 FROM blocks b WHERE (b.blocker_id = ? AND b.blocked_id = p.author_id) OR (b.blocker_id = p.author_id AND b.blocked_id = ?))');
+    bindings.push(user.id, user.id);
+  }
   const query = `SELECT ${postColumns} FROM posts p JOIN users u ON u.id = p.author_id
     WHERE ${conditions.join(' AND ')} ORDER BY p.published_at DESC, p.id DESC LIMIT 21 OFFSET ?`;
   const rows = await env.DB.prepare(query).bind(...bindings, cursor).all<PostRow>();
@@ -291,7 +300,7 @@ export async function handlePosts(request: Request, env: Env, user: SessionUser 
     if (denied) return denied;
   }
 
-  if (path === '/api/posts' && method === 'GET') return publicList(url, env);
+  if (path === '/api/posts' && method === 'GET') return publicList(url, env, user);
   if (path === '/api/posts' && method === 'POST') return create(request, env, user!);
   if (path === '/api/posts/mine' && method === 'GET') return user ? mine(env, user) : error(401, 'login_required');
   if (path === '/api/moderation/queue' && method === 'GET') {

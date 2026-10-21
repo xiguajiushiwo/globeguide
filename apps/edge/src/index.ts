@@ -1,6 +1,8 @@
 import { handleAuth, requireOrigin, resolveSession } from './auth';
 import type { Env } from './env';
 import { handlePosts } from './posts';
+import { handleSocial } from './social';
+import { handleMessaging } from './messaging';
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -14,6 +16,10 @@ export default {
     const user = await resolveSession(request, env);
     const postsResponse = await handlePosts(request, env, user);
     if (postsResponse) return postsResponse;
+    const socialResponse = await handleSocial(request, env, user);
+    if (socialResponse) return socialResponse;
+    const messagingResponse = await handleMessaging(request, env, user);
+    if (messagingResponse) return messagingResponse;
     return Response.json({ error: 'Not found.' }, { status: 404 });
   },
 };
