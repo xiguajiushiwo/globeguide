@@ -4,6 +4,7 @@ import { ArrowRight, MapPinned } from 'lucide-react';
 import { DestinationCard } from '@/components/destination-card';
 import { HomeHero } from '@/components/home-hero';
 import { HomeStories } from '@/components/home-stories';
+import { JourneyPlanner } from '@/components/journey-planner';
 import { copy } from '@/lib/copy';
 import { featured } from '@/lib/places';
 import { destinationCatalog } from '@globeguide/domain';
@@ -25,6 +26,7 @@ export default function HomePage() {
         </div>
         <div className="destination-grid">{featured.map((city) => <DestinationCard key={city.id} {...city} />)}</div>
       </section>
+      <JourneyPlanner />
       <section className="home-explore" aria-labelledby="home-explore-title">
         <div className="shell home-explore__inner">
           <div className="home-explore__intro">

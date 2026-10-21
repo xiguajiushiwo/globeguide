@@ -66,6 +66,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
 
     const selector = [
       '.section-heading', '.destination-card', '.home-explore__inner',
+      '.journey-section', '.journey-step',
       '.home-explore__intro', '.home-explore__cities', '.home-explore__cities a',
       '.home-stories', '.home-stories .destination-stories__heading',
       '.content-page', '.auth-page', '.map-page', '.place-content__heading', '.fact', '.guide-section',
