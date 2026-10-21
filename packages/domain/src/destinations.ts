@@ -1,4 +1,5 @@
 import { placeSummarySchema, type PlaceSummary } from './place.js';
+import { worldCapitals } from './world-capitals.js';
 
 export type Destination = {
   place: PlaceSummary;
@@ -10,6 +11,8 @@ export type Destination = {
   summary: string;
   guideId?: string;
   image?: string;
+  isCapital?: boolean;
+  capitalOf?: string;
 };
 
 type ChinaSeed = {
@@ -28,7 +31,7 @@ const updatedAt = '2026-10-20T00:00:00.000Z';
 
 // City-center points are from the GeoNames cities15000 gazetteer (CC BY 4.0).
 const mainlandCenters: ChinaSeed[] = [
-  { code: '11', name: 'Beijing', nameZh: '北京', region: 'Beijing Municipality', regionCode: 'CN-BJ', latitude: 39.9075, longitude: 116.39723, summary: 'Explore historic neighborhoods, major museums, and the cultural heart of northern China.', aliases: ['Peking'] },
+  { code: '11', name: 'Beijing', nameZh: '北京', region: 'Beijing Municipality', regionCode: 'CN-BJ', latitude: 39.9075, longitude: 116.39723, summary: 'Explore historic neighborhoods, major museums, and the cultural heart of northern China.', aliases: ['Peking', 'China', '中国'] },
   { code: '12', name: 'Tianjin', nameZh: '天津', region: 'Tianjin Municipality', regionCode: 'CN-TJ', latitude: 39.14222, longitude: 117.17667, summary: 'A northern port city with riverfront streets and layers of architectural history.' },
   { code: '13', name: 'Shijiazhuang', nameZh: '石家庄', region: 'Hebei', regionCode: 'CN-HE', latitude: 38.04139, longitude: 114.47861, summary: 'A practical starting point for exploring Hebei and the landscapes around its capital.' },
   { code: '14', name: 'Taiyuan', nameZh: '太原', region: 'Shanxi', regionCode: 'CN-SX', latitude: 37.86944, longitude: 112.56028, summary: 'Begin a Shanxi journey with the city’s museums, old streets, and regional food.' },
@@ -81,23 +84,24 @@ function mainlandDestination(seed: ChinaSeed): Destination {
     regionGroup: 'mainland',
     aliases: seed.aliases ?? [],
     summary: seed.summary,
+    ...(seed.code === '11' ? { isCapital: true, capitalOf: 'China' } : {}),
   };
 }
 
 const worldDestinations: Destination[] = [
   {
     place: placeSummarySchema.parse({ id: '11111111-1111-4111-8111-111111111111', name: 'Tokyo', countryCode: 'JP', latitude: 35.6762, longitude: 139.6503, locale: 'en', timeZone: 'Asia/Tokyo', currency: 'JPY', updatedAt, sourceLabel: 'GlobeGuide editorial guide' }),
-    nameZh: '东京', region: 'Tokyo', regionCode: 'JP-13', regionGroup: 'rest-of-world', aliases: ['Tokio', '東京'],
-    summary: 'Explore a city of distinct neighborhoods, temples, gardens, and contemporary streets.', guideId: '11111111-1111-4111-8111-111111111111', image: '/images/tokyo.jpg',
+    nameZh: '东京', region: 'Tokyo', regionCode: 'JP-13', regionGroup: 'rest-of-world', aliases: ['Tokio', '東京', 'Japan', '日本'],
+    summary: 'Explore a city of distinct neighborhoods, temples, gardens, and contemporary streets.', guideId: '11111111-1111-4111-8111-111111111111', image: '/images/tokyo.jpg', isCapital: true, capitalOf: 'Japan',
   },
   {
     place: placeSummarySchema.parse({ id: '22222222-2222-4222-8222-222222222222', name: 'Paris', countryCode: 'FR', latitude: 48.8566, longitude: 2.3522, locale: 'en', timeZone: 'Europe/Paris', currency: 'EUR', updatedAt, sourceLabel: 'GlobeGuide editorial guide' }),
-    nameZh: '巴黎', region: 'Île-de-France', regionCode: 'FR-IDF', regionGroup: 'rest-of-world', aliases: ['París'],
-    summary: 'Pair a major museum or monument with an unhurried neighborhood walk.', guideId: '22222222-2222-4222-8222-222222222222', image: '/images/paris.jpg',
+    nameZh: '巴黎', region: 'Île-de-France', regionCode: 'FR-IDF', regionGroup: 'rest-of-world', aliases: ['París', 'France', '法国'],
+    summary: 'Pair a major museum or monument with an unhurried neighborhood walk.', guideId: '22222222-2222-4222-8222-222222222222', image: '/images/paris.jpg', isCapital: true, capitalOf: 'France',
   },
   {
     place: placeSummarySchema.parse({ id: '33333333-3333-4333-8333-333333333333', name: 'New York', countryCode: 'US', latitude: 40.7128, longitude: -74.006, locale: 'en', timeZone: 'America/New_York', currency: 'USD', updatedAt, sourceLabel: 'GlobeGuide editorial guide' }),
-    nameZh: '纽约', region: 'New York State', regionCode: 'US-NY', regionGroup: 'rest-of-world', aliases: ['NYC', 'New York City'],
+    nameZh: '纽约', region: 'New York State', regionCode: 'US-NY', regionGroup: 'rest-of-world', aliases: ['NYC', 'New York City', 'United States', '美国'],
     summary: 'Discover the city one neighborhood, park, and waterfront at a time.', guideId: '33333333-3333-4333-8333-333333333333', image: '/images/new-york.jpg',
   },
 ];
@@ -105,16 +109,18 @@ const worldDestinations: Destination[] = [
 const otherChinaDestinations: Destination[] = [
   { code: '81', name: 'Hong Kong', nameZh: '香港', region: 'Hong Kong SAR', regionCode: 'CN-HK', regionGroup: 'hong-kong' as const, countryCode: 'HK', latitude: 22.27832, longitude: 114.17469, timeZone: 'Asia/Hong_Kong', currency: 'HKD', summary: 'Explore compact neighborhoods, hills, markets, and the harbor.', aliases: ['Hongkong'] },
   { code: '82', name: 'Macau', nameZh: '澳门', region: 'Macau SAR', regionCode: 'CN-MO', regionGroup: 'macau' as const, countryCode: 'MO', latitude: 22.20056, longitude: 113.54611, timeZone: 'Asia/Macau', currency: 'MOP', summary: 'Walk between historic streets, waterfront spaces, and local food traditions.', aliases: ['Macao'] },
-  { code: '71', name: 'Taipei', nameZh: '台北', region: 'Taiwan', regionCode: 'TW-TPE', regionGroup: 'taiwan' as const, countryCode: 'TW', latitude: 25.05306, longitude: 121.52639, timeZone: 'Asia/Taipei', currency: 'TWD', summary: 'Explore night markets, museums, mountain views, and neighborhood cafes.', aliases: ['臺北'] },
+  { code: '71', name: 'Taipei', nameZh: '台北', region: 'Taiwan', regionCode: 'TW-TPE', regionGroup: 'taiwan' as const, countryCode: 'TW', latitude: 25.05306, longitude: 121.52639, timeZone: 'Asia/Taipei', currency: 'TWD', summary: 'Explore night markets, museums, mountain views, and neighborhood cafes.', aliases: ['臺北', 'Taiwan', '台湾'] },
 ].map(({ code, name, nameZh, region, regionCode, regionGroup, countryCode, latitude, longitude, timeZone, currency, summary, aliases }) => ({
   place: placeSummarySchema.parse({ id: `10000000-0000-4000-8000-0000000000${code}`, name, countryCode, latitude, longitude, locale: 'en', timeZone, currency, updatedAt, sourceLabel: 'GeoNames cities15000 gazetteer (CC BY 4.0)' }),
   nameZh, region, regionCode, regionGroup, aliases, summary,
+  ...(code === '71' ? { isCapital: true, capitalOf: 'Taiwan' } : {}),
 }));
 
 export const destinationCatalog: Destination[] = [
   ...worldDestinations,
   ...mainlandCenters.map(mainlandDestination),
   ...otherChinaDestinations,
+  ...worldCapitals.filter((destination) => !['CN', 'FR', 'JP'].includes(destination.place.countryCode)),
 ];
 
 const byId = new Map<string, Destination>(destinationCatalog.map((destination) => [destination.place.id, destination]));

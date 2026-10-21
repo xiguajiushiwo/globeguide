@@ -11,6 +11,10 @@
 .map-toolbar__region select { height: 44px; min-width: 175px; padding: 0 31px 0 12px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--ink); font: inherit; font-size: 14px; }
 .map-toolbar__reset { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--teal-dark); font-size: 14px; font-weight: 700; cursor: pointer; }
 .map-toolbar__reset:hover { background: var(--soft); }
+.map-toolbar__locate { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 44px; padding: 0 14px; border: 1px solid #b9d2ed; border-radius: 4px; background: #f5f9ff; color: #245a9c; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.map-toolbar__locate:hover { border-color: #7da9d8; background: #edf5ff; }
+.map-toolbar__locate:disabled { cursor: wait; opacity: .55; }
+.map-location-notice { margin: -5px 0 15px; color: #245a9c; font-size: 13px; line-height: 1.45; }
 .map-layout { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(300px, .8fr); gap: 0; height: min(68vh, 690px); min-height: 550px; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
 .map-stage { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-width: 0; min-height: 0; }
 .map-stage__canvas { position: relative; min-width: 0; min-height: 0; background: #dde8e6; }

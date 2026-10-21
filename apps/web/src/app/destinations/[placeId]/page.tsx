@@ -56,7 +56,7 @@ export default async function DestinationPage({ params }: Props) {
     <section className="place-hero place-hero--plain">
       <div className="shell place-hero__inner">
         <Link className="back-link" href="/map/"><ArrowLeft size={17} aria-hidden="true" />World map</Link>
-        <div><p className="place-hero__country">{destination.region}</p><h1>{place.name}</h1><p className="place-hero__local-name" lang="zh">{destination.nameZh}</p></div>
+        <div><p className="place-hero__country">{destination.isCapital ? `Capital of ${destination.capitalOf}` : destination.region}</p><h1>{place.name}</h1>{destination.nameZh && <p className="place-hero__local-name" lang="zh">{destination.nameZh}</p>}</div>
       </div>
     </section>
     <div className="shell place-content">

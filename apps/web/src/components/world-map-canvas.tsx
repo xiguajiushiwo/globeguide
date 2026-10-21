@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import type { GeoJSONSource, Map as MapLibreMap } from 'maplibre-gl';
 import type { Destination } from '@globeguide/domain';
@@ -11,6 +11,8 @@ type Props = {
   selectedId: string | null;
   onSelect: (id: string) => void;
   onError: () => void;
+  locateRequest: number;
+  onLocationState: (state: 'idle' | 'loading' | 'located' | 'denied' | 'error') => void;
   active: boolean;
 };
 
@@ -27,11 +29,41 @@ function points(destinations: Destination[]) {
   };
 }
 
-export function WorldMapCanvas({ destinations, selectedId, onSelect, onError, active }: Props) {
+function userPoint(coordinates: [number, number]) {
+  return {
+    type: 'FeatureCollection' as const,
+    features: [{ type: 'Feature' as const, geometry: { type: 'Point' as const, coordinates }, properties: {} }],
+  };
+}
+
+export function WorldMapCanvas({ destinations, selectedId, onSelect, onError, locateRequest, onLocationState, active }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const callbacks = useRef({ onSelect, onError });
   callbacks.current = { onSelect, onError };
+  const locationCallbacks = useRef({ onLocationState });
+  locationCallbacks.current = { onLocationState };
+  const userLocationRef = useRef<[number, number] | null>(null);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+
+  useEffect(() => {
+    if (!locateRequest) return;
+    if (!navigator.geolocation) {
+      locationCallbacks.current.onLocationState('error');
+      return;
+    }
+    locationCallbacks.current.onLocationState('loading');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const coordinates: [number, number] = [position.coords.longitude, position.coords.latitude];
+        userLocationRef.current = coordinates;
+        setUserLocation(coordinates);
+        locationCallbacks.current.onLocationState('located');
+      },
+      (error) => locationCallbacks.current.onLocationState(error.code === error.PERMISSION_DENIED ? 'denied' : 'error'),
+      { enableHighAccuracy: false, maximumAge: 120000, timeout: 10000 },
+    );
+  }, [locateRequest]);
 
   useEffect(() => {
     if (!container.current) return;
@@ -88,6 +120,17 @@ export function WorldMapCanvas({ destinations, selectedId, onSelect, onError, ac
         },
       });
       map.addLayer({ id: 'selected-city', type: 'circle', source: 'destinations', filter: ['==', ['get', 'id'], ''], paint: { 'circle-color': '#cf6952', 'circle-radius': 13, 'circle-stroke-width': 3, 'circle-stroke-color': '#17343a' } });
+      map.addSource('user-location', { type: 'geojson', data: userPoint([0, 0]) });
+      map.addLayer({ id: 'user-location-halo', type: 'circle', source: 'user-location', paint: { 'circle-color': '#3b82f6', 'circle-radius': 16, 'circle-opacity': .16, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } });
+      map.addLayer({ id: 'user-location-dot', type: 'circle', source: 'user-location', paint: { 'circle-color': '#2563eb', 'circle-radius': 7, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } });
+      map.setLayoutProperty('user-location-halo', 'visibility', 'none');
+      map.setLayoutProperty('user-location-dot', 'visibility', 'none');
+      if (userLocationRef.current) {
+        map.setLayoutProperty('user-location-halo', 'visibility', 'visible');
+        map.setLayoutProperty('user-location-dot', 'visibility', 'visible');
+        (map.getSource('user-location') as GeoJSONSource).setData(userPoint(userLocationRef.current));
+        map.flyTo({ center: userLocationRef.current, zoom: Math.max(map.getZoom(), 5), speed: 1.2 });
+      }
       map.on('click', 'clusters', (event) => {
         const feature = event.features?.[0];
         if (feature?.geometry.type !== 'Point') return;
@@ -133,6 +176,20 @@ export function WorldMapCanvas({ destinations, selectedId, onSelect, onError, ac
     if (map.isStyleLoaded()) focus();
     else map.once('load', focus);
   }, [selectedId, destinations]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !userLocation) return;
+    const update = () => {
+      const source = map.getSource('user-location') as GeoJSONSource | undefined;
+      source?.setData(userPoint(userLocation));
+      if (map.getLayer('user-location-halo')) map.setLayoutProperty('user-location-halo', 'visibility', 'visible');
+      if (map.getLayer('user-location-dot')) map.setLayoutProperty('user-location-dot', 'visibility', 'visible');
+      map.flyTo({ center: userLocation, zoom: Math.max(map.getZoom(), 5), speed: 1.2 });
+    };
+    if (map.isStyleLoaded()) update();
+    else map.once('load', update);
+  }, [userLocation]);
 
   useEffect(() => {
     if (active) window.setTimeout(() => mapRef.current?.resize(), 50);
