@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, ArrowUpRight, CalendarDays, Check, CircleHelp, ExternalLink, MapPin, Plane, ShieldCheck, TrainFront } from 'lucide-react';
 
 import { bookingTimeline, japanAreaNotes, japanGuideReviewedAt, japanPackingChecklist, japanSources, japanTenDayRoute } from '@/lib/japan-guide';
+import { JapanRouteMap } from '@/components/japan-route-map';
 import './japan-guide.css';
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 
 const sections = [
   ['start', '先决定怎么走'], ['visa', '签证与出发资格'], ['before', '预订时间线'], ['entry', '入境与海关'],
-  ['airport', '机场进城'], ['rail', '铁路与市内交通'], ['route', '10 天逐日路线'], ['variants', '7/14 天怎么改'],
+  ['airport', '机场进城'], ['rail', '铁路与市内交通'], ['route', '10 天逐日路线'], ['route-map', '路线地图与现场交通'], ['variants', '7/14 天怎么改'],
   ['cities', '城市怎么玩'], ['tickets', '门票与预约'], ['budget', '真实预算'], ['sleep', '住宿与行李'],
   ['food', '吃饭与礼仪'], ['digital', '支付与联网'], ['season', '季节和人群'], ['safety', '安全与应急'],
   ['departure', '返程清单'], ['faq', '常见问题'], ['sources', '官方资料'],
@@ -158,6 +159,11 @@ export default function JapanGuidePage() {
             </dl><div className="japan-day__steps"><strong>照着走</strong><ol>{day.steps.map((step) => <li key={step}>{step}</li>)}</ol></div><p className="japan-day__transit"><TrainFront size={17} aria-hidden="true" />{day.transit}</p>{day.booking && <p className="japan-day__booking"><CalendarDays size={17} aria-hidden="true" />{day.booking}</p>}</div>
           </section>)}</div>
           <p>出发和返程航班往往占去半天，不把 D1/D10 算成完整游玩日。每天只放一个“必须完成”的预约，余下景点按天气、体力和拥挤程度替换；住宿与机票未定时不要先买不可改的时段票。</p>
+        </section>
+
+        <section aria-labelledby="route-map" className="japan-map-section">
+          <SectionHeading id="route-map" eyebrow="路线工具" title="把每一站放到地图上" lead="先看酒店基点与逐日顺序，再点景点查看实景、乘车和导航。东京、京都、奈良、大阪与机场均可按日期切换。" />
+          <JapanRouteMap />
         </section>
 
         <section aria-labelledby="variants">

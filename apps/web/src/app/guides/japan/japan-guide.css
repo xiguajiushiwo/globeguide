@@ -91,6 +91,57 @@
 .japan-day__transit, .japan-day__booking { display: flex; align-items: flex-start; gap: 8px; margin: 9px 0 0 !important; color: #566b6d; font-size: 13px; }
 .japan-day__transit svg, .japan-day__booking svg { flex: 0 0 auto; transform: translateY(4px); color: var(--j-green); }
 .japan-day__booking svg { color: var(--j-coral); }
+.japan-route-explorer { border: 1px solid var(--j-line); background: #fff; line-height: 1.55; }
+.japan-route-explorer__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 20px 22px 16px; }
+.japan-route-explorer__head span { color: var(--j-coral); font-size: 11px; font-weight: 700; }
+.japan-route-explorer__head h3 { margin: 3px 0 0; font-size: 20px; line-height: 1.3; }
+.japan-route-explorer__head p { max-width: 300px; margin: 0; color: var(--j-muted); font-size: 11px; }
+.japan-route-days { display: flex; overflow-x: auto; gap: 3px; padding: 0 15px 11px; scrollbar-width: thin; }
+.japan-route-days button { display: flex; flex: 0 0 auto; align-items: center; gap: 5px; min-height: 36px; border: 1px solid transparent; border-radius: 4px; padding: 5px 9px; background: transparent; color: #53696a; cursor: pointer; font: inherit; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.japan-route-days button span { color: inherit; font-size: 11px; font-weight: 400; }
+.japan-route-days button:hover { background: #edf4f2; }
+.japan-route-days button.is-active { border-color: #0d6466; background: #0d6466; color: #fff; }
+.japan-route-explorer__body { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(290px, .88fr); min-height: 490px; border-block: 1px solid var(--j-line); }
+.japan-route-map-wrap { position: relative; min-width: 0; min-height: 490px; background: #dce8e7; }
+.japan-route-map-wrap > .japan-route-map { position: absolute; inset: 0; width: 100%; height: 100%; }
+.japan-route-map-fallback { position: absolute; z-index: 5; inset: auto 12px 12px; padding: 11px 13px; background: #fff; color: var(--j-ink); font-size: 12px; box-shadow: 0 2px 12px #163c3426; }
+.japan-route-pin { display: grid; width: 32px; height: 32px; place-items: center; border: 2px solid #fff; border-radius: 50%; background: #c9604b; box-shadow: 0 2px 7px #152d2f55; color: #fff; cursor: pointer; font-size: 12px; font-weight: 700; }
+.japan-route-pin.is-selected { width: 39px; height: 39px; background: #105f65; font-size: 15px; }
+.japan-route-pin:focus-visible, .japan-route-explorer button:focus-visible, .japan-route-explorer a:focus-visible { outline: 3px solid #f1aa5c; outline-offset: 2px; }
+.japan-route-panel { min-width: 0; max-height: 560px; overflow-y: auto; border-left: 1px solid var(--j-line); }
+.japan-route-panel__base { padding: 16px 17px 12px; background: #f1f6f3; }
+.japan-route-panel__base strong { color: var(--j-ink); font-size: 13px; }
+.japan-route-panel__base p { margin: 4px 0 0; color: #4e6265; font-size: 11px; }
+.japan-route-stops { display: flex; flex-wrap: wrap; gap: 5px; margin: 0; padding: 10px 12px; border-bottom: 1px solid var(--j-line); list-style: none; }
+.japan-route-stops li { min-width: 0; }
+.japan-route-stops button { display: flex; align-items: center; gap: 7px; min-height: 35px; border: 1px solid var(--j-line); border-radius: 4px; padding: 5px 7px; background: #fff; color: #31575a; cursor: pointer; font: inherit; font-size: 11px; line-height: 1.2; text-align: left; }
+.japan-route-stops button.is-active { border-color: #187174; background: #eaf4f1; }
+.japan-route-stops button > span:first-child { display: grid; flex: 0 0 19px; height: 19px; place-items: center; border-radius: 50%; background: #c9604b; color: #fff; font-size: 10px; font-weight: 700; }
+.japan-route-stops button small { display: block; color: #6c8180; font-size: 10px; }
+.japan-route-stops button svg { flex: 0 0 auto; color: var(--j-coral); }
+.japan-route-focus figure { margin: 0; }
+.japan-route-focus figure img { display: block; width: 100%; height: 195px; object-fit: cover; }
+.japan-route-focus figcaption { padding: 5px 15px; background: #f6f8f6; color: #627779; font-size: 10px; }
+.japan-route-focus figcaption a { color: #0d6669; text-decoration: underline; }
+.japan-route-focus__content { padding: 14px 17px 18px; }
+.japan-route-focus h4 { margin: 0 0 7px; font-size: 16px; }
+.japan-route-focus p { margin: 0 0 9px; color: #4b6265; font-size: 12px; line-height: 1.55; }
+.japan-route-focus p:has(svg) { display: flex; align-items: flex-start; gap: 7px; }
+.japan-route-focus p svg { flex: 0 0 auto; margin-top: 2px; color: var(--j-coral); }
+.japan-route-focus__actions { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 12px; }
+.japan-route-focus__actions a { display: inline-flex; align-items: center; gap: 4px; color: #0b6265; font-size: 11px; font-weight: 700; }
+.japan-route-details { padding: 20px 22px; }
+.japan-route-details > div { display: flex; align-items: center; gap: 8px; color: var(--j-green); }
+.japan-route-details h4 { margin: 0; font-size: 15px; }
+.japan-route-details ol { display: grid; gap: 12px; margin: 14px 0; padding: 0; list-style: none; }
+.japan-route-details ol li { padding-left: 12px; border-left: 2px solid #ca604c; }
+.japan-route-details ol strong { font-size: 12px; }
+.japan-route-details ol p { margin: 3px 0; color: #4b6265; font-size: 12px; }
+.japan-route-details ol small { color: #856044; font-size: 11px; }
+.japan-route-details ol small a { display: inline-flex; align-items: center; gap: 2px; margin-left: 5px; color: #0b6265; font-weight: 700; text-decoration: underline; }
+.japan-route-details > ul { margin: 15px 0 0; padding: 13px 0 0 18px; border-top: 1px solid var(--j-line); color: #4b6265; font-size: 12px; }
+.japan-route-details > ul li + li { margin-top: 5px; }
+.japan-route-explorer__source { margin: 0 !important; padding: 11px 22px 16px; color: #667b7d; font-size: 11px; line-height: 1.6; }
 .japan-variant { padding: 14px 0 18px; border-top: 1px solid var(--j-line); }
 .japan-variant h3 { margin: 0 0 7px; font-size: 17px; }
 .japan-variant p { margin: 0; color: #4b6265; }
@@ -136,6 +187,7 @@
   .japan-toc ol { display: flex; gap: 18px; width: max-content; }
   .japan-toc a { white-space: nowrap; }
   .japan-article { max-width: 830px; }
+  .japan-route-explorer__body { grid-template-columns: minmax(0, 1fr) minmax(270px, .8fr); }
 }
 
 @media (max-width: 640px) {
@@ -171,6 +223,15 @@
   .japan-split > div + div { border-top: 1px solid var(--j-line); }
   .japan-end { display: block; }
   .japan-end a { margin-top: 13px; }
+  .japan-route-explorer__head { display: block; padding: 16px 15px 12px; }
+  .japan-route-explorer__head p { max-width: none; margin-top: 5px; }
+  .japan-route-days { padding-inline: 9px; }
+  .japan-route-explorer__body { display: block; }
+  .japan-route-map-wrap { height: 330px; min-height: 0; }
+  .japan-route-panel { max-height: none; border-left: 0; }
+  .japan-route-focus figure img { height: 210px; }
+  .japan-route-details { padding: 18px 15px; }
+  .japan-route-explorer__source { padding-inline: 15px; }
 }
 
 @media print {
