@@ -1,0 +1,26 @@
+.guides-index { padding-block: 56px 110px; }
+.guides-index__heading { max-width: 760px; padding-bottom: 58px; }
+.guides-index__symbol { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-bottom: 22px; border: 1px solid var(--line); color: var(--teal); }
+.guides-index h1 { margin: 0; font-size: 46px; line-height: 1.16; }
+.guides-index__heading p { margin: 15px 0 0; color: var(--muted); font-size: 17px; line-height: 1.7; }
+.guides-index__section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--line); }
+.guides-index__section-heading h2 { margin: 0; font-size: 23px; }
+.guides-index__section-heading span { color: var(--muted); font-size: 13px; }
+.guides-index__entry { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 32px; max-width: 850px; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.guides-index__image { position: relative; min-height: 190px; overflow: hidden; background: var(--soft); }
+.guides-index__image img { object-fit: cover; }
+.guides-index__entry-content { align-self: center; min-width: 0; }
+.guides-index__entry-label { display: flex; align-items: center; gap: 7px; color: var(--teal-dark); font-size: 12px; font-weight: 700; }
+.guides-index__entry h3 { margin: 11px 0 9px; font-size: 25px; line-height: 1.25; }
+.guides-index__entry p { max-width: 490px; margin: 0 0 15px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+.guides-index__entry-content > span { display: inline-flex; align-items: center; gap: 8px; color: var(--teal-dark); font-size: 14px; font-weight: 700; }
+.guides-index__entry:hover .guides-index__entry-content > span { text-decoration: underline; }
+@media (max-width: 640px) {
+  .guides-index { padding-block: 35px 70px; }
+  .guides-index__heading { padding-bottom: 39px; }
+  .guides-index h1 { font-size: 34px; }
+  .guides-index__heading p { font-size: 15px; }
+  .guides-index__entry { grid-template-columns: 1fr; gap: 18px; }
+  .guides-index__image { aspect-ratio: 16 / 9; min-height: 0; }
+  .guides-index__entry h3 { font-size: 22px; }
+}

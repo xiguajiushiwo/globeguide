@@ -52,7 +52,7 @@ export default function JapanGuidePage() {
       <Image src="/images/tokyo.jpg" alt="东京城市景观" fill priority sizes="100vw" />
       <div className="japan-hero__shade" />
       <div className="shell japan-hero__content">
-        <Link href="/destinations/11111111-1111-4111-8111-111111111111/" className="japan-back"><ArrowLeft size={16} />东京目的地</Link>
+        <Link href="/guides/" className="japan-back"><ArrowLeft size={16} />全部旅行攻略</Link>
         <p className="japan-hero__eyebrow">GlobeGuide / 日本专题</p>
         <h1>日本自由行<br />从签证到返程</h1>
         <p className="japan-hero__intro">第一份日本行程，从能不能出发、怎么买票，到每天坐哪段车、住哪里、花多少钱，按真实出行顺序拆开。</p>
@@ -92,6 +92,13 @@ export default function JapanGuidePage() {
             <li><strong>按本领区清单备件。</strong>常见类别包括申请表、护照、照片、行程/住宿信息及经济能力证明，但材料组合、原件要求、有效期和补件规则随领区及签证类别变化。未确认前优先订可退改产品。</li>
             <li><strong>递交并核对签发结果。</strong>领取后逐字检查姓名、护照号、有效期、入境次数、停留期限；出发日期必须落在允许范围。JNTO 提到一般处理约五个工作日，但这不是保证时限，旺季和补件都应留足缓冲。</li>
           </ol>
+          <h3 className="japan-subheading">递交前逐项核对</h3>
+          <ul className="japan-check-list">
+            <li><strong>受理领区：</strong>用常住地和现行领区规则确认负责的使领馆，再进入其指定的签证申请渠道；跨领区材料要求可能不同。</li>
+            <li><strong>材料版本：</strong>在递交当天重新下载该类别清单与申请表，按清单准备照片、身份和经济资料。不要用旅行社旧截图替代使领馆公告。</li>
+            <li><strong>订单一致性：</strong>护照拼音、机票与酒店预订人、申请表日期及同行信息逐项对照；保留可退改订单直至签证结果明确。</li>
+            <li><strong>获签后复查：</strong>确认入境次数、有效期和停留天数覆盖全部行程，再购买无法退改的跨城车票和门票。</li>
+          </ul>
           <Callout title="不要混淆：签证、入境许可与 Visit Japan Web">签证允许你向日本申请入境，最终能否入境由边检决定；Visit Japan Web 用于预填入境与海关信息，<strong>不是签证，也并非强制注册</strong>。护照、签证、返程安排和住宿信息仍要随身可查。</Callout>
           <p className="japan-citations">核对入口：<Source id="visa" /> · <Source id="consulate">日本驻华大使馆签证页</Source> · <Source id="consular">中国领事服务网最新提醒</Source></p>
         </section>
@@ -117,7 +124,17 @@ export default function JapanGuidePage() {
             <tr><th>东京成田 NRT</th><td>上野/日暮里看 Skyliner；东京/品川/新宿方向看 N’EX 或巴士。不同车票与线路不能混用。</td><td>先查航站楼再查上车站台；特急票与普通乘车规则不同，别只刷交通卡就上指定席。</td></tr>
             <tr><th>关西机场 KIX</th><td>难波看南海；天王寺/大阪/京都方向比较 JR 与机场巴士。</td><td>关西机场车站与航站楼之间可能需要步行或接驳；早班机前夜规划好首班车。</td></tr>
           </tbody></table></div>
-          <p className="japan-citations">核对：<Source id="airport-access" /> · <Source id="narita" /> · <Source id="haneda" /></p>
+          <h3 className="japan-subheading">拿到行李后，按酒店位置选车</h3>
+          <div className="japan-table-wrap"><table><thead><tr><th>从机场到哪里</th><th>先查的线路</th><th>上车前确认</th></tr></thead><tbody>
+            <tr><th>NRT → 上野/日暮里</th><td>京成 Skyliner；预算优先时比较京成其他列车。</td><td>Skyliner 有指定席与专用票，确认停靠站、班次和购票凭证。<Source id="keisei">京成官网</Source></td></tr>
+            <tr><th>NRT → 东京/品川/新宿</th><td>比较 JR 成田特快、机场巴士与换乘次数。</td><td>先算下车站到酒店的最后一段；晚到时核对末班与巴士落客点。</td></tr>
+            <tr><th>HND → 品川/浅草</th><td>从机场京急站查看直通方向与实际终点。</td><td>同一站台列车终点可能不同，按显示屏核对目的地，别只看线路颜色。</td></tr>
+            <tr><th>HND → 浜松町/东京站附近</th><td>东京单轨电车到浜松町，再按酒店位置换乘。</td><td>大箱子优先确认换乘电梯；东京站内部步行距离不能忽略。</td></tr>
+            <tr><th>KIX → 难波</th><td>南海普通列车或特急，按时间和行李比较。</td><td>特急可能需要乘车券以外的座席票；确认下车是南海难波站。<Source id="kix">机场官网</Source></td></tr>
+            <tr><th>KIX → 天王寺/大阪/京都</th><td>比较 JR 直达、转乘与机场巴士。</td><td>确认目标站是“大阪”还是“新大阪”；特急票种与站台按实际班次核对。</td></tr>
+          </tbody></table></div>
+          <ol className="japan-steps"><li>在地图里输入<strong>酒店名称或准确地址</strong>，记下最近的铁路站和出口；“到东京”并不等于“到酒店”。</li><li>在机场跟随 Railways / Trains 指示到车站，看运营商、列车种别、目的地和末班时间。普通车与指定席特急的购票方式可能不同。</li><li>检票前备好二维码或实体票；不确定时向有人窗口出示酒店站名和车次，问是否还需要特急券。错过末班就改机场巴士或合法出租车，别在站台临时猜路线。</li></ol>
+          <p className="japan-citations">核对：<Source id="airport-access" /> · <Source id="narita" /> · <Source id="haneda" /> · <Source id="keisei" /> · <Source id="kix" /></p>
         </section>
 
         <section aria-labelledby="rail">
@@ -138,7 +155,7 @@ export default function JapanGuidePage() {
             <div className="japan-day__rail"><span>DAY {String(day.day).padStart(2, '0')}</span><small>{day.sleep}</small></div>
             <div className="japan-day__main"><h3 id={`japan-day-${day.day}`}>{day.title}</h3><dl>
               <div><dt>上午</dt><dd>{day.morning}</dd></div><div><dt>下午</dt><dd>{day.afternoon}</dd></div><div><dt>晚上</dt><dd>{day.evening}</dd></div>
-            </dl><p className="japan-day__transit"><TrainFront size={17} aria-hidden="true" />{day.transit}</p>{day.booking && <p className="japan-day__booking"><CalendarDays size={17} aria-hidden="true" />{day.booking}</p>}</div>
+            </dl><div className="japan-day__steps"><strong>照着走</strong><ol>{day.steps.map((step) => <li key={step}>{step}</li>)}</ol></div><p className="japan-day__transit"><TrainFront size={17} aria-hidden="true" />{day.transit}</p>{day.booking && <p className="japan-day__booking"><CalendarDays size={17} aria-hidden="true" />{day.booking}</p>}</div>
           </section>)}</div>
           <p>出发和返程航班往往占去半天，不把 D1/D10 算成完整游玩日。每天只放一个“必须完成”的预约，余下景点按天气、体力和拥挤程度替换；住宿与机票未定时不要先买不可改的时段票。</p>
         </section>

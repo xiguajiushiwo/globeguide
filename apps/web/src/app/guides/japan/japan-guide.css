@@ -48,6 +48,7 @@
 .japan-steps { display: grid; gap: 15px; padding-left: 25px; }
 .japan-steps li { padding-left: 6px; }
 .japan-steps li::marker { color: var(--j-coral); font-weight: 700; }
+.japan-subheading { margin: 28px 0 10px; font-size: 18px; line-height: 1.4; }
 .japan-callout { margin: 25px 0 0; padding: 18px 22px; border-left: 3px solid #b45b49; background: #fbf4ef; }
 .japan-callout > strong { color: #8a3d2f; }
 .japan-callout p { margin: 6px 0 0; color: #654c45; font-size: 14px; }
@@ -82,6 +83,11 @@
 .japan-day dl > div { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 7px; }
 .japan-day dt { color: #2b7777; font-size: 13px; font-weight: 700; }
 .japan-day dd { margin: 0; color: #4b6265; font-size: 14px; }
+.japan-day__steps { margin: 18px 0 15px; padding: 15px 18px; border-left: 2px solid var(--j-green); background: #f3f8f6; font-size: 13px; }
+.japan-day__steps > strong { display: block; margin-bottom: 5px; color: var(--j-green); }
+.japan-day__steps ol { margin: 0; padding-left: 19px; }
+.japan-day__steps li { padding-left: 3px; }
+.japan-day__steps li + li { margin-top: 5px; }
 .japan-day__transit, .japan-day__booking { display: flex; align-items: flex-start; gap: 8px; margin: 9px 0 0 !important; color: #566b6d; font-size: 13px; }
 .japan-day__transit svg, .japan-day__booking svg { flex: 0 0 auto; transform: translateY(4px); color: var(--j-green); }
 .japan-day__booking svg { color: var(--j-coral); }

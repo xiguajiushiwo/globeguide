@@ -9,7 +9,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: origin, changeFrequency: 'weekly', priority: 1 },
     { url: `${origin}/map/`, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${origin}/guides/japan/`, lastModified: '2026-10-22', changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${origin}/guides/`, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${origin}/guides/japan/`, lastModified: '2026-10-22', changeFrequency: 'monthly', priority: 0.7 },
     ...destinationCatalog.map((destination) => ({
       url: `${origin}/destinations/${destination.place.id}/`,
       lastModified: destination.place.updatedAt,
