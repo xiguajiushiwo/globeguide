@@ -51,7 +51,10 @@ export const japanFieldDays: [JapanFieldDay, ...JapanFieldDay[]] = [
   {
     day: 1, title: '机场到酒店', base: '东京住宿基点：上野站步行圈；以下以羽田 T3 入境为例，成田到达请改查京成或 JR。',
     stops: [{ id: 'ueno', name: '上野公园', city: '东京', coordinates: [139.7738278, 35.7152915], arrival: '先办入住或寄存行李；上野公园作为酒店周边的方位锚点。', photoTip: '第一天不安排必须完成的拍照任务，优先摸清次日进站入口。' }],
-    legs: [{ from: '羽田机场 T3', to: '上野住宿区', instruction: '到京急羽田机场第 3 航站楼站，坐开往品川方向的车至品川；按当天路线换 JR 山手线至上野。京急列车终点和直通情况不同，上车前看站台显示。', fare: '羽田 T3 → 品川：成人 IC 参考 ¥454；品川 → 上野另计。', evidence: yahooFare('羽田空港第３ターミナル', '品川'), evidenceLabel: '查询京急段' }],
+    legs: [
+      { from: '羽田机场 T3', to: '品川', instruction: '到京急羽田机场第 3 航站楼站，乘开往品川方向的列车；终点和直通情况不同，上车前看显示屏。', fare: '成人 IC 参考 ¥454。', evidence: yahooFare('羽田空港第３ターミナル', '品川'), evidenceLabel: '查询京急段' },
+      { from: '品川', to: '上野住宿区', instruction: '换 JR：上野东京线或京滨东北线可直达上野；先在站台屏幕确认该班次停上野，再按酒店地址找出口。', fare: '品川 → 上野成人 IC 参考 ¥253，两段合计参考 ¥707。', evidence: yahooFare('品川', '上野'), evidenceLabel: '查询 JR 段' },
+    ],
     fieldNotes: ['先从航班信息确认 HND/NRT 和航站楼，不要只看“东京机场”。', '酒店地址必须精确到门牌；上野有 JR、东京地铁和京成多个站，按酒店地图选择出口。', '晚到时先查末班；别把含换乘的路线当作直达。'],
   },
   {
@@ -74,6 +77,7 @@ export const japanFieldDays: [JapanFieldDay, ...JapanFieldDay[]] = [
       { id: 'shibuya', name: '涩谷十字路口', city: '东京', coordinates: [139.7005723, 35.6594821], arrival: '从涩谷站找八公口方向；大站内部通道会变化，跟着现场“Hachiko”指示。', photoTip: '照片是路口夜景示例；拍摄时站在人行道安全区域，不在过街中央停留。', photo: shibuya },
     ],
     legs: [
+      { from: '上野', to: '原宿', instruction: 'JR 山手线往池袋、新宿方向直达原宿；原宿站到明治神宫本殿仍需走参道。', fare: '直达成人 IC 参考 ¥253。', evidence: yahooFare('上野', '原宿'), evidenceLabel: '查询本段' },
       { from: '原宿', to: '涩谷', instruction: 'JR 山手线内回/涩谷方向一站；体力充足可从表参道一带步行，路线以当天导航为准。', fare: '成人 IC 参考 ¥155。', evidence: yahooFare('原宿', '渋谷'), evidenceLabel: '查询本段' },
       { from: '涩谷', to: '新宿', instruction: 'JR 山手线往新宿方向；也可比较埼京线直达班次，按站台屏幕确认。', fare: '直达优先路线成人 IC 参考 ¥199。', evidence: yahooFare('渋谷', '新宿'), evidenceLabel: '查询本段' },
     ],
@@ -88,7 +92,10 @@ export const japanFieldDays: [JapanFieldDay, ...JapanFieldDay[]] = [
   {
     day: 5, title: '东京转京都、锦市场', base: '京都住宿基点：京都站步行圈；先放行李，再轻装去锦市场。',
     stops: [{ id: 'nishiki', name: '锦市场', city: '京都', coordinates: [135.7655699, 35.0050244], arrival: '抵达京都站后先处理行李；按酒店位置选择地铁或巴士到四条/河原町周边，再步行入市场。', photoTip: '市场是通行空间，不边走边吃；拍摊主、店内商品先征得允许。' }],
-    legs: [{ from: '东京站', to: '京都站', instruction: '东海道新干线 Nozomi 指定席；按车票上的东京/品川乘车站、列车号、车厢和座位进站。SmartEX 订票时选具体班次。', fare: 'SmartEX 2025-04-01 官方表：东京 → 京都普通车 Nozomi 指定席常规季节成人 ¥13,970；繁忙/淡季与产品可能调整。', evidence: 'https://smart-ex.jp/en/product/plan/service/pdf/service_fares_reserved.pdf', evidenceLabel: '查看官方价格表' }],
+    legs: [
+      { from: '东京站', to: '京都站', instruction: '东海道新干线 Nozomi 指定席；按车票上的东京/品川乘车站、列车号、车厢和座位进站。SmartEX 订票时选具体班次。', fare: 'SmartEX 2025-04-01 官方表：东京 → 京都普通车 Nozomi 指定席常规季节成人 ¥13,970；繁忙/淡季与产品可能调整。', evidence: 'https://smart-ex.jp/en/product/plan/service/pdf/service_fares_reserved.pdf', evidenceLabel: '查看官方价格表' },
+      { from: '京都站', to: '四条', instruction: '放好行李后乘京都市营地铁乌丸线往国际会馆方向 2 站至四条；再按锦市场入口实时步行导航。', fare: '成人 IC 参考 ¥220。', evidence: yahooFare('京都', '四条'), evidenceLabel: '查询地铁段' },
+    ],
     fieldNotes: ['东京站与品川站都可乘东海道新干线，票面起点必须与实际上车站一致。', '从京都站到酒店的最后几百米按酒店地址实时导航，不猜测车站出口。', '锦市场店铺营业时间不统一；跨城当天不安排固定时段的远处门票。'],
   },
   {
@@ -132,13 +139,13 @@ export const japanFieldDays: [JapanFieldDay, ...JapanFieldDay[]] = [
       { id: 'osaka-castle', name: '大阪城天守阁', city: '大阪', coordinates: [135.5253958, 34.6871828], arrival: '大阪城公园范围很大；先在导航里选择天守阁或具体入口，不把“到公园”当作“到天守阁”。', photoTip: '天守阁外景可从城濠与广场拍摄；进馆票价与展览按官网查。' },
       { id: 'dotonbori-day9', name: '道顿堀戎桥', city: '大阪', coordinates: [135.5013046, 34.6690672], arrival: '晚餐前返回难波片区；若下午改去梅田，应在实时地图重新选回程线路。', photoTip: '桥上夜景适合城市记录，留意行人和车辆。' },
     ],
-    legs: [{ from: '难波酒店', to: '大阪城天守阁', instruction: '先步行至酒店附近实际运营商车站，再查到大阪城公园或谷町四丁目等站的当日线路；两站到天守阁的步行口不同。', fare: '随酒店所在站与运营商变化；购票前实时查询。' }],
+    legs: [{ from: '南海难波附近', to: '大阪城天守阁', instruction: '步行到 Osaka Metro 难波站，御堂筋线往新大阪方向 2 站至本町；换中央线往森之宫方向 3 站到森之宫，再沿公园内道路步行至天守阁。站台与出口按当天现场屏幕确认。', fare: '难波地铁站 → 森之宫成人 IC 参考 ¥240；公园内步行免费，天守阁门票另计。', evidence: yahooFare('なんば', '森ノ宮'), evidenceLabel: '查询地铁段' }],
     fieldNotes: ['大阪城公园免费区域与天守阁收费入口不同。', 'USJ 需要另留完整一天，不能按大阪市区景点的交通预算估。'],
   },
   {
     day: 10, title: '难波到关西机场', base: '以 KIX 离境、南海难波站附近酒店为例；航班若从 ITM 起飞，整段必须重查。',
     stops: [{ id: 'kix', name: '关西国际机场', city: '大阪', coordinates: [135.222523, 34.4342045], arrival: '在南海难波站核对关西机场方向站台与列车种别；到机场后看航空公司对应航站楼。', photoTip: '返程只标交通终点；不把航站楼照片当作实时导向。' }],
-    legs: [{ from: '南海难波', to: '关西机场', instruction: '南海空港线普通/空港急行到关西机场站；若选 Rapi:t 特急，需要确认特急座席票。', fare: '普通/空港急行成人 IC 参考 ¥970；Rapi:t 特急另计。', evidence: yahooFare('南海難波', '関西空港'), evidenceLabel: '查询本段' }],
+    legs: [{ from: '南海难波', to: '关西机场', instruction: '从南海难波站乘空港急行直达关西机场；其他班次可能在泉佐野换乘，按显示屏确认。若选 Rapi:t 特急，还需要座席票。', fare: '空港急行成人 IC 参考 ¥970；Rapi:t 特急另计。', evidence: yahooFare('なんば', '関西空港'), evidenceLabel: '查询本段' }],
     fieldNotes: ['前一晚核对起飞机场、航站楼、首班车、行李额度和航空公司建议的到机场时间。', '机场铁路站与实际值机柜台仍有步行或接驳距离；国际航班留足安检与出境时间。'],
   },
 ];
