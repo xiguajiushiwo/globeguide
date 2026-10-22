@@ -1,0 +1,180 @@
+.japan-guide { --j-ink: #17343a; --j-muted: #596e73; --j-line: #d8e4e1; --j-green: #126f72; --j-coral: #c9604b; color: var(--j-ink); font-family: Arial, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; }
+.japan-guide a:hover { color: var(--j-green); }
+.japan-hero { position: relative; height: 450px; overflow: hidden; background: #203539; color: white; }
+.japan-hero > img { object-fit: cover; object-position: center 48%; }
+.japan-hero__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10, 28, 32, .94) 0%, rgba(10, 28, 32, .72) 48%, rgba(10, 28, 32, .17) 100%); }
+.japan-hero__content { position: relative; display: flex; height: 100%; flex-direction: column; align-items: flex-start; justify-content: center; padding-block: 22px; }
+.japan-back { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 28px; color: #d6e5e2; font-size: 13px; }
+.japan-back:hover { color: white !important; text-decoration: underline; }
+.japan-hero__eyebrow { margin: 0 0 13px; color: #e0b39c; font-size: 12px; font-weight: 700; }
+.japan-hero h1 { max-width: 700px; margin: 0; font-size: 55px; font-weight: 700; line-height: 1.15; }
+.japan-hero__intro { max-width: 650px; margin: 18px 0 17px; color: #e8f0ed; font-size: 17px; line-height: 1.7; }
+.japan-hero__meta { display: flex; flex-wrap: wrap; gap: 7px 23px; color: #d0dfdd; font-size: 12px; }
+.japan-scope { border-bottom: 1px solid var(--j-line); background: #eef5f2; }
+.japan-scope__inner { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-block: 20px; }
+.japan-scope__inner > div { display: flex; align-items: center; gap: 13px; min-width: 0; color: #526b6c; font-size: 13px; }
+.japan-scope svg { flex: 0 0 auto; color: var(--j-green); }
+.japan-scope strong { display: block; margin-bottom: 3px; color: var(--j-ink); font-size: 13px; }
+.japan-layout { display: grid; grid-template-columns: 205px minmax(0, 830px); align-items: start; gap: clamp(35px, 6vw, 90px); padding-block: 54px 110px; }
+.japan-toc { position: sticky; top: 102px; max-height: calc(100vh - 120px); overflow-y: auto; border-left: 1px solid var(--j-line); padding-left: 17px; scrollbar-width: thin; }
+.japan-toc p { margin: 0 0 13px; color: var(--j-green); font-size: 12px; font-weight: 700; }
+.japan-toc ol { margin: 0; padding: 0; list-style: none; }
+.japan-toc li { margin: 0; }
+.japan-toc a { display: block; padding: 6px 0; color: #52686c; font-size: 12px; line-height: 1.35; }
+.japan-toc a:hover { color: var(--j-green); text-decoration: underline; }
+.japan-article { min-width: 0; font-size: 15px; line-height: 1.85; }
+.japan-article > section { padding: 44px 0 50px; border-bottom: 1px solid var(--j-line); }
+.japan-article > section:first-of-type { padding-top: 22px; }
+.japan-editor-note { margin: 0; padding: 17px 21px; border-left: 3px solid var(--j-coral); background: #f7f9f7; color: #4d6266; font-size: 13px; line-height: 1.75; }
+.japan-editor-note strong { color: var(--j-ink); }
+.japan-section-heading { scroll-margin-top: 105px; margin: 0 0 25px; }
+.japan-section-heading > span { color: var(--j-coral); font-size: 12px; font-weight: 700; }
+.japan-section-heading h2 { margin: 6px 0 0; font-size: 32px; font-weight: 700; line-height: 1.3; }
+.japan-section-heading > p { margin: 11px 0 0; color: var(--j-muted); font-size: 15px; line-height: 1.7; }
+.japan-article p { margin-top: 0; }
+.japan-article p:last-child { margin-bottom: 0; }
+.japan-article strong { color: #193b3d; }
+.japan-source-link { display: inline-flex; align-items: baseline; gap: 3px; color: #0a6265; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.japan-source-link svg { flex: 0 0 auto; transform: translateY(2px); }
+.japan-citations { margin-top: 19px !important; color: #6b7b7c; font-size: 13px; }
+.japan-route-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-bottom: 24px; border-top: 1px solid var(--j-line); border-bottom: 1px solid var(--j-line); }
+.japan-route-options > div { padding: 20px 0 17px; }
+.japan-route-options > div + div { border-left: 1px solid var(--j-line); padding-left: 20px; }
+.japan-route-options strong { color: var(--j-green); font-size: 15px; }
+.japan-route-options p { margin: 9px 0 0; color: #52676b; font-size: 13px; line-height: 1.7; }
+.japan-inline-action { display: flex; flex-wrap: wrap; gap: 16px 25px; margin-top: 23px !important; }
+.japan-inline-action a { display: inline-flex; align-items: center; gap: 8px; color: var(--j-green); font-size: 14px; font-weight: 700; }
+.japan-inline-action a:hover { text-decoration: underline; }
+.japan-steps { display: grid; gap: 15px; padding-left: 25px; }
+.japan-steps li { padding-left: 6px; }
+.japan-steps li::marker { color: var(--j-coral); font-weight: 700; }
+.japan-callout { margin: 25px 0 0; padding: 18px 22px; border-left: 3px solid #b45b49; background: #fbf4ef; }
+.japan-callout > strong { color: #8a3d2f; }
+.japan-callout p { margin: 6px 0 0; color: #654c45; font-size: 14px; }
+.japan-timeline { border-top: 1px solid var(--j-line); }
+.japan-timeline > div { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 18px; padding: 19px 0; border-bottom: 1px solid var(--j-line); }
+.japan-timeline h3 { margin: 0; color: var(--j-green); font-size: 15px; }
+.japan-timeline ul { margin: 0; padding-left: 21px; }
+.japan-timeline li + li { margin-top: 5px; }
+.japan-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-bottom: 24px; color: var(--j-green); font-size: 13px; font-weight: 700; }
+.japan-flow span { padding: 5px 0; }
+.japan-flow svg { color: var(--j-coral); }
+.japan-table-wrap { max-width: 100%; overflow-x: auto; margin: 22px 0; border: 1px solid var(--j-line); }
+.japan-table-wrap table { width: 100%; min-width: 615px; border-collapse: collapse; font-size: 13px; line-height: 1.65; }
+.japan-table-wrap th, .japan-table-wrap td { padding: 13px 15px; border-bottom: 1px solid var(--j-line); vertical-align: top; text-align: left; }
+.japan-table-wrap thead { background: #eff5f2; color: #1d5557; }
+.japan-table-wrap tbody tr:last-child th, .japan-table-wrap tbody tr:last-child td { border-bottom: 0; }
+.japan-table-wrap tbody th { width: 22%; white-space: nowrap; font-weight: 700; }
+.japan-table-wrap td { color: #4a6164; }
+.japan-table-total { background: #f4f8f6; font-weight: 700; }
+.japan-table-total td { color: var(--j-ink); }
+.japan-rule-list { border-top: 1px solid var(--j-line); }
+.japan-rule-list > div { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--j-line); }
+.japan-rule-list > div > span { color: var(--j-coral); font-size: 14px; font-weight: 700; }
+.japan-rule-list h3 { margin: 0 0 6px; font-size: 17px; }
+.japan-rule-list p { margin: 0; color: #4b6467; font-size: 14px; }
+.japan-day-list { border-top: 1px solid var(--j-line); }
+.japan-day { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 20px; padding: 24px 0 28px; border-bottom: 1px solid var(--j-line); }
+.japan-day__rail span { display: block; color: var(--j-coral); font-size: 13px; font-weight: 700; }
+.japan-day__rail small { display: block; margin-top: 5px; color: var(--j-muted); font-size: 12px; }
+.japan-day h3 { margin: -2px 0 12px; font-size: 19px; }
+.japan-day dl { display: grid; gap: 6px; margin: 0 0 12px; }
+.japan-day dl > div { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 7px; }
+.japan-day dt { color: #2b7777; font-size: 13px; font-weight: 700; }
+.japan-day dd { margin: 0; color: #4b6265; font-size: 14px; }
+.japan-day__transit, .japan-day__booking { display: flex; align-items: flex-start; gap: 8px; margin: 9px 0 0 !important; color: #566b6d; font-size: 13px; }
+.japan-day__transit svg, .japan-day__booking svg { flex: 0 0 auto; transform: translateY(4px); color: var(--j-green); }
+.japan-day__booking svg { color: var(--j-coral); }
+.japan-variant { padding: 14px 0 18px; border-top: 1px solid var(--j-line); }
+.japan-variant h3 { margin: 0 0 7px; font-size: 17px; }
+.japan-variant p { margin: 0; color: #4b6265; }
+.japan-area-list { border-top: 1px solid var(--j-line); }
+.japan-area-list > section { padding: 19px 0 20px; border-bottom: 1px solid var(--j-line); }
+.japan-area-list > section > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: 13px; margin-bottom: 7px; }
+.japan-area-list h3 { margin: 0; font-size: 19px; }
+.japan-area-list > section > div span { color: var(--j-coral); font-size: 12px; font-weight: 700; }
+.japan-area-list p { margin: 2px 0; color: #4b6265; font-size: 14px; }
+.japan-check-list, .japan-emergency { padding-left: 24px; }
+.japan-check-list li, .japan-emergency li { padding-left: 5px; margin-bottom: 12px; }
+.japan-check-list li::marker, .japan-emergency li::marker { color: var(--j-green); }
+.japan-split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; border-block: 1px solid var(--j-line); margin-bottom: 22px; }
+.japan-split > div { padding: 18px 0; }
+.japan-split h3 { margin: 0 0 8px; font-size: 17px; }
+.japan-split p { margin: 0; color: #4b6265; font-size: 14px; }
+.japan-season-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; border-top: 1px solid var(--j-line); margin-bottom: 20px; }
+.japan-season-grid > div { padding: 15px 0; border-bottom: 1px solid var(--j-line); }
+.japan-season-grid h3 { margin: 0 0 5px; font-size: 16px; }
+.japan-season-grid p { margin: 0; color: #4b6265; font-size: 14px; }
+.japan-packing { display: grid; gap: 0; padding: 0; border-top: 1px solid var(--j-line); list-style: none; }
+.japan-packing li { display: flex; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--j-line); font-size: 14px; }
+.japan-packing svg { flex: 0 0 auto; margin-top: 5px; color: var(--j-green); }
+.japan-faq { border-top: 1px solid var(--j-line); }
+.japan-faq details { border-bottom: 1px solid var(--j-line); }
+.japan-faq summary { display: flex; align-items: center; gap: 10px; padding: 15px 0; color: var(--j-ink); font-weight: 700; cursor: pointer; }
+.japan-faq summary svg { flex: 0 0 auto; color: var(--j-green); }
+.japan-faq p { margin: 0 0 17px 28px; color: #4b6265; font-size: 14px; }
+.japan-sources { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; padding: 0; border-top: 1px solid var(--j-line); list-style: none; }
+.japan-sources li { min-width: 0; padding: 13px 0; border-bottom: 1px solid var(--j-line); }
+.japan-sources li a { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--j-green); font-size: 13px; font-weight: 700; line-height: 1.4; }
+.japan-sources li a svg { flex: 0 0 auto; }
+.japan-sources small { display: block; margin-top: 4px; color: #667b7d; font-size: 11px; line-height: 1.4; }
+.japan-end { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-top: 32px; font-size: 14px; }
+.japan-end > div, .japan-end a { display: inline-flex; align-items: center; gap: 10px; }
+.japan-end > div { color: var(--j-muted); }
+.japan-end a { flex: 0 0 auto; color: var(--j-green); font-weight: 700; }
+
+@media (max-width: 900px) {
+  .japan-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-top: 22px; }
+  .japan-toc { position: sticky; top: 76px; z-index: 8; max-height: none; overflow-x: auto; overflow-y: hidden; padding: 10px 0; border-left: 0; border-bottom: 1px solid var(--j-line); background: rgba(255, 255, 255, .96); backdrop-filter: blur(8px); }
+  .japan-toc p { display: none; }
+  .japan-toc ol { display: flex; gap: 18px; width: max-content; }
+  .japan-toc a { white-space: nowrap; }
+  .japan-article { max-width: 830px; }
+}
+
+@media (max-width: 640px) {
+  .japan-hero { height: 440px; }
+  .japan-hero > img { object-position: 60% center; }
+  .japan-hero__shade { background: linear-gradient(0deg, rgba(10, 28, 32, .92), rgba(10, 28, 32, .35)); }
+  .japan-hero__content { justify-content: flex-end; padding-bottom: 34px; }
+  .japan-back { margin-bottom: 25px; }
+  .japan-hero h1 { font-size: 38px; }
+  .japan-hero__intro { font-size: 14px; line-height: 1.55; }
+  .japan-hero__meta { font-size: 11px; }
+  .japan-scope__inner { gap: 4px; padding-block: 14px; }
+  .japan-scope__inner > div { gap: 6px; font-size: 10px; }
+  .japan-scope__inner svg { width: 16px; }
+  .japan-scope strong { font-size: 11px; }
+  .japan-toc { top: 66px; }
+  .japan-layout { padding-bottom: 75px; }
+  .japan-article { font-size: 14px; }
+  .japan-article > section { padding-block: 35px 42px; }
+  .japan-section-heading h2 { font-size: 27px; }
+  .japan-section-heading > p { font-size: 14px; }
+  .japan-route-options { display: block; }
+  .japan-route-options > div { padding: 12px 0 !important; border-left: 0 !important; }
+  .japan-route-options > div + div { border-top: 1px solid var(--j-line); }
+  .japan-timeline > div { grid-template-columns: 1fr; gap: 5px; }
+  .japan-day { grid-template-columns: 1fr; gap: 7px; }
+  .japan-day__rail { display: flex; align-items: baseline; gap: 12px; }
+  .japan-day__rail small { margin-top: 0; }
+  .japan-flow { gap: 5px; font-size: 11px; }
+  .japan-flow svg { width: 13px; }
+  .japan-split, .japan-season-grid, .japan-sources { grid-template-columns: 1fr; }
+  .japan-split { gap: 0; }
+  .japan-split > div + div { border-top: 1px solid var(--j-line); }
+  .japan-end { display: block; }
+  .japan-end a { margin-top: 13px; }
+}
+
+@media print {
+  .site-header, .site-footer, .japan-toc, .japan-hero > img, .japan-hero__shade, .japan-scope, .japan-end { display: none !important; }
+  .japan-hero { height: auto; color: #111; background: white; }
+  .japan-hero__content { display: block; padding: 0; }
+  .japan-hero__intro, .japan-hero__meta { color: #333; }
+  .japan-layout { display: block; width: 100%; padding: 0; }
+  .japan-article > section { break-inside: auto; padding-block: 18px; }
+  .japan-day, .japan-area-list > section, .japan-table-wrap { break-inside: avoid; }
+  .japan-source-link { color: #111; }
+  a[href^='http']::after { content: ' (' attr(href) ')'; font-size: 8px; overflow-wrap: anywhere; }
+}

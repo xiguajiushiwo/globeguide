@@ -95,6 +95,7 @@ export default async function DestinationPage({ params }: Props) {
         <div className="place-content__actions"><SaveButton place={place} /><Link className="trip-link" href={`/trips?destination=${place.id}`}><CalendarDays size={18} aria-hidden="true" />{copy.planTrip}</Link></div>
       </div>
       <p className="guide-intro">{guide.intro}</p>
+      {place.countryCode === 'JP' && <p className="destination-overview__map-action" lang="zh-CN"><Link className="text-link" href="/guides/japan/">日本自由行全攻略：签证、交通、路线与预算<ArrowUpRight size={16} aria-hidden="true" /></Link></p>}
       <div className="fact-grid" aria-label={copy.destinationBasics}>
         <div className="fact"><Clock3 size={22} aria-hidden="true" /><span>{copy.localTime}</span><strong>{place.timeZone.replaceAll('_', ' ')}</strong></div>
         <div className="fact"><Coins size={22} aria-hidden="true" /><span>{copy.currency}</span><strong>{place.currency}</strong></div>
