@@ -102,6 +102,13 @@
 .japan-theme-categories { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 15px 13px; }
 .japan-theme-categories button span { color: inherit; font-size: 11px; opacity: .75; }
 .japan-theme-categories button.is-active { border-color: #105f65; background: #e8f3f0; color: #105f65; }
+.japan-theme-filters { display: flex; align-items: center; gap: 10px; padding: 0 15px 14px; }
+.japan-theme-filters label:first-child { display: flex; align-items: center; gap: 7px; color: #4e6265; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.japan-theme-filters select, .japan-theme-filters input { min-height: 38px; border: 1px solid var(--j-line); border-radius: 4px; background: #fff; color: var(--j-ink); font: inherit; font-size: 12px; }
+.japan-theme-filters select { padding: 0 24px 0 9px; }
+.japan-theme-search { display: flex; align-items: center; gap: 8px; min-width: 0; width: min(300px, 100%); padding-left: 10px; border: 1px solid var(--j-line); border-radius: 4px; color: #557073; }
+.japan-theme-search input { width: 100%; min-width: 0; border: 0; padding: 0 8px 0 0; outline: 0; }
+.japan-theme-search:focus-within, .japan-theme-filters select:focus-visible { outline: 2px solid #e49b65; outline-offset: 2px; }
 .japan-route-days { display: flex; overflow-x: auto; gap: 3px; padding: 0 15px 11px; scrollbar-width: thin; }
 .japan-route-days button { display: flex; flex: 0 0 auto; align-items: center; gap: 5px; min-height: 36px; border: 1px solid transparent; border-radius: 4px; padding: 5px 9px; background: transparent; color: #53696a; cursor: pointer; font: inherit; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .japan-route-days button span { color: inherit; font-size: 11px; font-weight: 400; }
@@ -116,11 +123,18 @@
 .japan-route-pin--anime { background: #aa5147; }
 .japan-route-pin--heritage { background: #226d66; }
 .japan-route-pin--museum { background: #555f9c; }
+.japan-route-pin--nature { background: #4b7852; }
+.japan-route-pin--city { background: #aa6941; }
+.japan-route-pin--experience { background: #8d5687; }
 .japan-route-pin--anime.is-selected { background: #7d332e; }
 .japan-route-pin--heritage.is-selected { background: #164a45; }
 .japan-route-pin--museum.is-selected { background: #373f78; }
+.japan-route-pin--nature.is-selected { background: #315b39; }
+.japan-route-pin--city.is-selected { background: #804321; }
+.japan-route-pin--experience.is-selected { background: #683c64; }
 .japan-route-pin:focus-visible, .japan-route-explorer button:focus-visible, .japan-route-explorer a:focus-visible { outline: 3px solid #f1aa5c; outline-offset: 2px; }
 .japan-route-panel { min-width: 0; max-height: 560px; overflow-y: auto; border-left: 1px solid var(--j-line); }
+.japan-route-panel--themes { display: flex; flex-direction: column; overflow: hidden; }
 .japan-route-panel__base { padding: 16px 17px 12px; background: #f1f6f3; }
 .japan-route-panel__base strong { color: var(--j-ink); font-size: 13px; }
 .japan-route-panel__base p { margin: 4px 0 0; color: #4e6265; font-size: 11px; }
@@ -131,7 +145,7 @@
 .japan-route-stops button > span:first-child { display: grid; flex: 0 0 19px; height: 19px; place-items: center; border-radius: 50%; background: #c9604b; color: #fff; font-size: 10px; font-weight: 700; }
 .japan-route-stops button small { display: block; color: #6c8180; font-size: 10px; }
 .japan-route-stops button svg { flex: 0 0 auto; color: var(--j-coral); }
-.japan-theme-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; margin: 0; padding: 11px; list-style: none; border-bottom: 1px solid var(--j-line); }
+.japan-theme-list { display: grid; flex: 1 1 auto; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; gap: 5px; min-height: 110px; max-height: 235px; margin: 0; padding: 11px; overflow-y: auto; list-style: none; border-bottom: 1px solid var(--j-line); scrollbar-width: thin; }
 .japan-theme-list li { min-width: 0; }
 .japan-theme-list button { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 49px; border: 1px solid var(--j-line); border-radius: 4px; padding: 6px 8px; background: #fff; color: #31575a; cursor: pointer; font: inherit; font-size: 11px; font-weight: 700; line-height: 1.25; text-align: left; }
 .japan-theme-list button.is-active { border-color: #187174; background: #eaf4f1; }
@@ -142,6 +156,14 @@
 .japan-theme-tag--anime { background: #aa5147; }
 .japan-theme-tag--heritage { background: #226d66; }
 .japan-theme-tag--museum { background: #555f9c; }
+.japan-theme-tag--nature { background: #4b7852; }
+.japan-theme-tag--city { background: #aa6941; }
+.japan-theme-tag--experience { background: #8d5687; }
+.japan-theme-work { color: #9b5148 !important; font-weight: 700; }
+.japan-theme-empty { min-height: 150px; padding: 24px 17px; border-bottom: 1px solid var(--j-line); }
+.japan-theme-empty strong { font-size: 13px; }
+.japan-theme-empty p { margin: 5px 0 12px; color: var(--j-muted); font-size: 12px; }
+.japan-theme-empty button { border: 0; padding: 0; background: none; color: #0b6265; cursor: pointer; font: inherit; font-size: 12px; font-weight: 700; text-decoration: underline; }
 .japan-route-focus figure { margin: 0; }
 .japan-route-focus figure img { display: block; width: 100%; height: 195px; object-fit: cover; }
 .japan-route-focus figcaption { padding: 5px 15px; background: #f6f8f6; color: #627779; font-size: 10px; }
@@ -252,6 +274,10 @@
   .japan-route-explorer__body { display: block; }
   .japan-route-map-wrap { height: 330px; min-height: 0; }
   .japan-route-panel { max-height: none; border-left: 0; }
+  .japan-route-panel--themes { overflow: visible; }
+  .japan-theme-filters { align-items: stretch; flex-wrap: wrap; }
+  .japan-theme-search { flex: 1 1 190px; }
+  .japan-theme-list { max-height: 240px; }
   .japan-route-focus figure img { height: 210px; }
   .japan-route-details { padding: 18px 15px; }
   .japan-route-explorer__source { padding-inline: 15px; }

@@ -162,7 +162,7 @@ export default function JapanGuidePage() {
         </section>
 
         <section aria-labelledby="route-map" className="japan-map-section">
-          <SectionHeading id="route-map" eyebrow="地点地图" title="按路线走，也按兴趣找" lead="逐日路线可查看交通与打卡顺序；主题地图可单独筛选动漫巡礼、人文地点和博物馆，再点地点看位置与参观提醒。" />
+          <SectionHeading id="route-map" eyebrow="地点地图" title="按路线走，也按兴趣找" lead="逐日路线可查看交通与打卡顺序；主题地图收录日本各地区的动漫巡礼、人文古迹、博物馆、自然风景、城市街区和乐园体验，可按地区或作品搜索。" />
           <JapanRouteMap />
         </section>
 
