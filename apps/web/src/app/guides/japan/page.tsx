@@ -162,7 +162,7 @@ export default function JapanGuidePage() {
         </section>
 
         <section aria-labelledby="route-map" className="japan-map-section">
-          <SectionHeading id="route-map" eyebrow="路线工具" title="把每一站放到地图上" lead="先看酒店基点与逐日顺序，再点景点查看实景、乘车和导航。东京、京都、奈良、大阪与机场均可按日期切换。" />
+          <SectionHeading id="route-map" eyebrow="地点地图" title="按路线走，也按兴趣找" lead="逐日路线可查看交通与打卡顺序；主题地图可单独筛选动漫巡礼、人文地点和博物馆，再点地点看位置与参观提醒。" />
           <JapanRouteMap />
         </section>
 
