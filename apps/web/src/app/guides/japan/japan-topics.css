@@ -1,0 +1,33 @@
+.jp-practical { font-family: Arial, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; color: var(--ink); }
+.jp-practical-hero { background: #edf4f0; border-bottom: 1px solid #d8e5dd; padding: 32px 0 46px; }
+.jp-back { display: inline-flex; align-items: center; gap: 8px; color: var(--teal); font-size: 14px; font-weight: 700; }
+.jp-practical-hero .jp-back { margin-bottom: 35px; }
+.jp-eyebrow { color: var(--teal); font-size: 12px; letter-spacing: .08em; font-weight: 700; margin: 0 0 12px; }
+.jp-practical-hero h1 { max-width: 900px; font-size: clamp(29px, 3.5vw, 43px); line-height: 1.4; margin: 0; text-wrap: balance; }
+.jp-deck { max-width: 760px; margin: 20px 0; font-size: 16px; color: var(--muted); line-height: 1.9; }
+.jp-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: 12px; }
+.jp-practical-layout { display: grid; grid-template-columns: 205px minmax(0, 820px); gap: clamp(25px, 5vw, 75px); padding-block: 40px 90px; }
+.jp-practical-toc { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 15px; border-left: 2px solid var(--line); padding-left: 18px; align-self: start; }
+.jp-practical-toc strong { font-size: 13px; }.jp-practical-toc a { font-size: 13px; line-height: 1.7; color: var(--muted); }.jp-practical-toc small { margin-right: 8px; color: var(--teal); }.jp-practical-toc a:hover { color: var(--teal); }
+.jp-practical-body { min-width: 0; font-size: 15px; line-height: 1.95; }
+.jp-practical-body h2 { margin: 0 0 20px; font-size: 25px; line-height: 1.5; scroll-margin-top: 100px; }
+.jp-practical-body p { margin: 0 0 18px; }.jp-practical-body .jp-eyebrow { margin-bottom: 10px; }
+.jp-answer { padding: 27px; border: 1px solid #cbded4; background: #f3f8f5; border-radius: 10px; }
+.jp-answer ul, .jp-checklist ul { list-style: none; padding: 0; margin: 20px 0 0; }
+.jp-answer li, .jp-checklist li { display: flex; align-items: flex-start; gap: 10px; margin-top: 12px; }.jp-answer li svg, .jp-checklist li svg { flex-shrink: 0; margin-top: 7px; color: var(--teal); }
+.jp-audience { color: var(--muted); font-size: 13px; padding: 18px 0; }
+.jp-practical-section { padding: 26px 0 35px; margin-bottom: 20px; border-bottom: 1px solid var(--line); }
+.jp-action-list { display: grid; gap: 17px; padding-left: 24px; }.jp-action-list li { padding-left: 6px; }.jp-action-list li::marker { font-weight: 700; color: var(--teal); }
+.jp-table-wrap { overflow-x: auto; margin-block: 24px; border: 1px solid var(--line); border-radius: 6px; }
+.jp-table-wrap table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.85; }.jp-table-wrap caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.jp-table-wrap th, .jp-table-wrap td { text-align: left; padding: 16px; border-bottom: 1px solid var(--line); vertical-align: top; }.jp-table-wrap thead { background: var(--soft); }.jp-table-wrap tbody th { min-width: 140px; width: 24%; }.jp-table-wrap tr:last-child td, .jp-table-wrap tr:last-child th { border-bottom: 0; }
+.jp-inline-sources { display: flex; flex-wrap: wrap; gap: 7px 14px; margin-top: 24px; font-size: 12px; line-height: 1.7; }.jp-inline-sources > span { color: var(--muted); }.jp-inline-sources a { display: inline-flex; gap: 3px; align-items: center; color: var(--teal); text-decoration: underline; text-underline-offset: 3px; }
+.jp-checklist { padding: 26px; border-radius: 10px; background: #fff8ee; border: 1px solid #eddfc8; margin-block: 32px; }.jp-checklist > p:last-child { color: var(--muted); margin: 20px 0 0; font-size: 13px; }
+.jp-plan-action { display: flex; align-items: flex-start; gap: 15px; padding: 24px; background: var(--soft); border-radius: 10px; margin: 30px 0; }.jp-plan-action > svg { flex-shrink: 0; color: var(--teal); margin-top: 7px; }.jp-plan-action h2 { font-size: 21px; margin: 0 0 8px; }.jp-plan-action p { font-size: 14px; color: var(--muted); }.jp-plan-action > div > div { display: flex; flex-wrap: wrap; gap: 10px; }.jp-plan-action a { display: inline-flex; align-items: center; gap: 5px; background: #fff; border: 1px solid #b5ccc1; border-radius: 5px; padding: 7px 13px; font-size: 13px; font-weight: 700; color: var(--teal); }
+.jp-source-list { list-style: none; padding: 0; }.jp-source-list li { margin: 18px 0; }.jp-source-list a { display: inline-flex; align-items: center; gap: 8px; color: var(--teal); font-weight: 700; }.jp-source-list p { margin: 3px 0; color: var(--muted); font-size: 13px; }.jp-source-list small { font-size: 12px; color: var(--muted); }
+@media (max-width: 900px) { .jp-practical-layout { grid-template-columns: 1fr; gap: 24px; }.jp-practical-toc { position: static; flex-direction: row; flex-wrap: wrap; gap: 10px 20px; border-left: 0; border-bottom: 1px solid var(--line); padding: 0 0 22px; }.jp-practical-toc strong { width: 100%; } }
+@media (max-width: 760px) {
+  .jp-practical-hero { padding-bottom: 28px; }.jp-practical-hero .jp-back { margin-bottom: 24px; }.jp-practical-body h2 { font-size: 23px; }.jp-answer, .jp-checklist { padding: 20px; }.jp-practical-body { font-size: 15px; }
+  .jp-table-wrap { border: 0; }.jp-table-wrap thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }.jp-table-wrap table, .jp-table-wrap tbody { display: block; }.jp-table-wrap tr { display: block; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 14px; overflow: hidden; }.jp-table-wrap tbody th, .jp-table-wrap td { display: block; width: 100%; border: 0; min-width: 0; padding: 12px 16px; }.jp-table-wrap tbody th { background: var(--soft); }.jp-table-wrap td::before { content: attr(data-label); display: block; font-size: 12px; font-weight: 700; color: var(--teal); margin-bottom: 4px; }.jp-plan-action { padding: 20px; }.jp-plan-action > svg { display: none; }
+}
+@media print { .site-header, .site-footer, .jp-practical-toc, .jp-plan-action, .jp-topic-cards { display: none; }.jp-practical-layout { display: block; }.jp-practical-hero { background: none; padding: 0; }.jp-practical-body h2 { break-after: avoid; }.jp-table-wrap { overflow: visible; } }

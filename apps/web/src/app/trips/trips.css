@@ -30,6 +30,20 @@
 .trip-field input, .trip-field select, .trip-field textarea, .trip-editor__add-stop select { width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; border: 1px solid #b8c9c7; border-radius: 4px; background: white; color: var(--ink); font: inherit; font-weight: 400; }
 .trip-field textarea { resize: vertical; line-height: 1.5; }
 .trip-field input::placeholder, .trip-field textarea::placeholder { color: #79878b; }
+.japan-route-picker { margin-top: 28px; padding: 20px; border: 1px solid #c9d9d5; border-radius: 6px; background: #f2f8f5; }
+.japan-route-picker .trip-editor__section-heading { align-items: flex-start; }
+.japan-route-picker .trip-editor__section-heading p { margin: 6px 0 0; color: var(--muted); font-size: 13px; font-weight: 400; line-height: 1.5; }
+.japan-route-picker__selected { flex: 0 0 auto; padding: 5px 9px; border-radius: 99px; background: #d9ece5; color: var(--teal-dark); font-size: 12px; font-weight: 700; }
+.japan-route-picker__options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+.japan-route-picker__options button { display: flex; min-height: 106px; flex-direction: column; align-items: flex-start; gap: 8px; padding: 13px; border: 1px solid #c4d4d0; border-radius: 5px; background: white; color: var(--ink); text-align: left; }
+.japan-route-picker__options button:hover, .japan-route-picker__options button.is-active { border-color: var(--teal); background: #e2f0eb; }
+.japan-route-picker__options strong { font-size: 15px; }
+.japan-route-picker__options span { color: var(--muted); font-size: 12px; font-weight: 400; line-height: 1.5; }
+.japan-route-picker__days { display: grid; gap: 6px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #c9d9d5; }
+.japan-route-picker__days div { display: grid; grid-template-columns: 145px minmax(0, 1fr); gap: 9px; font-size: 12px; line-height: 1.45; }
+.japan-route-picker__days strong { color: var(--teal-dark); }
+.japan-route-picker__days span { color: var(--muted); }
+.japan-route-picker__days small { display: block; margin-top: 5px; font-size: 12px; line-height: 1.7; }
 .trip-editor__stops { margin: 28px 0; padding-block: 20px 23px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .trip-editor__section-heading { margin-bottom: 15px; }
 .trip-editor h3 { margin: 0; font-size: 18px; }
@@ -61,4 +75,6 @@
   .trip-editor__add-stop { flex-direction: column; }
   .trip-editor__section-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
   .trip-stops li > span { max-width: calc(100% - 113px); overflow-wrap: anywhere; }
+  .japan-route-picker__options { grid-template-columns: 1fr; }
+  .japan-route-picker__days div { grid-template-columns: 110px minmax(0, 1fr); }
 }

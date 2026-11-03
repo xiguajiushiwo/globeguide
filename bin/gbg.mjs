@@ -53,9 +53,9 @@ async function doctor() {
   console.log(`Node.js 22+: ${nodeReady ? 'ready' : 'install Node.js 22 or newer'}`);
   console.log(`Git: ${gitReady ? 'ready' : 'install Git and authenticate with GitHub'}`);
   console.log(`Corepack or pnpm: ${pnpmReady ? 'ready' : 'install Corepack or pnpm 11'}`);
-  console.log(`PostgreSQL on 127.0.0.1:5432: ${postgresReady ? 'reachable' : 'not reachable (needed for the local API)'}`);
+  console.log(`PostgreSQL on 127.0.0.1:5432: ${postgresReady ? 'reachable' : 'not reachable (optional; only needed for apps/api)'}`);
   console.log('PostGIS: checked when database migrations run.');
-  if (!nodeReady || !gitReady || !pnpmReady || !postgresReady) process.exitCode = 1;
+  if (!nodeReady || !gitReady || !pnpmReady) process.exitCode = 1;
 }
 
 function init(directory) {
@@ -77,7 +77,7 @@ function init(directory) {
     return;
   }
 
-  console.log('Cloning the private GlobeGuide repository. GitHub access is required.');
+  console.log('Cloning the private Wayella repository. GitHub access is required.');
   const clone = run('git', ['clone', repository, target], { stdio: 'inherit' });
   if (clone.error || clone.status !== 0) {
     console.error('Clone failed. Confirm that GitHub authentication and repository access are configured.');
@@ -94,8 +94,8 @@ function init(directory) {
     return;
   }
 
-  console.log(`GlobeGuide is ready in ${target}`);
-  console.log('See README.md for PostgreSQL/PostGIS setup, migration, seed, and start commands.');
+  console.log(`Wayella is ready in ${target}`);
+  console.log('See README.md for the website quick start and docs/development.md for full local setup.');
 }
 
 const args = process.argv.slice(2);

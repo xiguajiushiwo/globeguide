@@ -32,4 +32,20 @@ describe('social relationships and interactions', () => {
     expect((await call('/api/comments', 'POST', alice, { postId: 'post1', parentId: 'missing', body: 'bad reply' })).status).toBe(400);
     expect((await call(`/api/comments/${id}`, 'DELETE', alice)).status).toBe(200);
   });
+
+  it('accepts emoji, photo, sticker, and voice comment attachments', async () => {
+    const photo = await call('/api/comments', 'POST', alice, { postId: 'post1', kind: 'photo', attachmentUrl: 'https://cdn.example.com/comment.jpg', body: '' });
+    expect(photo.status).toBe(201);
+    const voice = await call('/api/comments', 'POST', alice, { postId: 'post1', kind: 'voice', attachmentUrl: 'data:audio/webm;base64,AAAA', body: '' });
+    expect(voice.status).toBe(201);
+    const sticker = await call('/api/comments', 'POST', alice, { postId: 'post1', kind: 'sticker', body: '🎉' });
+    expect(sticker.status).toBe(201);
+    const comments = (await (await call('/api/comments?postId=post1', 'GET', null)).json() as { comments: { kind: string; attachmentUrl: string | null }[] }).comments;
+    expect(comments).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: 'photo', attachmentUrl: 'https://cdn.example.com/comment.jpg' }),
+      expect.objectContaining({ kind: 'voice', attachmentUrl: 'data:audio/webm;base64,AAAA' }),
+      expect.objectContaining({ kind: 'sticker', body: '🎉' }),
+    ]));
+    expect((await call('/api/comments', 'POST', alice, { postId: 'post1', kind: 'photo', attachmentUrl: 'javascript:alert(1)', body: '' })).status).toBe(400);
+  });
 });

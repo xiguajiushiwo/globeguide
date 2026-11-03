@@ -12,6 +12,16 @@ function error(status: number, code: string): Response { return json({ error: co
 function plainText(value: string): boolean {
   return !/<\s*\/?\s*[a-z!][^>]*>/i.test(value) && !/!\[[^\]]*\]\([^)]*\)/.test(value) && !/(https?:\/\/|www\.)/i.test(value);
 }
+function safeAttachment(value: unknown): value is string {
+  if (typeof value !== 'string' || value.length < 8 || value.length > 700_000) return false;
+  if (value.startsWith('data:audio/')) return /^data:audio\/[a-z0-9.+-]+;base64,[A-Za-z0-9+/=]+$/.test(value);
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
 async function readJson(request: Request): Promise<Record<string, unknown> | null> {
   if (!request.headers.get('content-type')?.toLowerCase().startsWith('application/json')) return null;
   try { const value: unknown = await request.json(); return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : null; } catch { return null; }
@@ -69,7 +79,7 @@ async function patchProfile(request: Request, env: Env, user: SessionUser): Prom
   if (avatarInitial !== null && (typeof avatarInitial !== 'string' || avatarInitial.trim().length > 3 || !plainText(avatarInitial))) return error(400, 'invalid_profile');
   const listValue = (value: unknown) => {
     if (value === null) return null;
-    if (Array.isArray(value) && value.every((item) => typeof item === 'string' && item.length <= 40 && plainText(item))) return JSON.stringify(value);
+    if (Array.isArray(value) && value.length <= 12 && value.every((item) => typeof item === 'string' && item.length <= 40 && plainText(item))) return JSON.stringify(value);
     return typeof value === 'string' && value.length <= 500 && plainText(value) ? value.trim() : undefined;
   };
   const langValue = listValue(languages); const prefValue = listValue(travelPreferences);
@@ -152,7 +162,7 @@ async function commentsGet(url: URL, env: Env, user: SessionUser | null): Promis
   if (!post) return error(404, 'post_not_found');
   if (user && await blockedBetween(env, user.id, post.author_id)) return error(403, 'blocked');
   const rows = await env.DB.prepare(`SELECT c.id, c.post_id AS postId, c.author_id AS authorId, u.display_name AS authorName,
-    c.parent_id AS parentId, c.body, c.status, c.created_at AS createdAt, c.deleted_at AS deletedAt
+    c.parent_id AS parentId, c.body, c.kind, c.attachment_url AS attachmentUrl, c.status, c.created_at AS createdAt, c.deleted_at AS deletedAt
     FROM post_comments c JOIN users u ON u.id = c.author_id WHERE c.post_id = ? AND NOT EXISTS
     (SELECT 1 FROM blocks b WHERE (b.blocker_id = c.author_id AND b.blocked_id = ?) OR (b.blocker_id = ? AND b.blocked_id = c.author_id))
     ORDER BY c.created_at ASC, c.id ASC LIMIT 200`).bind(postId, user?.id ?? '', user?.id ?? '').all<Record<string, unknown>>();
@@ -164,6 +174,8 @@ async function commentsGet(url: URL, env: Env, user: SessionUser | null): Promis
     author: { id: row.authorId, displayName: row.authorName },
     parentId: row.parentId,
     body: row.status === 'removed' || row.deletedAt ? 'Comment deleted' : row.body,
+    kind: row.kind || 'text',
+    attachmentUrl: row.status === 'removed' || row.deletedAt ? null : row.attachmentUrl,
     status: row.status,
     createdAt: row.createdAt,
     deletedAt: row.deletedAt,
@@ -171,18 +183,29 @@ async function commentsGet(url: URL, env: Env, user: SessionUser | null): Promis
 }
 async function commentsPost(request: Request, env: Env, user: SessionUser): Promise<Response> {
   const body = await readJson(request); const postId = typeof body?.postId === 'string' ? body.postId : null; const text = typeof body?.body === 'string' ? body.body.trim() : ''; const parentId = body?.parentId === null || body?.parentId === undefined ? null : typeof body.parentId === 'string' ? body.parentId : undefined;
-  if (!id(postId) || !text || text.length > MAX_TEXT || !plainText(text) || parentId === undefined) return error(400, 'invalid_comment');
+  const kind = body?.kind === undefined ? 'text' : body.kind;
+  const attachmentUrl = body?.attachmentUrl === undefined || body?.attachmentUrl === null ? null : body.attachmentUrl;
+  if (!id(postId) || typeof kind !== 'string' || !['text', 'emoji', 'photo', 'sticker', 'voice'].includes(kind) || parentId === undefined) return error(400, 'invalid_comment');
+  if (text.length > MAX_TEXT || !plainText(text) || (kind !== 'photo' && kind !== 'voice' && !text) || ((kind === 'photo' || kind === 'voice') && !safeAttachment(attachmentUrl))) return error(400, 'invalid_comment');
   const post = await env.DB.prepare("SELECT author_id FROM posts WHERE id = ? AND status = 'published' AND deleted_at IS NULL").bind(postId).first<{ author_id: string }>();
   if (!post) return error(404, 'post_not_found');
   if (await blockedBetween(env, user.id, post.author_id)) return error(403, 'blocked');
+  let replyRecipient: string | null = null;
   if (parentId) {
     const parent = await env.DB.prepare('SELECT id, post_id, parent_id, author_id FROM post_comments WHERE id = ? AND status = \'published\'').bind(parentId).first<{ id: string; post_id: string; parent_id: string | null; author_id: string }>();
     if (!parent || parent.post_id !== postId || parent.parent_id) return error(400, 'invalid_comment_parent');
     if (await blockedBetween(env, user.id, parent.author_id)) return error(403, 'blocked');
+    replyRecipient = parent.author_id;
   }
   const commentId = crypto.randomUUID(); const now = new Date().toISOString();
-  await env.DB.prepare('INSERT INTO post_comments (id, post_id, author_id, parent_id, body, created_at) VALUES (?, ?, ?, ?, ?, ?)').bind(commentId, postId, user.id, parentId, text, now).run();
-  const comment = { id: commentId, postId, parentId, body: text, createdAt: now, author: { id: user.id, displayName: user.displayName } };
+  const statements = [env.DB.prepare('INSERT INTO post_comments (id, post_id, author_id, parent_id, body, kind, attachment_url, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').bind(commentId, postId, user.id, parentId, text, kind, attachmentUrl, now)];
+  for (const recipient of new Set([post.author_id, replyRecipient].filter((value): value is string => Boolean(value)))) {
+    if (recipient === user.id) continue;
+    statements.push(env.DB.prepare('INSERT INTO notifications (id, recipient_id, actor_id, comment_id, kind, created_at) VALUES (?, ?, ?, ?, ?, ?)')
+      .bind(crypto.randomUUID(), recipient, user.id, commentId, recipient === replyRecipient ? 'reply' : 'comment', now));
+  }
+  await env.DB.batch(statements);
+  const comment = { id: commentId, postId, parentId, body: text, kind, attachmentUrl, createdAt: now, author: { id: user.id, displayName: user.displayName } };
   return json({ ...comment, comment }, 201);
 }
 async function commentDelete(env: Env, user: SessionUser, commentId: string): Promise<Response> {

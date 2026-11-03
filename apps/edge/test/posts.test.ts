@@ -12,6 +12,8 @@ const city = '10000000-0000-4000-8000-000000000061';
 const schema = [
   readFileSync(fileURLToPath(new URL('../migrations/0001_auth.sql', import.meta.url)), 'utf8'),
   readFileSync(fileURLToPath(new URL('../migrations/0002_posts.sql', import.meta.url)), 'utf8'),
+  readFileSync(fileURLToPath(new URL('../migrations/0003_social.sql', import.meta.url)), 'utf8'),
+  readFileSync(fileURLToPath(new URL('../migrations/0004_creator_market.sql', import.meta.url)), 'utf8'),
 ].join('\n');
 let database: DatabaseSync;
 let env: Env;
@@ -99,5 +101,29 @@ describe('creator publishing boundaries', () => {
   it('rejects links and HTML in the plain text beta', async () => {
     expect((await call('/api/posts', 'POST', alice, { ...valid, body: 'Visit https://example.com for copied details and more text.' })).status).toBe(400);
     expect((await call('/api/posts', 'POST', alice, { ...valid, body: '<b>Bold</b> content with enough words for the test.' })).status).toBe(400);
+  });
+
+  it('stores rich media metadata and live scheduling details', async () => {
+    const created = await call('/api/posts', 'POST', alice, {
+      ...valid,
+      type: 'moment',
+      format: 'video',
+      mediaUrls: ['https://cdn.example.com/tokyo.mp4'],
+      body: 'A short route video with practical station and luggage details for other travelers.',
+    });
+    expect(created.status).toBe(201);
+    const id = (await created.json() as { id: string }).id;
+    await call(`/api/posts/${id}/submit`, 'POST', alice, {});
+    await call(`/api/moderation/${id}/approve`, 'POST', admin, { reason: 'Media metadata is present.' });
+    expect(await (await call(`/api/posts/${id}`, 'GET', null)).json()).toMatchObject({ post: { format: 'video', mediaUrls: ['https://cdn.example.com/tokyo.mp4'] } });
+
+    const live = await call('/api/posts', 'POST', alice, { ...valid, format: 'live', liveStartsAt: '2026-11-08T12:00:00.000Z' });
+    expect(live.status).toBe(201);
+  });
+
+  it('rejects unsafe media URLs and incomplete rich formats', async () => {
+    expect((await call('/api/posts', 'POST', alice, { ...valid, format: 'video', mediaUrls: ['javascript:alert(1)'] })).status).toBe(400);
+    expect((await call('/api/posts', 'POST', alice, { ...valid, format: 'gallery', mediaUrls: [] })).status).toBe(400);
+    expect((await call('/api/posts', 'POST', alice, { ...valid, format: 'live' })).status).toBe(400);
   });
 });

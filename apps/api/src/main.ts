@@ -20,7 +20,7 @@ export async function createApp(): Promise<NestFastifyApplication> {
 
   if (process.env.NODE_ENV !== 'test') {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle('GlobeGuide API')
+      .setTitle('Wayella API')
       .setDescription('Global travel information and trip planning API')
       .setVersion('0.1.0')
       .addServer('/v1')

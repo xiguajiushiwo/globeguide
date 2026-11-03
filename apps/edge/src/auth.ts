@@ -146,8 +146,8 @@ function mailAvailable(env: Env): boolean {
 }
 
 async function sendMail(env: Env, to: string, purpose: Purpose, code: string): Promise<void> {
-  const subject = purpose === 'register' ? 'GlobeGuide email verification' : 'GlobeGuide password reset';
-  const body = `Your GlobeGuide verification code is ${code}. It expires in 10 minutes. If you did not request this, ignore this email.`;
+  const subject = purpose === 'register' ? 'Wayella email verification' : 'Wayella password reset';
+  const body = `Your Wayella verification code is ${code}. It expires in 10 minutes. If you did not request this, ignore this email.`;
   if (env.MAIL_SINK) return env.MAIL_SINK.send(to, subject, body);
   if (!env.MAIL_API_KEY || !env.MAIL_FROM) throw new Error('Email provider is not configured.');
   const response = await fetch('https://api.resend.com/emails', {
@@ -267,7 +267,7 @@ export async function handleAuth(request: Request, env: Env): Promise<Response |
   const path = new URL(request.url).pathname;
   if (!path.startsWith('/api/auth/')) return null;
   if (!env.DB || !env.AUTH_SECRET || env.AUTH_SECRET.length < 32 || !env.CODE_HMAC_KEY || env.CODE_HMAC_KEY.length < 32) return reply({ error: 'Authentication is not configured.' }, 503);
-  if (request.method === 'GET' && path === '/api/auth/config') return reply({ registrationAvailable: mailAvailable(env) });
+  if (request.method === 'GET' && path === '/api/auth/config') return reply({ registrationAvailable: mailAvailable(env), passwordResetAvailable: mailAvailable(env) });
   if (request.method === 'GET' && path === '/api/auth/me') {
     const user = await resolveSession(request, env);
     return reply({ user: user ? { id: user.id, email: user.email, displayName: user.displayName, role: user.role } : null });
@@ -278,6 +278,21 @@ export async function handleAuth(request: Request, env: Env): Promise<Response |
   if (path === '/api/auth/register') return register(request, env);
   if (path === '/api/auth/login') return login(request, env);
   if (path === '/api/auth/reset') return reset(request, env);
+  if (path === '/api/auth/password') {
+    const user = await resolveSession(request, env);
+    if (!user) return reply({ error: 'login_required' }, 401);
+    const data = await readJson(request);
+    if (typeof data?.currentPassword !== 'string' || !validPassword(data.password)) return reply({ error: 'invalid_password' }, 400);
+    if (!await limited(env, 'change-password', user.email, request, 5, 20, 900)) return reply({ error: 'rate_limited' }, 429);
+    const row = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(user.id).first<UserRow>();
+    if (!row || !await verifyPassword(data.currentPassword, row.password_hash)) return reply({ error: 'incorrect_password' }, 400);
+    if (data.currentPassword === data.password) return reply({ error: 'password_unchanged' }, 400);
+    await env.DB.batch([
+      env.DB.prepare('UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?').bind(await hashPassword(data.password), new Date().toISOString(), user.id),
+      env.DB.prepare('DELETE FROM auth_sessions WHERE user_id = ?').bind(user.id),
+    ]);
+    return reply({ ok: true }, 200, cookieFor(request, '', 0));
+  }
   if (path === '/api/auth/logout') {
     const token = sessionToken(request);
     if (token) await env.DB.prepare('DELETE FROM auth_sessions WHERE token_hash = ?').bind(await hmac(env.AUTH_SECRET, token)).run();

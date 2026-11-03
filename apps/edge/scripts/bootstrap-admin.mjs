@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 
 const email = process.env.ADMIN_BOOTSTRAP_EMAIL?.trim().toLowerCase();
 const password = process.env.ADMIN_BOOTSTRAP_PASSWORD;
-const name = process.env.ADMIN_BOOTSTRAP_NAME?.trim() || 'GlobeGuide Admin';
+const name = process.env.ADMIN_BOOTSTRAP_NAME?.trim() || 'Wayella Admin';
 
 if (!email || !/^[^\s@]{1,64}@[^\s@]+\.[^\s@]+$/.test(email) || !password || password.length < 16 || password.length > 128 || name.length > 48) {
   console.error('Set ADMIN_BOOTSTRAP_EMAIL, ADMIN_BOOTSTRAP_PASSWORD (16-128 characters), and optionally ADMIN_BOOTSTRAP_NAME.');

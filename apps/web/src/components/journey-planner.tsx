@@ -100,7 +100,7 @@ export function JourneyPlanner() {
           <div className="journey-section__visual-sticky">
             <div className={`journey-visual journey-visual--step-${activeStep}`} aria-live="polite">
               <div className="journey-visual__topline">
-                <span><Route size={14} aria-hidden="true" /> GlobeGuide route</span>
+                <span><Route size={14} aria-hidden="true" /> Wayella route</span>
                 <span className="journey-visual__signal"><i /> Live canvas</span>
               </div>
               <div className="journey-visual__canvas">
@@ -130,7 +130,7 @@ export function JourneyPlanner() {
         <div className="journey-section__steps">
           <p className="journey-section__eyebrow">A better way to travel</p>
           <h2 id="journey-title">The trip takes shape as you move.</h2>
-          <p className="journey-section__intro">GlobeGuide keeps discovery, planning and real-world notes in one calm flow, so a trip can stay open until you are ready to go.</p>
+          <p className="journey-section__intro">Wayella keeps discovery, planning and real-world notes in one calm flow, so a trip can stay open until you are ready to go.</p>
           <div className="journey-steps">
             {steps.map((step, index) => {
               const Icon = step.icon;

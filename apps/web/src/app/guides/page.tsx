@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Globe2 } from 'lucide-react';
+import { JapanTopicCards } from '@/components/japan-topic-cards';
+import { IranGuideCards } from '@/components/iran-guide-article';
 
 import './guides.css';
 
 export const metadata: Metadata = {
   title: '旅行攻略',
-  description: '按国家查找 GlobeGuide 旅行攻略。从出发手续到在地交通、行程和预算，按真实出行顺序规划。',
+  description: '按国家查找 Wayella 旅行攻略。从出发手续到在地交通、行程和预算，按真实出行顺序规划。',
   alternates: { canonical: '/guides/' },
 };
 
@@ -17,9 +19,18 @@ export default function GuidesPage() {
       <div className="guides-index__symbol"><Globe2 size={25} aria-hidden="true" /></div>
       <h1>旅行攻略</h1>
       <p>选择目的地，按出发前、抵达后、旅途中和返程的顺序查找实用信息。</p>
+      <nav className="guides-country-nav" aria-label="选择国家"><a href="#guides-iran">伊朗 · 新增</a><a href="#guides-asia">日本</a></nav>
     </div>
+    <section className="guides-index__section guides-index__section--iran" aria-labelledby="guides-iran" lang="zh-CN">
+      <div className="guides-index__section-heading"><h2 id="guides-iran">西亚 · 伊朗</h2><span>1 篇总攻略 · 3 篇实用专题</span></div>
+      <Link className="guides-index__entry" href="/guides/iran/">
+        <div className="guides-iran-art" aria-hidden="true"><span>IRAN</span><strong>波斯文化<br />与城市故事</strong><i /></div>
+        <div className="guides-index__entry-content"><div className="guides-index__entry-label"><BookOpen size={16} aria-hidden="true" />国家攻略</div><h3>认识伊朗，从文化到旅行准备</h3><p>五城文化、入境、现金与网络。附官方安全提醒，路线仅供未来规划参考；当前建议暂缓非必要旅游。</p><span>查看伊朗攻略 <ArrowRight size={17} aria-hidden="true" /></span></div>
+      </Link>
+      <IranGuideCards />
+    </section>
     <section className="guides-index__section" aria-labelledby="guides-asia">
-      <div className="guides-index__section-heading"><h2 id="guides-asia">亚洲</h2><span>已发布 1 篇</span></div>
+      <div className="guides-index__section-heading"><h2 id="guides-asia">亚洲 · 日本</h2><span>1 篇总攻略 · 5 篇实用专题</span></div>
       <Link className="guides-index__entry" href="/guides/japan/">
         <div className="guides-index__image"><Image src="/images/tokyo.jpg" alt="东京城市景观" fill sizes="(max-width: 640px) 100vw, 280px" /></div>
         <div className="guides-index__entry-content">
@@ -29,6 +40,8 @@ export default function GuidesPage() {
           <span>查看攻略 <ArrowRight size={17} aria-hidden="true" /></span>
         </div>
       </Link>
+      <h2 className="japan-topics-index-title">第一次去日本，先把这些事弄清楚</h2>
+      <JapanTopicCards />
     </section>
   </main>;
 }

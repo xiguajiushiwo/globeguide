@@ -63,6 +63,20 @@ beforeEach(() => {
 });
 
 describe('email and password auth', () => {
+  it('changes a password only after checking the current password and revokes every session', async () => {
+    const cookie = await register();
+    const another = await call('/api/auth/login', { email, password: 'A secure 12+ password' });
+    const otherCookie = another.headers.get('Set-Cookie')!.split(';')[0]!;
+    expect((await call('/api/auth/password', { currentPassword: 'wrong', password: 'A different secure password' }, cookie)).status).toBe(400);
+    expect((await call('/api/auth/password', { currentPassword: 'A secure 12+ password', password: 'short' }, cookie)).status).toBe(400);
+    expect((await call('/api/auth/password', { currentPassword: 'A secure 12+ password', password: 'A different secure password' })).status).toBe(401);
+    expect((await call('/api/auth/password', { currentPassword: 'A secure 12+ password', password: 'A different secure password' }, cookie, 'https://other.example')).status).toBe(403);
+    const changed = await call('/api/auth/password', { currentPassword: 'A secure 12+ password', password: 'A different secure password' }, cookie);
+    expect(changed.status).toBe(200); expect(changed.headers.get('Set-Cookie')).toContain('Max-Age=0');
+    for (const old of [cookie, otherCookie]) expect(await resolveSession(new Request(`${origin}/api/auth/me`, { headers: { Cookie: old } }), env)).toBeNull();
+    expect((await call('/api/auth/login', { email, password: 'A secure 12+ password' })).status).toBe(401);
+    expect((await call('/api/auth/login', { email, password: 'A different secure password' })).status).toBe(200);
+  });
   it('keeps registration unavailable when there is no real provider or test sink', async () => {
     delete env.MAIL_SINK;
     expect((await call('/api/auth/config').then((response) => response.json()) as { registrationAvailable: boolean }).registrationAvailable).toBe(false);

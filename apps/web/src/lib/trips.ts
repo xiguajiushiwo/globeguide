@@ -1,5 +1,7 @@
 import { isDestinationId } from '@globeguide/domain';
 
+import { japanTripDestinationId, getJapanRouteTemplate, type JapanRouteTemplateId } from './japan-trip';
+
 const STORAGE_KEY = 'globeguide:trips:v1';
 const VERSION = 1;
 const ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -13,6 +15,7 @@ export interface Trip {
   endDate: string | null;
   notes: string;
   highlightIds: string[];
+  route?: { kind: 'japan'; templateId: JapanRouteTemplateId };
   updatedAt: string;
 }
 
@@ -57,6 +60,14 @@ function parseTrip(value: unknown): Trip {
     new Set(value.highlightIds).size !== value.highlightIds.length) {
     throw new Error('Trip stops must be unique valid highlight IDs.');
   }
+  let route: Trip['route'];
+  if (value.route !== undefined) {
+    if (!isRecord(value.route) || value.route.kind !== 'japan' || value.destinationId !== japanTripDestinationId ||
+      typeof value.route.templateId !== 'string' || !getJapanRouteTemplate(value.route.templateId)) {
+      throw new Error('Invalid route template.');
+    }
+    route = { kind: 'japan', templateId: value.route.templateId as JapanRouteTemplateId };
+  }
   if (typeof value.updatedAt !== 'string' || !/^\d{4}-\d{2}-\d{2}T/.test(value.updatedAt) ||
     !Number.isFinite(Date.parse(value.updatedAt))) {
     throw new Error('Invalid trip update time.');
@@ -70,6 +81,7 @@ function parseTrip(value: unknown): Trip {
     endDate: value.endDate,
     notes: value.notes,
     highlightIds: [...value.highlightIds],
+    ...(route ? { route } : {}),
     updatedAt: value.updatedAt,
   } as Trip;
 }

@@ -1,6 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import { resolve } from 'node:path';
 
 const port = process.env.PLAYWRIGHT_PORT ?? '4173';
+const edgeDirectory = resolve(__dirname, '../edge');
+const wrangler = resolve(edgeDirectory, 'node_modules/wrangler/bin/wrangler.js');
 
 export default defineConfig({
   testDir: './e2e',
@@ -11,13 +14,15 @@ export default defineConfig({
   use: {
     baseURL: `http://127.0.0.1:${port}`,
     trace: 'retain-on-failure',
+    ...(process.env.PLAYWRIGHT_CHANNEL ? { channel: process.env.PLAYWRIGHT_CHANNEL } : {}),
   },
   projects: [
     { name: 'desktop-chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile-chromium', use: { ...devices['Pixel 7'], browserName: 'chromium' } },
   ],
   webServer: {
-    command: `npx --yes wrangler@4.151.2 pages dev out --port ${port}`,
+    command: `"${process.execPath}" "${wrangler}" pages dev ../web/out --port ${port}`,
+    cwd: edgeDirectory,
     url: `http://127.0.0.1:${port}`,
     reuseExistingServer: false,
     timeout: 120_000,

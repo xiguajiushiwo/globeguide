@@ -6,6 +6,9 @@
 .guides-index__section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--line); }
 .guides-index__section-heading h2 { margin: 0; font-size: 23px; }
 .guides-index__section-heading span { color: var(--muted); font-size: 13px; }
+.guides-country-nav { display: flex; gap: 12px; margin-top: 22px; }.guides-country-nav a { padding: 9px 17px; border: 1px solid var(--line); border-radius: 5px; color: var(--teal); font-size: 14px; font-weight: 700; }
+.guides-index__section--iran { margin-bottom: 65px; }.guides-index__section-heading h2 { scroll-margin-top: 100px; }
+.guides-iran-art { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 12px; min-height: 205px; padding: 28px; overflow: hidden; background: #eee5d3; color: #285c58; }.guides-iran-art > span { font-size: 12px; letter-spacing: .2em; z-index: 1; }.guides-iran-art strong { font-size: 27px; line-height: 1.4; z-index: 1; }.guides-iran-art i { position: absolute; height: 200px; width: 200px; right: -100px; top: -35px; border: 30px double #c4c3a8; transform: rotate(30deg); opacity: .6; }
 .guides-index__entry { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 32px; max-width: 850px; padding: 24px 0; border-bottom: 1px solid var(--line); }
 .guides-index__image { position: relative; min-height: 190px; overflow: hidden; background: var(--soft); }
 .guides-index__image img { object-fit: cover; }
@@ -15,6 +18,7 @@
 .guides-index__entry p { max-width: 490px; margin: 0 0 15px; color: var(--muted); font-size: 14px; line-height: 1.7; }
 .guides-index__entry-content > span { display: inline-flex; align-items: center; gap: 8px; color: var(--teal-dark); font-size: 14px; font-weight: 700; }
 .guides-index__entry:hover .guides-index__entry-content > span { text-decoration: underline; }
+.japan-topics-index-title { margin: 38px 0 18px; font-size: 24px; line-height: 1.5; }
 @media (max-width: 640px) {
   .guides-index { padding-block: 35px 70px; }
   .guides-index__heading { padding-bottom: 39px; }

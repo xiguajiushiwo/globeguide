@@ -12,6 +12,7 @@ export type JapanStop = {
   coordinates: [number, number];
   arrival: string;
   photoTip: string;
+  navigationMode?: 'transit' | 'walking';
   photo?: JapanPhoto;
 };
 
@@ -24,6 +25,14 @@ export type JapanLeg = {
   evidenceLabel?: string;
 };
 
+export type JapanDayOption = {
+  id: string;
+  label: string;
+  stopIds: string[];
+  legs?: JapanLeg[];
+  fieldNotes?: string[];
+};
+
 export type JapanFieldDay = {
   day: number;
   title: string;
@@ -31,6 +40,7 @@ export type JapanFieldDay = {
   stops: [JapanStop, ...JapanStop[]];
   legs: JapanLeg[];
   fieldNotes: string[];
+  options?: [JapanDayOption, JapanDayOption, ...JapanDayOption[]];
 };
 
 const pexels = (id: string, photographer: string): JapanPhoto => ({
@@ -102,8 +112,8 @@ export const japanFieldDays: [JapanFieldDay, ...JapanFieldDay[]] = [
     day: 6, title: '清水寺、三年坂、八坂', base: '从京都站出发，清水寺上坡、三年坂下坡，最后走到八坂神社；下雨时石板路要减速。',
     stops: [
       { id: 'kiyomizu', name: '清水寺本堂', city: '京都', coordinates: [135.7844389, 34.994303], arrival: '先导航到清水寺主入口；公交下车后仍有上坡步行，拥挤或带长者可比较出租车落点。', photoTip: '实景图显示秋季本堂；红叶只在对应季节出现，拍摄请遵守寺院限制。', photo: kiyomizu },
-      { id: 'sannenzaka', name: '三年坂', city: '京都', coordinates: [135.7808266, 34.9979857], arrival: '从清水寺下行，经产宁坂/三年坂向祇园方向；沿途店铺和巷口密集，用地图确认下一点。', photoTip: '在不挡人行的位置拍坡道与传统町家；勿闯入私人院落。' },
-      { id: 'yasaka', name: '八坂神社', city: '京都', coordinates: [135.7782611, 35.0036027], arrival: '沿东山街巷往北，抵达八坂神社后再按体力决定是否去圆山公园。', photoTip: '黄昏可拍西楼门一带；避开祭祀活动和明确禁拍区域。' },
+      { id: 'sannenzaka', name: '三年坂', city: '京都', coordinates: [135.7808266, 34.9979857], arrival: '从清水寺下行，经产宁坂/三年坂向祇园方向；沿途店铺和巷口密集，用地图确认下一点。', photoTip: '在不挡人行的位置拍坡道与传统町家；勿闯入私人院落。', navigationMode: 'walking' },
+      { id: 'yasaka', name: '八坂神社', city: '京都', coordinates: [135.7782611, 35.0036027], arrival: '沿东山街巷往北，抵达八坂神社后再按体力决定是否去圆山公园。', photoTip: '黄昏可拍西楼门一带；避开祭祀活动和明确禁拍区域。', navigationMode: 'walking' },
     ],
     legs: [
       { from: '京都站', to: '清水寺', instruction: '京都市巴士 206 系统可到五条坂一带，再上坡步行；京都公交线路、站台和拥堵会变化，出发前看京都市交通局与实时导航。', fare: '普通市巴士均一区间票价请在上车前查现价；这里不把未核实的金额写死。', evidence: 'https://www2.city.kyoto.lg.jp/kotsu/webguide/en/', evidenceLabel: '京都市交通局' },
@@ -119,6 +129,10 @@ export const japanFieldDays: [JapanFieldDay, ...JapanFieldDay[]] = [
     ],
     legs: [{ from: '京都站', to: '稻荷站', instruction: 'JR 奈良线普通车到稻荷站；确认列车停靠稻荷，再由站前步行至伏见稻荷大社。', fare: '成人 IC 参考 ¥150。', evidence: yahooFare('京都', '稲荷'), evidenceLabel: '查询本段' }],
     fieldNotes: ['千本鸟居入口与山顶不是同一个点；上山长度依体力决定，留原路返回时间。', '岚山是独立替换路线，不把两处照片与同一天乘车费用混算。'],
+    options: [
+      { id: 'fushimi', label: '伏见稻荷', stopIds: ['fushimi'], legs: [{ from: '京都站', to: '稻荷站', instruction: 'JR 奈良线普通车到稻荷站；确认列车停靠稻荷，再由站前步行至伏见稻荷大社。', fare: '成人 IC 参考 ¥150。', evidence: yahooFare('京都', '稲荷'), evidenceLabel: '查询本段' }], fieldNotes: ['千本鸟居入口与山顶不是同一个点；上山长度依体力决定，留原路返回时间。'] },
+      { id: 'arashiyama', label: '岚山', stopIds: ['arashiyama'], legs: [{ from: '京都站', to: '岚山', instruction: '先确定竹林、渡月桥或寺院作为首站，再按位置选择 JR 嵯峨岚山、阪急岚山或岚电；不同车站不是同一入口。', fare: '票价和班次按当天运营商与导航查询。', evidence: 'https://www2.city.kyoto.lg.jp/koho/eng/kyoto/transportation.html', evidenceLabel: '查询京都交通信息' }], fieldNotes: ['竹林、渡月桥和寺院之间仍需步行；早到也要为人流和拍摄礼仪留余量。'] },
+    ],
   },
   {
     day: 8, title: '京都经奈良到大阪', base: '先处理大件行李：寄送大阪酒店或在有保障的地点寄存；奈良公园不适合拖箱。',

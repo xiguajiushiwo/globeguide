@@ -1,146 +1,113 @@
-# GlobeGuide 全球旅行指南
+# Wayella
 
-GlobeGuide 是可公开浏览的全球旅行指南内测版。首页保留东京、巴黎、纽约的深度编辑指南，同时提供全球交互地图、全球国家首都目录、31 个中国大陆省级中心城市，以及香港、澳门和台北入口。登录不是浏览前置条件；登录后可在 `Travel Notes` 中发布 `Guide` 或 `Moment`，公开内容需经过审核。
+**看见世界，让世界看见你。**
 
-## 先看这里
+*See the world. Share yours.*
 
-| 你是谁 | 如何使用 |
+Wayella 是一个从旅行出发的内容社区：查找目的地和实用攻略，把喜欢的地点排成行程，再分享旅途中的故事与发现。
+
+**[访问 Wayella →](https://wayella.com/)** · [日本攻略](https://wayella.com/guides/japan/) · [世界地图](https://wayella.com/map/) · [旅行社区](https://wayella.com/stories/)
+
+> 项目处于早期内测阶段，原名 GlobeGuide。产品已更名为 Wayella；GitHub 仓库、工作区包名和 Cloudflare 项目沿用 `globeguide`，以保持现有部署和数据兼容。源码仓库为私有，线上网站可公开访问。
+
+## 这个项目可以做什么
+
+| 场景 | 当前能力 |
 | --- | --- |
-| 内测用户 | 打开下方的 Cloudflare Pages 地址即可使用，不需要下载代码、安装 Node.js 或配置数据库。 |
-| 获授权的开发协作者 | 使用下方的一条 npm 命令，通过已授权的 GitHub 账号获取私有代码并安装依赖。 |
+| 发现目的地 | 世界地图、国家首都与中国城市目录，中英文地点搜索，东京、巴黎、纽约城市指南 |
+| 阅读实用攻略 | 日本总攻略、机场／住宿／交通／预约等专题、逐日路线与动漫景点地图；伊朗文化与旅行准备资料 |
+| 规划旅行 | 收藏地点、编辑行程、安排停靠顺序、日本路线模板、JSON 导入与导出 |
+| 发布旅行内容 | Guide 与 Moment、草稿、提交审核、内容管理；支持图片、视频和直播间链接 |
+| 社区互动 | 点赞、帖子收藏、关注、评论与回复、表情、图片链接和语音评论、私信及群聊 |
+| 管理个人账号 | 公开资料、个人中心、互动通知、密码修改、举报、拉黑及黑名单管理 |
+| 交易探索 | 发布旅行相关商品、查看商品并提交购买意向 |
 
-**内测地址：[globeguide.pages.dev](https://globeguide.pages.dev/)。** 网页已部署并通过主要浏览器流程验收。当前 `http://127.0.0.1:3000/` 只在开发者自己的电脑上可用，不能作为发给内测用户的地址。
+## 当前边界
 
-**数据限制：收藏和行程仍保存在当前浏览器。** 账号、会话和创作者帖子保存在 Cloudflare D1；收藏和行程暂不随账号跨设备同步。清除浏览器网站数据可能导致它们丢失。换设备前，请先导出行程文件，再到新浏览器导入。内测版不提供预订、付款或 AI 旅行建议。交通、票价等可能变化的信息请以页面链接的官方来源为准。
+- **邮件注册和密码找回尚未开放**：相关流程已实现，生产环境仍需配置真实事务邮件服务；已有账号可继续登录。
+- **媒体目前以链接为主**：尚未接入图片／视频文件上传、转码和自建直播推流；评论中的语音录制是基础实现，表情包入口目前是内置表情。
+- **商城尚未接入支付**：当前提交的是购买意向，没有在线扣款、结算或物流系统。
+- **地点收藏与旅行行程保存在浏览器**：暂不跨设备或跨域名同步；行程可导出备份。账号、帖子和社交数据存储在 Cloudflare D1。
+- **攻略是编辑资料，不是实时承诺**：保留来源和查阅日期；签证、票价、开放状态和安全提醒需要出发前复核。伊朗内容当前包含暂缓非必要旅游的提醒。
 
-**地图定位：** 地图页的“我的位置”按钮只在你点击并允许浏览器定位后显示当前设备位置；坐标只用于本次地图视图，不会上传、保存或关联账号。拒绝权限时仍可正常浏览所有城市和首都。
+## 技术架构
 
-**首都目录数据：** 首都坐标来自 World Cities / SimpleMaps 数据（CC BY 4.0），国家名称、货币和基础元数据来自 `mledoze/countries`（MIT）；详情页中的交通和开放时间仍需以当地官方信息为准。
+```text
+浏览器 → wayella.com → Cloudflare Pages
+                         ├─ Next.js 静态页面、图片和地图
+                         └─ /api/* → Pages Worker → Cloudflare D1
 
-**Travel Notes 内容规则：** `/stories/` 是 Travel Notes 的稳定地址，前台分为 `Guides` 和 `Moments`。游客可以浏览已发布内容；登录用户可以写草稿并提交审核。编辑示例是 GlobeGuide 原创文字，参考链接只用于事实核对和内容结构说明，不复制第三方文章、图片或个人投稿。当前版本只支持纯文本，不开放作者图片上传、点赞、评论、关注或私信。
-
-**邮件限制：** 当前没有配置真实发件域名或事务邮件服务。公网环境没有配置邮件发送时，注册和密码重置会明确返回“邮件服务尚未启用”，不会伪造已发送验证码。部署 Resend（或兼容服务）并验证发件域名后，再设置 `MAIL_API_KEY` 与 `MAIL_FROM` 才能开放真实注册。自动化测试可注入仅测试用的 `MAIL_SINK`，该绑定不应部署到公网。
-
-GitHub 仓库及可安装源码保持**私有**。内测网页部署后可由持有网址的人访问，但不会开放源码。
-
-## 协作者一条命令安装
-
-准备条件：拥有私有仓库 [`xiguajiushiwo/globeguide`](https://github.com/xiguajiushiwo/globeguide) 的访问权限；本机已安装 Git、Node.js 22 或更新版本，以及 Corepack 或 pnpm 11。先为 Git 配置 GitHub HTTPS 登录，可使用 `gh auth login` 加 `gh auth setup-git`，或 Git Credential Manager。不要把访问令牌写进命令或仓库 URL。
-
-在准备放置项目的目录运行（PowerShell，已在 Windows 验证）：
-
-```powershell
-$env:GIT_CONFIG_COUNT='1'; $env:GIT_CONFIG_KEY_0='url.https://github.com/.insteadOf'; $env:GIT_CONFIG_VALUE_0='ssh://git@github.com/'; npm exec --yes --package=git+https://github.com/xiguajiushiwo/globeguide.git -- gbg init globeguide
+可选地理服务：NestJS + Fastify → Prisma → PostgreSQL / PostGIS
 ```
 
-部分 npm/Git 组合会把 GitHub HTTPS 包地址改走 SSH；命令前面的 Git 映射确保当前 PowerShell 会话使用已配置的 HTTPS 凭据。该命令经 GitHub 授权获取 CLI，克隆私有仓库到 `./globeguide`，然后执行 `pnpm install --frozen-lockfile`。它**不会向公开 npm 仓库发布源码**；`gbg` 是私有 Git 包提供的命令，并非公开的 `npm install gbg` 包。若目标目录已经存在，命令会拒绝覆盖。
+前端使用 **Next.js、React、TypeScript、MapLibre GL**；线上账号与社区 API 使用 **Cloudflare Workers 和 D1**。仓库通过 **pnpm workspace + Turborepo** 管理，用 **Vitest 和 Playwright** 验证。
 
-已配置 GitHub SSH 密钥、且 HTTPS 克隆也已授权的协作者，可直接使用跨平台简写：
+`apps/api` 是独立的地理服务，保留自己的接口和测试；当前 Pages 网站不依赖它运行。
 
-```sh
-npm exec --yes --package=git+https://github.com/xiguajiushiwo/globeguide.git -- gbg init globeguide
-```
+## 快速开始
 
-安装后检查本地环境：
+需要 Node.js 22+、pnpm 11 和此私有仓库的 GitHub 访问权限。
 
 ```sh
+git clone https://github.com/xiguajiushiwo/globeguide.git
 cd globeguide
-node bin/gbg.mjs doctor
+pnpm install --frozen-lockfile
+pnpm --filter @globeguide/api prisma:generate
+pnpm --filter @globeguide/web dev
 ```
 
-`doctor` 检查 Node.js、Git、Corepack/pnpm，以及 `127.0.0.1:5432` 上的 PostgreSQL 端口；不会读取或打印密码。远程数据库或其他端口需单独检查。若 npm Git 安装在本机环境中不可用，可执行 `gh repo clone xiguajiushiwo/globeguide`，进入项目目录后运行 `corepack pnpm install --frozen-lockfile`。
-
-## 本地开发
-
-Web 使用 Next.js 静态导出；生产账号和创作者 API 是同源 Cloudflare Pages Advanced Worker + D1。既有 API 使用 NestJS/Fastify、Prisma 和 PostgreSQL/PostGIS，供后续地理服务开发。部署后的 Web 内测版不依赖开发者电脑或本地 API；开发旧 API 时才需要 PostgreSQL 和与其版本匹配的 PostGIS 扩展。
-
-1. 安装 PostgreSQL 和 PostGIS，创建 `globeguide` 数据库及用户，以管理员身份在该数据库启用 `postgis` 扩展。首个迁移也会执行 `CREATE EXTENSION IF NOT EXISTS postgis`。
-2. 将仓库根目录的 `.env.example` 复制为 `apps/api/.env`，把 `replace-me` 换成自己的数据库密码；密码如含特殊字符，需要做 URL 编码。`.env` 已被 Git 忽略。
-3. 在仓库根目录生成 Prisma Client、执行迁移并导入三个城市的初始数据：
+打开 **http://127.0.0.1:3000/**。此模式用于开发页面、地图和攻略；账号、发帖及社交接口需要使用完整本地预览：
 
 ```sh
-corepack pnpm --filter @globeguide/api prisma:generate
-corepack pnpm --filter @globeguide/api prisma:migrate
-corepack pnpm --filter @globeguide/api prisma:seed
+pnpm build
+pnpm --filter @globeguide/edge db:migrate:local
 ```
 
-分别在两个终端启动 Web 和 API：
+将 `apps/edge/.dev.vars.example` 复制为同目录的 `.dev.vars`，然后运行：
 
 ```sh
-corepack pnpm --filter @globeguide/web dev
+pnpm preview
 ```
 
-```sh
-corepack pnpm --filter @globeguide/api dev
-```
-
-本地 Web 地址是 `http://127.0.0.1:3000/`；API 健康检查是 `http://127.0.0.1:3001/v1/health`。API 从 `apps/api/.env` 读取配置。API 停止时，Web 内测版的精选指南、搜索和浏览器本地数据仍可使用。
-
-## 检查质量
-
-在仓库根目录执行：
-
-```sh
-corepack pnpm lint
-corepack pnpm typecheck
-corepack pnpm test
-corepack pnpm build
-```
-
-`pnpm test` 包含 CLI、领域和 API 测试。API 端到端测试可单独运行 `corepack pnpm --filter @globeguide/api test:e2e`。Web 生产构建将静态文件输出到 `apps/web/out`。
-
-静态站点的桌面和手机浏览器流程可在构建后运行；CI 也会执行同一检查：
-
-```sh
-corepack pnpm --filter @globeguide/web test:e2e
-```
-
-## 发布 Cloudflare Pages 内测版
-
-发布内容是 `apps/web/out` 中的静态 Web 文件。协作者在已授权的本地仓库中执行：
-
-```sh
-corepack pnpm install --frozen-lockfile
-corepack pnpm --filter @globeguide/web build
-corepack pnpm --filter @globeguide/edge build
-npx wrangler login
-cd apps/edge
-npx wrangler d1 migrations apply globeguide-beta --remote
-npx wrangler pages deploy ../web/out --project-name globeguide --branch main --commit-dirty=true
-```
-
-Pages 项目 `globeguide` 已创建并部署在上方内测地址，无需再次执行 `pages project create`。`apps/edge/wrangler.jsonc` 将 `DB` 绑定到专用的 `globeguide-beta` D1，不会修改其他数据库。先设置生产密钥（不要写入仓库）：
-
-```sh
-npx wrangler pages secret put AUTH_SECRET --project-name globeguide
-npx wrangler pages secret put CODE_HMAC_KEY --project-name globeguide
-# 配置真实发件服务后才设置：
-npx wrangler pages secret put MAIL_API_KEY --project-name globeguide
-npx wrangler pages secret put MAIL_FROM --project-name globeguide
-```
-
-首次部署后，用受控终端创建管理员。邮箱从环境变量读取，密码不会写入脚本或 Git；`ADMIN_BOOTSTRAP_CONFIRM` 是防误操作确认值：
-
-```powershell
-$env:ADMIN_BOOTSTRAP_EMAIL='your-admin@example.com'
-$env:ADMIN_BOOTSTRAP_PASSWORD=Read-Host 'Admin password (16+ characters)'
-$env:ADMIN_BOOTSTRAP_CONFIRM='globeguide-beta'
-node apps/edge/scripts/bootstrap-admin.mjs --remote
-Remove-Item Env:ADMIN_BOOTSTRAP_PASSWORD,Env:ADMIN_BOOTSTRAP_CONFIRM
-```
-
-当前通过 Wrangler 手动发布，推送 GitHub 不会自动更新线上网页。仓库仍为私有；Cloudflare 只接收构建后的静态站点和 Worker。不要上传 `apps/api/.env`、数据库备份或源码访问凭据。每次发布后检查搜索、目的地、地图归属、故事审核、账号错误状态、桌面和手机布局、CI 通过，以及 GitHub 仓库仍显示为私有。
+完整预览同样使用 3000 端口，请先停止前面的 Next.js 开发服务。本地预览使用本地 D1，不会写入生产数据库；邮件验证码仍需要配置邮件服务。
 
 ## 项目结构
 
-- `apps/web`：面向旅行者的 Web 内测版。
-- `apps/api`：版本化 API、Prisma 和 PostGIS 迁移。
-- `packages/domain`：共享的地点与行程规则。
-- `docs/superpowers/specs/2026-10-19-globeguide-platform-design.md`：长期平台设计。
-- `docs/superpowers/specs/2026-10-20-globeguide-beta-design.md`：本次内测范围和限制。
+```text
+apps/
+  web/          页面、组件、攻略内容、静态资源与浏览器测试
+  edge/         生产 API、D1 迁移、账号与社区逻辑
+  api/          可选的 NestJS 地理服务与 PostgreSQL 模型
+packages/
+  domain/       地点目录、共享类型、校验与行程规则
+bin/            私有仓库安装和环境检查 CLI
+scripts/        仓库文件及文档链接检查
+test/           CLI 测试
+docs/           开发、部署、架构、内容来源和维护说明
+```
 
-不要提交个人行程导出文件、数据库凭据或真实用户信息。浏览器本地存储并非备份，重要行程应导出留存。
+## 验证与协作
 
-## English quick start
+```sh
+pnpm check:repo
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+pnpm --filter @globeguide/web exec playwright install chromium
+pnpm --filter @globeguide/web test:e2e
+```
 
-Invited testers can use the hosted Web URL above. Authorized GitHub collaborators can run the PowerShell `npm exec` command in this README, then follow the local database and development steps. The source repository remains private; saved data is browser-local and does not sync between devices.
+GitHub Actions 在推送和 Pull Request 时执行仓库检查、类型检查、测试、构建及桌面／手机浏览流程。**推送 GitHub 不会自动部署网站**，生产发布使用 Wrangler 手动执行。
+
+| 文档 | 内容 |
+| --- | --- |
+| [开发指南](docs/development.md) | 本地 D1、可选 PostgreSQL、浏览器测试、CLI 和生成文件 |
+| [部署指南](docs/deployment.md) | Cloudflare Pages、域名、密钥、迁移、发布与回滚 |
+| [架构与功能边界](docs/architecture.md) | 模块职责、数据存储、认证、内容审核与后续方向 |
+| [内容与第三方来源](docs/content-and-attribution.md) | 攻略维护规则、地图数据和图片许可 |
+| [仓库维护](docs/maintenance.md) | 文件保留与清理规则 |
+
+## English
+
+**Wayella is a travel community for discovering places, planning journeys, and sharing stories.** The beta combines destination guides, interactive maps, personal itineraries, creator tools, and community features. Visit **[wayella.com](https://wayella.com/)**. Media uploads, live streaming infrastructure, payments, and cross-device itinerary sync are not yet available; production email registration and password recovery await mail-service configuration.

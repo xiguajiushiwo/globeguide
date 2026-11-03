@@ -72,17 +72,20 @@ export function StoryViewer() {
     {!loading && message && <p className="story-notice" role="status">{message}</p>}
     {story && <article>
       <div className="story-detail__meta"><span className={`story-kind story-kind--${story.type}`}>
-        {story.type === 'guide' ? 'Guide' : 'Travel journal'}</span>
-        {example && <span>GlobeGuide editorial example · not a traveler submission</span>}
+        {story.format === 'video' ? 'Video' : story.format === 'gallery' ? 'Photo set' : story.format === 'live' ? 'Live' : story.type === 'guide' ? 'Guide' : 'Travel journal'}</span>
+        {example && <span>Wayella editorial example · not a traveler submission</span>}
       </div>
       <h1>{story.title || 'A travel note'}</h1>
-      <p className="story-detail__byline">By {example ? story.author.displayName : <Link href={`/profiles/${encodeURIComponent(story.author.id)}/`}>{story.author.displayName}</Link>}
+      <p className="story-detail__byline">By {example ? story.author.displayName : <Link href={`/profiles/?id=${encodeURIComponent(story.author.id)}`}>{story.author.displayName}</Link>}
         {story.publishedAt && <> · {new Date(story.publishedAt).toLocaleDateString('en', { year: 'numeric', month: 'long', day: 'numeric' })}</>}
         {story.visitedMonth && <> · Visited {story.visitedMonth}</>}
       </p>
       {destination && <Link className="story-detail__place" href={`/destinations/${destination.place.id}/`}>
         <MapPin size={17} aria-hidden="true" />{destination.place.name} · {destination.nameZh}</Link>}
       <div className="story-detail__body">{story.body.split(/\n\s*\n/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
+      {story.format === 'video' && story.mediaUrls?.[0] && <video className="story-detail__video" controls playsInline preload="metadata" src={story.mediaUrls[0]} />}
+      {story.format === 'gallery' && story.mediaUrls && story.mediaUrls.length > 0 && <div className="story-detail__gallery">{story.mediaUrls.map((src) => <img key={src} src={src} alt="Travel note photo" loading="lazy" />)}</div>}
+      {story.format === 'live' && <div className="story-detail__live"><span className="story-kind story-kind--moment">Live room</span><strong>{story.liveStartsAt ? `Starts ${new Date(story.liveStartsAt).toLocaleString()}` : 'Live room scheduled'}</strong>{story.liveUrl && <a className="story-primary" href={story.liveUrl} target="_blank" rel="noreferrer">Join live room <ArrowUpRight size={15} aria-hidden="true" /></a>}</div>}
       {example && <div className="story-example-note"><p>This original platform example shows how notes will appear. It does not claim a personal visit or provide current opening hours or prices.</p>{story.sourceUrl && <a href={story.sourceUrl} target="_blank" rel="noreferrer">{story.sourceLabel ?? 'Reference source'} <ArrowUpRight size={14} aria-hidden="true" /></a>}</div>}
       {!example && <>
         <SocialActions postId={story.id} authenticated={authenticated} initial={{ liked: false, bookmarked: false, counts: { likes: 0, bookmarks: 0, shares: 0, comments: 0 } }} />

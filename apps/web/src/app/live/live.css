@@ -1,0 +1,5 @@
+.live-page { padding-block: 32px 90px; }
+.live-page__hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 28px; padding: 30px 28px; background: #fff2ee; }
+.live-page__hero h1 { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 44px; font-weight: 500; }
+.live-page__hero p:not(.stories-eyebrow) { max-width: 620px; margin: 10px 0 0; color: var(--muted); line-height: 1.55; }
+@media (max-width: 640px) { .live-page { padding-block: 22px 65px; } .live-page__hero { align-items: flex-start; flex-direction: column; padding: 23px 18px; } .live-page__hero h1 { font-size: 36px; } }

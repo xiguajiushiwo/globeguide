@@ -70,7 +70,7 @@ export class GeographyService {
       timeZone: place.timeZone as PlaceSummary['timeZone'],
       currency: place.currency as PlaceSummary['currency'],
       updatedAt: place.updatedAt.toISOString(),
-      sourceLabel: place.sources[0]?.label ?? 'GlobeGuide',
+      sourceLabel: place.sources[0]?.label ?? 'Wayella',
     };
   }
 }

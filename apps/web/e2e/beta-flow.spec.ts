@@ -2,6 +2,23 @@ import { readFile } from 'node:fs/promises';
 
 import { expect, test } from '@playwright/test';
 
+test('Japan map keeps alternative day routes and themed places usable together', async ({ page }) => {
+  await page.goto('/guides/japan/');
+  const explorer = page.locator('.japan-route-explorer');
+  await explorer.getByRole('button', { name: /^D7/ }).click();
+  await expect(explorer.locator('.japan-route-stops')).toContainText('伏见稻荷');
+  await expect(explorer.locator('.japan-route-stops')).not.toContainText('岚山');
+  await explorer.getByRole('button', { name: '岚山', exact: true }).click();
+  await expect(explorer.locator('.japan-route-stops')).toContainText('岚山');
+  await expect(explorer.locator('.japan-route-stops')).not.toContainText('伏见稻荷');
+  await explorer.getByRole('button', { name: '主题地点', exact: true }).click();
+  await explorer.getByRole('searchbox', { name: '搜索地点或作品' }).fill('你的名字。');
+  await expect(explorer.locator('.japan-theme-list')).toContainText('须贺神社');
+  await explorer.getByRole('button', { name: '逐日路线', exact: true }).click();
+  await expect(explorer.locator('.japan-route-stops')).toContainText('岚山');
+  await expect(explorer.locator('.japan-route-details')).toContainText('京都站');
+});
+
 test('search, save and build a portable trip', async ({ page }, testInfo) => {
   await page.goto('/');
   await page.getByRole('searchbox', { name: 'Search a city or place' }).fill('Louvre');
@@ -14,8 +31,9 @@ test('search, save and build a portable trip', async ({ page }, testInfo) => {
 
   await page.getByRole('button', { name: 'Save place' }).click();
   await expect(page.getByRole('button', { name: 'Saved in this browser' })).toBeVisible();
-  if (testInfo.project.name === 'mobile-chromium') {
-    await page.getByRole('button', { name: 'Open menu' }).click();
+  const menuButton = page.getByRole('button', { name: 'Open menu' });
+  if (await menuButton.isVisible()) {
+    await menuButton.click();
   }
   await page.getByRole('link', { name: 'Saved places' }).click();
   await expect(page.getByRole('heading', { name: 'Your saved places' })).toBeVisible();
@@ -41,7 +59,7 @@ test('search, save and build a portable trip', async ({ page }, testInfo) => {
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export JSON' }).click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toBe('globeguide-trips.json');
+  expect(download.suggestedFilename()).toBe('wayella-trips.json');
   const archive = await readFile(await download.path());
   expect(JSON.parse(archive.toString()).trips).toHaveLength(1);
 
@@ -49,7 +67,7 @@ test('search, save and build a portable trip', async ({ page }, testInfo) => {
   await page.getByRole('button', { name: 'Delete trip' }).click();
   await expect(page.getByText('No trips planned yet.')).toBeVisible();
   await page.locator('input[type="file"]').setInputFiles({
-    name: 'globeguide-trips.json',
+    name: 'wayella-trips.json',
     mimeType: 'application/json',
     buffer: archive,
   });
@@ -68,7 +86,7 @@ test('discover Travel Notes and open an editorial reference', async ({ page }, t
   await expect(page.getByRole('heading', { name: 'Travel Notes', exact: true })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'Guides', exact: true })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'Moments', exact: true })).toBeVisible();
-  await expect(page.getByText('GlobeGuide editorial picks')).toBeVisible();
+  await expect(page.getByText('Wayella editorial picks')).toBeVisible();
 
   await page.getByRole('tab', { name: 'Guides', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Build a neighborhood day in Paris', exact: true })).toBeVisible();

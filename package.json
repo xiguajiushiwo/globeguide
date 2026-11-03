@@ -15,6 +15,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
+    "preview": "pnpm --filter @globeguide/edge preview",
+    "check:repo": "node scripts/check-repository.mjs",
     "lint": "turbo run lint",
     "test": "node --test test/gbg.test.mjs && turbo run test",
     "typecheck": "turbo run typecheck"

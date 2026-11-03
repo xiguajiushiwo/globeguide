@@ -6,6 +6,13 @@
   font-size: 15px;
   font-weight: 400;
 }
+.search-guide-results { margin-block: 30px; }
+.search-guide-results > h2 { font-size: 22px; }
+.search-guide-result { display: block; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.search-guide-result > span, .search-guide-result strong { color: var(--teal); font-size: 13px; }
+.search-guide-result h3 { font-size: 19px; margin: 8px 0; line-height: 1.6; }
+.search-guide-result p { color: var(--muted); line-height: 1.8; font-size: 14px; }
+.search-guide-result strong { display: inline-flex; align-items: center; gap: 5px; }
 
 @media (max-width: 640px) {
   .search-result h2 small {

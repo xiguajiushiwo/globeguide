@@ -9,15 +9,15 @@ import { copy } from '@/lib/copy';
 import './globals.css';
 import './auth.css';
 import './stories/stories.css';
+import './account/account.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://globeguide.pages.dev'),
-  title: { default: 'GlobeGuide | Explore destinations', template: '%s | GlobeGuide' },
-  description: 'Explore destinations and save places for your next journey.',
-  alternates: { canonical: '/' },
+  metadataBase: new URL('https://wayella.com'),
+  title: { default: 'Wayella | See the world. Share yours.', template: '%s | Wayella' },
+  description: 'See the world. Share yours. Discover travel guides, plan your journey, and share your stories on Wayella.',
   manifest: '/manifest.webmanifest',
-  applicationName: 'GlobeGuide',
-  appleWebApp: { capable: true, title: 'GlobeGuide', statusBarStyle: 'default' },
+  applicationName: 'Wayella',
+  appleWebApp: { capable: true, title: 'Wayella', statusBarStyle: 'default' },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

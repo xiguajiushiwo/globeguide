@@ -8,6 +8,8 @@ const migrations = [
   '../migrations/0001_auth.sql',
   '../migrations/0002_posts.sql',
   '../migrations/0003_social.sql',
+  '../migrations/0004_creator_market.sql',
+  '../migrations/0005_notifications.sql',
 ];
 
 function d1(db: DatabaseSync): D1Database {

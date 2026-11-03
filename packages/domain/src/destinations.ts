@@ -90,17 +90,17 @@ function mainlandDestination(seed: ChinaSeed): Destination {
 
 const worldDestinations: Destination[] = [
   {
-    place: placeSummarySchema.parse({ id: '11111111-1111-4111-8111-111111111111', name: 'Tokyo', countryCode: 'JP', latitude: 35.6762, longitude: 139.6503, locale: 'en', timeZone: 'Asia/Tokyo', currency: 'JPY', updatedAt, sourceLabel: 'GlobeGuide editorial guide' }),
+    place: placeSummarySchema.parse({ id: '11111111-1111-4111-8111-111111111111', name: 'Tokyo', countryCode: 'JP', latitude: 35.6762, longitude: 139.6503, locale: 'en', timeZone: 'Asia/Tokyo', currency: 'JPY', updatedAt, sourceLabel: 'Wayella editorial guide' }),
     nameZh: '东京', region: 'Tokyo', regionCode: 'JP-13', regionGroup: 'rest-of-world', aliases: ['Tokio', '東京', 'Japan', '日本'],
     summary: 'Explore a city of distinct neighborhoods, temples, gardens, and contemporary streets.', guideId: '11111111-1111-4111-8111-111111111111', image: '/images/tokyo.jpg', isCapital: true, capitalOf: 'Japan',
   },
   {
-    place: placeSummarySchema.parse({ id: '22222222-2222-4222-8222-222222222222', name: 'Paris', countryCode: 'FR', latitude: 48.8566, longitude: 2.3522, locale: 'en', timeZone: 'Europe/Paris', currency: 'EUR', updatedAt, sourceLabel: 'GlobeGuide editorial guide' }),
+    place: placeSummarySchema.parse({ id: '22222222-2222-4222-8222-222222222222', name: 'Paris', countryCode: 'FR', latitude: 48.8566, longitude: 2.3522, locale: 'en', timeZone: 'Europe/Paris', currency: 'EUR', updatedAt, sourceLabel: 'Wayella editorial guide' }),
     nameZh: '巴黎', region: 'Île-de-France', regionCode: 'FR-IDF', regionGroup: 'rest-of-world', aliases: ['París', 'France', '法国'],
     summary: 'Pair a major museum or monument with an unhurried neighborhood walk.', guideId: '22222222-2222-4222-8222-222222222222', image: '/images/paris.jpg', isCapital: true, capitalOf: 'France',
   },
   {
-    place: placeSummarySchema.parse({ id: '33333333-3333-4333-8333-333333333333', name: 'New York', countryCode: 'US', latitude: 40.7128, longitude: -74.006, locale: 'en', timeZone: 'America/New_York', currency: 'USD', updatedAt, sourceLabel: 'GlobeGuide editorial guide' }),
+    place: placeSummarySchema.parse({ id: '33333333-3333-4333-8333-333333333333', name: 'New York', countryCode: 'US', latitude: 40.7128, longitude: -74.006, locale: 'en', timeZone: 'America/New_York', currency: 'USD', updatedAt, sourceLabel: 'Wayella editorial guide' }),
     nameZh: '纽约', region: 'New York State', regionCode: 'US-NY', regionGroup: 'rest-of-world', aliases: ['NYC', 'New York City', 'United States', '美国'],
     summary: 'Discover the city one neighborhood, park, and waterfront at a time.', guideId: '33333333-3333-4333-8333-333333333333', image: '/images/new-york.jpg',
   },

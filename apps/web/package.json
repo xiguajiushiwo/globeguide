@@ -3,12 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --hostname 127.0.0.1 --port 3000",
-    "build": "next build",
+    "dev": "node scripts/prepare-assets.mjs && next dev --hostname 127.0.0.1 --port 3000",
+    "build": "node scripts/prepare-assets.mjs && next build",
     "test": "vitest run src",
     "test:e2e": "playwright test",
-    "start": "npx --yes wrangler@4.151.2 pages dev out --port 3000",
-    "serve:e2e": "npx --yes wrangler@4.151.2 pages dev out --port 4173",
     "lint": "next typegen && tsc --noEmit",
     "typecheck": "next typegen && tsc --noEmit"
   },

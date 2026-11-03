@@ -35,7 +35,7 @@
 .account-actions { display: flex; gap: 16px; flex-wrap: wrap; }
 .account-actions a { color: var(--teal-dark); font-weight: 700; }
 .account-local-note { margin-top: 38px; max-width: 560px; color: var(--muted); font-size: 13px; line-height: 1.55; }
-@media (max-width: 1050px) {
+@media (max-width: 1280px) {
   .site-header__inner { position: relative; }
   .nav-menu-button { display: grid; margin-left: auto; }
   .header-links { display: none; position: absolute; top: 100%; left: -20px; right: -20px; padding: 16px 20px 23px; background: white; border: 1px solid var(--line); box-shadow: 0 12px 20px rgba(0,0,0,.09); }

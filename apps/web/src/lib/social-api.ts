@@ -5,9 +5,10 @@ export type Profile = {
   id: string;
   displayName: string;
   bio: string | null;
-  avatarInitial: string;
+  avatarInitial: string | null;
+  languages?: string | string[] | null;
   language?: string;
-  travelPreferences?: string[];
+  travelPreferences?: string | string[] | null;
   createdAt?: string;
   following: boolean;
   blocked: boolean;
@@ -24,6 +25,8 @@ export type SocialComment = {
   postId: string;
   parentId: string | null;
   body: string;
+  kind?: 'text' | 'emoji' | 'photo' | 'sticker' | 'voice';
+  attachmentUrl?: string | null;
   createdAt: string;
   deletedAt?: string | null;
   author: { id: string; displayName: string };
@@ -90,8 +93,8 @@ export async function listComments(postId: string, cursor?: string) {
   });
   return { comments, items: comments, nextCursor: result.nextCursor ?? null };
 }
-export async function createComment(postId: string, body: string, parentId?: string | null) {
-  const result = await requestJson<{ comment?: SocialComment } & SocialComment>('/api/comments', jsonInit('POST', { postId, body, parentId: parentId ?? null }));
+export async function createComment(postId: string, body: string, parentId?: string | null, options?: { kind?: SocialComment['kind']; attachmentUrl?: string | null }) {
+  const result = await requestJson<{ comment?: SocialComment } & SocialComment>('/api/comments', jsonInit('POST', { postId, body, parentId: parentId ?? null, kind: options?.kind ?? 'text', attachmentUrl: options?.attachmentUrl ?? null }));
   const raw = (result.comment ?? result) as SocialComment & { authorId?: string; authorName?: string };
   return raw.author ? raw : { ...raw, author: { id: raw.authorId ?? '', displayName: raw.authorName ?? 'Traveler' } };
 }

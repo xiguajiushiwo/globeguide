@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, MapPinned } from 'lucide-react';
 
@@ -8,6 +9,8 @@ import { JourneyPlanner } from '@/components/journey-planner';
 import { copy } from '@/lib/copy';
 import { featured } from '@/lib/places';
 import { destinationCatalog } from '@globeguide/domain';
+
+export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 const chinaHighlights = ['Beijing', "Xi'an", 'Chengdu', 'Shanghai', 'Guangzhou', 'Hong Kong']
   .map((name) => destinationCatalog.find((destination) => destination.place.name === name))

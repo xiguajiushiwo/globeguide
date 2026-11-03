@@ -18,8 +18,8 @@ function placeUrl(stop: JapanStop) {
   return `https://www.google.com/maps/search/?api=1&query=${stop.coordinates[1]},${stop.coordinates[0]}`;
 }
 
-function directionsUrl(from: JapanStop, to: JapanStop) {
-  return `https://www.google.com/maps/dir/?api=1&origin=${from.coordinates[1]},${from.coordinates[0]}&destination=${to.coordinates[1]},${to.coordinates[0]}&travelmode=walking`;
+function directionsUrl(from: JapanStop, to: JapanStop, mode: 'transit' | 'walking') {
+  return `https://www.google.com/maps/dir/?api=1&origin=${from.coordinates[1]},${from.coordinates[0]}&destination=${to.coordinates[1]},${to.coordinates[0]}&travelmode=${mode}`;
 }
 
 export function JapanRouteMap() {
@@ -30,13 +30,17 @@ export function JapanRouteMap() {
   const [selectedPlaceId, setSelectedPlaceId] = useState(japanThemePlaces[0]!.id);
   const [dayNumber, setDayNumber] = useState(3);
   const [selectedId, setSelectedId] = useState('shibuya');
+  const [variantId, setVariantId] = useState('');
   const [mapError, setMapError] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
   const fittedViewRef = useRef<string | null>(null);
   const day = japanFieldDays.find((item) => item.day === dayNumber) ?? japanFieldDays[0];
-  const selectedStop = day.stops.find((stop) => stop.id === selectedId) ?? day.stops[0];
+  const activeVariant = day.options?.find((option) => option.id === variantId) ?? day.options?.[0];
+  const visibleStops = useMemo(() => activeVariant ? day.stops.filter((stop) => activeVariant.stopIds.includes(stop.id)) : day.stops, [day, activeVariant]);
+  const selectedStop = visibleStops.find((stop) => stop.id === selectedId) ?? visibleStops[0]!;
+  const routeKey = `${dayNumber}-${activeVariant?.id ?? 'default'}`;
   const visiblePlaces = useMemo(() => filterJapanThemePlaces(japanThemePlaces, category, region, query), [category, region, query]);
   const selectedPlace = visiblePlaces.find((place) => place.id === selectedPlaceId) ?? visiblePlaces[0];
 
@@ -74,7 +78,7 @@ export function JapanRouteMap() {
     const map = mapRef.current;
     if (!map) return;
     markersRef.current.forEach((marker) => marker.remove());
-    const points = mode === 'route' ? day.stops : visiblePlaces;
+    const points = mode === 'route' ? visibleStops : visiblePlaces;
     markersRef.current = points.map((stop, index) => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -86,18 +90,18 @@ export function JapanRouteMap() {
       button.addEventListener('click', () => mode === 'route' ? setSelectedId(stop.id) : setSelectedPlaceId(stop.id));
       return new maplibregl.Marker({ element: button, anchor: 'bottom' }).setLngLat(stop.coordinates).addTo(map);
     });
-    const viewKey = mode === 'route' ? `day-${dayNumber}` : `theme-${category}-${region}-${query.trim()}`;
+    const viewKey = mode === 'route' ? `day-${routeKey}` : `theme-${category}-${region}-${query.trim()}`;
     if (fittedViewRef.current === viewKey) return;
     fittedViewRef.current = viewKey;
     if (points.length === 0) return;
     if (points.length === 1) {
-      map.easeTo({ center: points[0].coordinates, zoom: mode === 'route' && dayNumber === 10 ? 9 : 12, duration: 550 });
+      map.easeTo({ center: points[0]!.coordinates, zoom: mode === 'route' && dayNumber === 10 ? 9 : 12, duration: 550 });
     } else {
       const bounds = new maplibregl.LngLatBounds();
       points.forEach((stop) => bounds.extend(stop.coordinates));
       map.fitBounds(bounds, { padding: 55, maxZoom: mode === 'route' ? dayNumber === 7 ? 10 : 13 : 9, duration: 550 });
     }
-  }, [day, dayNumber, selectedStop.id, mode, category, region, query, visiblePlaces, selectedPlace?.id]);
+  }, [day, dayNumber, routeKey, visibleStops, selectedStop.id, mode, category, region, query, visiblePlaces, selectedPlace?.id]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -111,7 +115,7 @@ export function JapanRouteMap() {
       height = container.clientHeight;
       if (!width || !height) return;
       map.resize();
-      const points = mode === 'route' ? day.stops : visiblePlaces;
+      const points = mode === 'route' ? visibleStops : visiblePlaces;
       if (points.length === 1) {
         map.easeTo({ center: points[0]!.coordinates, zoom: mode === 'route' && dayNumber === 10 ? 9 : 12, duration: 300 });
       } else if (points.length > 1) {
@@ -122,9 +126,11 @@ export function JapanRouteMap() {
     });
     observer.observe(container);
     return () => observer.disconnect();
-  }, [mode, day, dayNumber, visiblePlaces]);
+  }, [mode, day, dayNumber, visibleStops, visiblePlaces]);
 
-  const selectedIndex = useMemo(() => day.stops.findIndex((stop) => stop.id === selectedStop.id), [day, selectedStop]);
+  const selectedIndex = useMemo(() => visibleStops.findIndex((stop) => stop.id === selectedStop.id), [selectedStop, visibleStops]);
+  const activeLegs = activeVariant?.legs ?? day.legs;
+  const activeNotes = activeVariant?.fieldNotes ?? day.fieldNotes;
 
   return <div className="japan-route-explorer">
     <div className="japan-route-explorer__head">
@@ -136,7 +142,7 @@ export function JapanRouteMap() {
       <button type="button" aria-pressed={mode === 'themes'} className={mode === 'themes' ? 'is-active' : ''} onClick={() => setMode('themes')}><MapPin size={16} aria-hidden="true" />主题地点</button>
     </div>
     {mode === 'route' ? <div className="japan-route-days" role="group" aria-label="选择行程日期">
-      {japanFieldDays.map((item) => <button key={item.day} type="button" className={item.day === dayNumber ? 'is-active' : ''} aria-pressed={item.day === dayNumber} onClick={() => { setDayNumber(item.day); setSelectedId(item.stops[0].id); }}>D{item.day}<span>{item.title}</span></button>)}
+      {japanFieldDays.map((item) => <button key={item.day} type="button" className={item.day === dayNumber ? 'is-active' : ''} aria-pressed={item.day === dayNumber} onClick={() => { setDayNumber(item.day); setVariantId(item.options?.[0]?.id ?? ''); setSelectedId(item.options ? item.options[0]!.stopIds[0]! : item.stops[0].id); }}>D{item.day}<span>{item.title}</span></button>)}
     </div> : <>
       <div className="japan-theme-categories" role="group" aria-label="筛选地点类别">
         {japanThemeCategories.map((item) => { const Icon = categoryIcons[item.id]; return <button key={item.id} type="button" className={category === item.id ? 'is-active' : ''} aria-pressed={category === item.id} onClick={() => { setCategory(item.id); setRegion('all'); setQuery(''); }}><Icon size={16} aria-hidden="true" />{item.label}<span>{japanThemePlaces.filter((place) => place.category === item.id).length}</span></button>; })}
@@ -154,10 +160,11 @@ export function JapanRouteMap() {
       <div className={`japan-route-panel${mode === 'themes' ? ' japan-route-panel--themes' : ''}`}>
         {mode === 'route' ? <>
         <div className="japan-route-panel__base"><strong>第 {day.day} 天 · {day.title}</strong><p>{day.base}</p></div>
-        <ol className="japan-route-stops">{day.stops.map((stop, index) => <li key={stop.id}><button type="button" className={stop.id === selectedStop.id ? 'is-active' : ''} onClick={() => { setSelectedId(stop.id); mapRef.current?.easeTo({ center: stop.coordinates, zoom: 14, duration: 500 }); }} aria-current={stop.id === selectedStop.id ? 'location' : undefined}><span>{index + 1}</span><span>{stop.name}<small>{stop.city}</small></span>{stop.photo && <Camera size={15} aria-label="有实景照片" />}</button></li>)}</ol>
+        {day.options && <div className="japan-route-variants" role="group" aria-label="选择当天路线"><span>当天选一套</span>{day.options.map((option) => <button key={option.id} type="button" className={activeVariant?.id === option.id ? 'is-active' : ''} aria-pressed={activeVariant?.id === option.id} onClick={() => { setVariantId(option.id); setSelectedId(option.stopIds[0] ?? ''); }}>{option.label}</button>)}</div>}
+        <ol className="japan-route-stops">{visibleStops.map((stop, index) => <li key={stop.id}><button type="button" className={stop.id === selectedStop.id ? 'is-active' : ''} onClick={() => { setSelectedId(stop.id); mapRef.current?.easeTo({ center: stop.coordinates, zoom: 14, duration: 500 }); }} aria-current={stop.id === selectedStop.id ? 'location' : undefined}><span>{index + 1}</span><span>{stop.name}<small>{stop.city}</small></span>{stop.photo && <Camera size={15} aria-label="有实景照片" />}</button></li>)}</ol>
         <div className="japan-route-focus">
           {selectedStop.photo && <figure><Image src={selectedStop.photo.src} alt={selectedStop.photo.alt} width={700} height={460} sizes="(max-width: 900px) 100vw, 380px" /><figcaption>实景参考 · <a href={selectedStop.photo.url} target="_blank" rel="noopener noreferrer">{selectedStop.photo.credit}</a></figcaption></figure>}
-          <div className="japan-route-focus__content"><h4>{selectedStop.name}</h4><p>{selectedStop.arrival}</p><p><Camera size={15} aria-hidden="true" />{selectedStop.photoTip}</p><div className="japan-route-focus__actions"><a href={placeUrl(selectedStop)} target="_blank" rel="noopener noreferrer"><MapPin size={15} aria-hidden="true" />查看地图 <ExternalLink size={13} aria-hidden="true" /></a>{selectedIndex > 0 && <a href={directionsUrl(day.stops[selectedIndex - 1]!, selectedStop)} target="_blank" rel="noopener noreferrer"><Navigation2 size={15} aria-hidden="true" />从上一站导航 <ExternalLink size={13} aria-hidden="true" /></a>}</div></div>
+          <div className="japan-route-focus__content"><h4>{selectedStop.name}</h4><p>{selectedStop.arrival}</p><p><Camera size={15} aria-hidden="true" />{selectedStop.photoTip}</p><div className="japan-route-focus__actions"><a href={placeUrl(selectedStop)} target="_blank" rel="noopener noreferrer"><MapPin size={15} aria-hidden="true" />查看地图 <ExternalLink size={13} aria-hidden="true" /></a>{selectedIndex > 0 && <a href={directionsUrl(visibleStops[selectedIndex - 1]!, selectedStop, selectedStop.navigationMode ?? 'transit')} target="_blank" rel="noopener noreferrer"><Navigation2 size={15} aria-hidden="true" />{selectedStop.navigationMode === 'walking' ? '从上一站步行' : '从上一站乘车'} <ExternalLink size={13} aria-hidden="true" /></a>}</div></div>
         </div>
         </> : <>
           <div className="japan-route-panel__base" aria-live="polite"><strong>{japanThemeCategories.find((item) => item.id === category)?.label} · {visiblePlaces.length} 个地点</strong><p>选择地点可聚焦地图；跨城市移动请另查交通。</p></div>
@@ -168,10 +175,10 @@ export function JapanRouteMap() {
     </div>
     {mode === 'route' ? <div className="japan-route-details">
       <div><TrainFront size={18} aria-hidden="true" /><h4>这一日怎么坐</h4></div>
-      <ol>{day.legs.map((leg) => <li key={`${leg.from}-${leg.to}`}><strong>{leg.from} → {leg.to}</strong><p>{leg.instruction}</p><small>{leg.fare} {leg.evidence && <a href={leg.evidence} target="_blank" rel="noopener noreferrer">{leg.evidenceLabel ?? '查实时信息'} <ExternalLink size={12} aria-hidden="true" /></a>}</small></li>)}</ol>
-      <ul>{day.fieldNotes.map((note) => <li key={note}>{note}</li>)}</ul>
+      <ol>{activeLegs.map((leg) => <li key={`${leg.from}-${leg.to}`}><strong>{leg.from} → {leg.to}</strong><p>{leg.instruction}</p><small>{leg.fare} {leg.evidence && <a href={leg.evidence} target="_blank" rel="noopener noreferrer">{leg.evidenceLabel ?? '查实时信息'} <ExternalLink size={12} aria-hidden="true" /></a>}</small></li>)}</ol>
+      <ul>{activeNotes.map((note) => <li key={note}>{note}</li>)}</ul>
     </div> : null}
-    <p className="japan-route-explorer__source">{mode === 'route' ? '票价为成人单程参考，铁路搜索核验于 2026-10-22；新干线引用 SmartEX 标注的 2025-04-01 价格表。实际发车、停靠、票价、入口和施工绕行以运营商与当天导航为准。照片只用于对应景点展示，不代表实时现场。' : '地点标记用于定位场所周边，不代表精确拍摄机位或私人区域。动漫关联分为画面参考、故事舞台和作品相关，不代表版权方认证；部分画面经过艺术加工。出行前请核对场所开放、交通和现场摄影规则。'}地图底图由 OpenFreeMap 提供。</p>
+    <p className="japan-route-explorer__source">{mode === 'route' ? '票价为成人单程参考，铁路搜索核验于 2026-10-22；新干线引用 SmartEX 标注的 2025-04-01 价格表。实际发车、停靠、票价、入口和施工绕行以运营商与当天导航为准。照片只用于对应景点展示，不代表实时现场。' : '地点标记用于定位场所周边，不代表精确拍摄机位或私人区域。动漫关联分为画面参考、故事舞台和作品相关，不代表版权方认证；部分画面经过艺术加工。出行前请核对场所开放、交通和现场摄影规则。'}地图底图由 OpenFreeMap 提供。 <a href="https://www.pexels.com/license/" target="_blank" rel="noopener noreferrer">查看照片许可</a></p>
   </div>;
 }
 

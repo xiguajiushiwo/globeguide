@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { deleteTrip, exportTrips, importTrips, readTrips, saveTrip, type Trip } from './trips';
 
 const tokyo = '11111111-1111-4111-8111-111111111111';
+const paris = '22222222-2222-4222-8222-222222222222';
 
 function memoryStorage(): Storage {
   const values = new Map<string, string>();
@@ -28,6 +29,15 @@ const trip: Trip = {
   updatedAt: '2026-10-20T10:00:00.000Z',
 };
 
+const japanTrip: Trip = {
+  ...trip,
+  id: '88888888-8888-4888-8888-888888888888',
+  title: 'Japan 10 days',
+  destinationId: tokyo,
+  highlightIds: ['ueno', 'fushimi', 'kix'],
+  route: { kind: 'japan', templateId: '10-day' },
+};
+
 describe('browser-local trips', () => {
   it('creates and edits a trip, preserving stop order after reload', () => {
     const storage = memoryStorage();
@@ -51,6 +61,24 @@ describe('browser-local trips', () => {
     expect(readTrips(target)).toEqual([trip]);
     deleteTrip(trip.id, target);
     expect(readTrips(target)).toEqual([]);
+  });
+
+  it('preserves Japan route metadata through save, export, and import', () => {
+    const source = memoryStorage();
+    const target = memoryStorage();
+    saveTrip(japanTrip, source);
+    expect(readTrips(source)).toEqual([japanTrip]);
+    const exported = exportTrips(source);
+    expect(exported).toContain('"templateId": "10-day"');
+    expect(importTrips(exported, target)).toEqual([japanTrip]);
+    expect(readTrips(target)).toEqual([japanTrip]);
+  });
+
+  it('rejects Japan route metadata for another destination or unknown template', () => {
+    const storage = memoryStorage();
+    expect(() => saveTrip({ ...trip, destinationId: paris, route: { kind: 'japan', templateId: '10-day' } }, storage)).toThrow();
+    expect(() => saveTrip({ ...japanTrip, route: { kind: 'japan', templateId: '21-day' as '10-day' } }, storage)).toThrow();
+    expect(readTrips(storage)).toEqual([]);
   });
 
   it('rejects malformed import without changing saved trips', () => {

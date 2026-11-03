@@ -35,7 +35,7 @@ export const guides: CityGuide[] = [
     place: placeSummarySchema.parse({
       id: '11111111-1111-4111-8111-111111111111', name: 'Tokyo', countryCode: 'JP',
       latitude: 35.6762, longitude: 139.6503, locale: 'en', timeZone: 'Asia/Tokyo',
-      currency: 'JPY', updatedAt, sourceLabel: 'GlobeGuide editorial guide',
+      currency: 'JPY', updatedAt, sourceLabel: 'Wayella editorial guide',
     }),
     country: 'Japan', image: '/images/tokyo.jpg', aliases: ['Tokio', '東京', '東京市'],
     intro: 'A city of distinct neighborhoods: temple lanes, busy station districts, gardens, and contemporary towers. Build each day around one area so your time goes into the city rather than crossing it.',
@@ -68,7 +68,7 @@ export const guides: CityGuide[] = [
     place: placeSummarySchema.parse({
       id: '22222222-2222-4222-8222-222222222222', name: 'Paris', countryCode: 'FR',
       latitude: 48.8566, longitude: 2.3522, locale: 'en', timeZone: 'Europe/Paris',
-      currency: 'EUR', updatedAt, sourceLabel: 'GlobeGuide editorial guide',
+      currency: 'EUR', updatedAt, sourceLabel: 'Wayella editorial guide',
     }),
     country: 'France', image: '/images/paris.jpg', aliases: ['París', '巴黎', 'City of Light'],
     intro: 'Paris rewards unhurried days. Pair one major museum or monument with a neighborhood walk, then leave room for the streets, gardens, and riverbanks between them.',
@@ -100,7 +100,7 @@ export const guides: CityGuide[] = [
     place: placeSummarySchema.parse({
       id: '33333333-3333-4333-8333-333333333333', name: 'New York', countryCode: 'US',
       latitude: 40.7128, longitude: -74.006, locale: 'en', timeZone: 'America/New_York',
-      currency: 'USD', updatedAt, sourceLabel: 'GlobeGuide editorial guide',
+      currency: 'USD', updatedAt, sourceLabel: 'Wayella editorial guide',
     }),
     country: 'United States', image: '/images/new-york.jpg', aliases: ['NYC', 'New York City', 'Big Apple', '纽约'],
     intro: 'New York is best understood one neighborhood at a time. Mix a major landmark with smaller streets and a park or waterfront, and allow for the scale of getting between boroughs.',

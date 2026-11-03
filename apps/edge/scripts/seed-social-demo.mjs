@@ -19,13 +19,13 @@ const salt = randomBytes(16);
 const hash = pbkdf2Sync(password, salt, 100_000, 32, 'sha256');
 const storedPassword = `pbkdf2-sha256$100000$${salt.toString('base64')}$${hash.toString('base64')}`;
 const users = [
-  { id: 'demo-official', email: 'demo-official@globeguide.test', name: 'GlobeGuide Official', bio: 'Editorial travel notes from the GlobeGuide team.' },
+  { id: 'demo-official', email: 'demo-official@globeguide.test', name: 'Wayella Official', bio: 'Editorial travel notes from the Wayella team.' },
   { id: 'demo-tokyo', email: 'demo-tokyo@globeguide.test', name: 'Tokyo Explorer', bio: 'Neighborhood walks, food stops, and calm city days.' },
   { id: 'demo-silk-road', email: 'demo-silk-road@globeguide.test', name: 'Silk Road Notes', bio: 'Slow travel notes across Central Asia and western China.' },
   { id: 'demo-weekend', email: 'demo-weekend@globeguide.test', name: 'Weekend Atlas', bio: 'Short trips and practical planning ideas.' },
 ];
 const posts = [
-  { id: 'demo-post-official', author: 'demo-official', type: 'guide', title: 'A gentle first day in Paris', body: 'Start with one neighborhood, one museum, and enough time to notice the streets between them. This example shows how a GlobeGuide editorial note can be saved and discussed.', destination: '22222222-2222-4222-8222-222222222222' },
+  { id: 'demo-post-official', author: 'demo-official', type: 'guide', title: 'A gentle first day in Paris', body: 'Start with one neighborhood, one museum, and enough time to notice the streets between them. This example shows how a Wayella editorial note can be saved and discussed.', destination: '22222222-2222-4222-8222-222222222222' },
   { id: 'demo-post-tokyo', author: 'demo-tokyo', type: 'moment', title: 'A quiet morning in Tokyo', body: 'The best part of an early Tokyo walk is the space between destinations. Follow the small streets, stop for breakfast, and leave the afternoon open.', destination: '11111111-1111-4111-8111-111111111111' },
   { id: 'demo-post-silk-road', author: 'demo-silk-road', type: 'guide', title: 'Planning a first Samarkand stop', body: 'Give the old city a full morning and keep the evening flexible. A short list of landmarks works better than trying to cross every item off at once.', destination: '20000000-0000-4000-8000-000000000105' },
   { id: 'demo-post-weekend', author: 'demo-weekend', type: 'moment', title: 'Notes from a weekend reset', body: 'A useful weekend plan starts with the return journey. Choose one anchor experience, leave room for a long meal, and keep the route easy to change.', destination: '33333333-3333-4333-8333-333333333333' },

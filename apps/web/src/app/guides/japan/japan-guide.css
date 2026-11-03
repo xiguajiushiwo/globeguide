@@ -42,6 +42,13 @@
 .japan-route-options > div + div { border-left: 1px solid var(--j-line); padding-left: 20px; }
 .japan-route-options strong { color: var(--j-green); font-size: 15px; }
 .japan-route-options p { margin: 9px 0 0; color: #52676b; font-size: 13px; line-height: 1.7; }
+.japan-planner-action { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: 24px 0; padding: 17px 19px; border: 1px solid #c9ddd8; background: #f0f7f4; }
+.japan-planner-action > div:first-child { min-width: 0; }
+.japan-planner-action strong { color: var(--j-green); font-size: 15px; }
+.japan-planner-action p { margin: 5px 0 0; color: #52676b; font-size: 13px; line-height: 1.55; }
+.japan-planner-action__links { display: flex; flex: 0 0 auto; flex-wrap: wrap; gap: 7px; }
+.japan-planner-action__links a { display: inline-flex; align-items: center; gap: 5px; padding: 8px 10px; border: 1px solid #9dbfba; color: var(--j-green); font-size: 12px; font-weight: 700; }
+.japan-planner-action__links a:hover, .japan-planner-action__links a.is-primary { border-color: var(--j-green); background: var(--j-green); color: white; }
 .japan-inline-action { display: flex; flex-wrap: wrap; gap: 16px 25px; margin-top: 23px !important; }
 .japan-inline-action a { display: inline-flex; align-items: center; gap: 8px; color: var(--j-green); font-size: 14px; font-weight: 700; }
 .japan-inline-action a:hover { text-decoration: underline; }
@@ -138,6 +145,10 @@
 .japan-route-panel__base { padding: 16px 17px 12px; background: #f1f6f3; }
 .japan-route-panel__base strong { color: var(--j-ink); font-size: 13px; }
 .japan-route-panel__base p { margin: 4px 0 0; color: #4e6265; font-size: 11px; }
+.japan-route-variants { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; padding: 10px 12px 0; }
+.japan-route-variants > span { color: #667b7d; font-size: 11px; font-weight: 700; }
+.japan-route-variants button { padding: 5px 9px; border: 1px solid var(--j-line); border-radius: 99px; background: white; color: var(--j-green); font-size: 11px; font-weight: 700; cursor: pointer; }
+.japan-route-variants button:hover, .japan-route-variants button.is-active { border-color: var(--j-green); background: var(--j-green); color: white; }
 .japan-route-stops { display: flex; flex-wrap: wrap; gap: 5px; margin: 0; padding: 10px 12px; border-bottom: 1px solid var(--j-line); list-style: none; }
 .japan-route-stops li { min-width: 0; }
 .japan-route-stops button { display: flex; align-items: center; gap: 7px; min-height: 35px; border: 1px solid var(--j-line); border-radius: 4px; padding: 5px 7px; background: #fff; color: #31575a; cursor: pointer; font: inherit; font-size: 11px; line-height: 1.2; text-align: left; }
@@ -257,6 +268,8 @@
   .japan-route-options { display: block; }
   .japan-route-options > div { padding: 12px 0 !important; border-left: 0 !important; }
   .japan-route-options > div + div { border-top: 1px solid var(--j-line); }
+  .japan-planner-action { display: block; }
+  .japan-planner-action__links { margin-top: 13px; }
   .japan-timeline > div { grid-template-columns: 1fr; gap: 5px; }
   .japan-day { grid-template-columns: 1fr; gap: 7px; }
   .japan-day__rail { display: flex; align-items: baseline; gap: 12px; }

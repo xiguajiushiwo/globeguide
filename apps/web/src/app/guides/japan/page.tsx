@@ -4,17 +4,21 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, ArrowUpRight, CalendarDays, Check, CircleHelp, ExternalLink, MapPin, Plane, ShieldCheck, TrainFront } from 'lucide-react';
 
 import { bookingTimeline, japanAreaNotes, japanGuideReviewedAt, japanPackingChecklist, japanSources, japanTenDayRoute } from '@/lib/japan-guide';
+import { japanTripDestinationId } from '@/lib/japan-trip';
 import { JapanRouteMap } from '@/components/japan-route-map';
+import { JapanTopicCards } from '@/components/japan-topic-cards';
+import { japanTopicsUpdatedAt } from '@/lib/japan-topic-index';
 import './japan-guide.css';
 
 export const metadata: Metadata = {
   title: '日本自由行全攻略：签证、交通、行程与预算',
   description: '面向中国大陆普通护照旅客的日本自由行指南：签证、入境、机场、交通卡、新干线、东京京都大阪奈良 7/10/14 天路线、预约、预算和安全。',
   alternates: { canonical: '/guides/japan/' },
-  openGraph: { title: '日本自由行全攻略 | GlobeGuide', description: '从办签证到返程，把第一次日本自由行走完整。', images: ['/images/tokyo.jpg'] },
+  openGraph: { title: '日本自由行全攻略 | Wayella', description: '从办签证到返程，把第一次日本自由行走完整。', images: ['/images/tokyo.jpg'] },
 };
 
 const sections = [
+  ['practical', '先解决具体问题'],
   ['start', '先决定怎么走'], ['visa', '签证与出发资格'], ['before', '预订时间线'], ['entry', '入境与海关'],
   ['airport', '机场进城'], ['rail', '铁路与市内交通'], ['route', '10 天逐日路线'], ['route-map', '路线地图与现场交通'], ['variants', '7/14 天怎么改'],
   ['cities', '城市怎么玩'], ['tickets', '门票与预约'], ['budget', '真实预算'], ['sleep', '住宿与行李'],
@@ -43,9 +47,9 @@ function Callout({ title, children }: { title: string; children: React.ReactNode
 export default function JapanGuidePage() {
   const articleSchema = {
     '@context': 'https://schema.org', '@type': 'Article', headline: '日本自由行全攻略：签证、交通、行程与预算',
-    inLanguage: 'zh-CN', dateModified: japanGuideReviewedAt, author: { '@type': 'Organization', name: 'GlobeGuide' },
-    publisher: { '@type': 'Organization', name: 'GlobeGuide' }, image: 'https://globeguide.pages.dev/images/tokyo.jpg',
-    mainEntityOfPage: 'https://globeguide.pages.dev/guides/japan/',
+    inLanguage: 'zh-CN', dateModified: japanTopicsUpdatedAt, author: { '@type': 'Organization', name: 'Wayella' },
+    publisher: { '@type': 'Organization', name: 'Wayella' }, image: 'https://wayella.com/images/tokyo.jpg',
+    mainEntityOfPage: 'https://wayella.com/guides/japan/',
   };
 
   return <article className="japan-guide" lang="zh-CN">
@@ -54,10 +58,10 @@ export default function JapanGuidePage() {
       <div className="japan-hero__shade" />
       <div className="shell japan-hero__content">
         <Link href="/guides/" className="japan-back"><ArrowLeft size={16} />全部旅行攻略</Link>
-        <p className="japan-hero__eyebrow">GlobeGuide / 日本专题</p>
+        <p className="japan-hero__eyebrow">Wayella / 日本专题</p>
         <h1>日本自由行<br />从签证到返程</h1>
         <p className="japan-hero__intro">第一份日本行程，从能不能出发、怎么买票，到每天坐哪段车、住哪里、花多少钱，按真实出行顺序拆开。</p>
-        <div className="japan-hero__meta"><span>适用：从中国大陆出发的首次自由行</span><span>资料核验：{japanGuideReviewedAt}</span></div>
+        <div className="japan-hero__meta"><span>适用：从中国大陆出发的首次自由行</span><span>实用专题更新：{japanTopicsUpdatedAt}</span></div>
       </div>
     </header>
 
@@ -72,14 +76,22 @@ export default function JapanGuidePage() {
     <div className="shell japan-layout">
       <nav className="japan-toc" aria-label="本篇目录"><p>本篇目录</p><ol>{sections.map(([id, title]) => <li key={id}><a href={`#${id}`}>{title}</a></li>)}</ol></nav>
       <div className="japan-article">
-        <p className="japan-editor-note">本篇以<strong>中国大陆普通护照、观光目的、个人自由行</strong>为基准。永久居民身份、其他护照、团体旅行或过境条件不同，先查签证资格。运营时间、车次、票价、汇率和签证材料均可能变化；文中预算是 GlobeGuide 的规划估算，官方入口集中在文末。</p>
+        <p className="japan-editor-note">本篇以<strong>中国大陆普通护照、观光目的、个人自由行</strong>为基准。永久居民身份、其他护照、团体旅行或过境条件不同，先查签证资格。运营时间、车次、票价、汇率和签证材料均可能变化；文中预算是 Wayella 的规划估算，官方入口集中在文末。</p>
 
+        <section aria-labelledby="practical">
+          <SectionHeading id="practical" eyebrow="实用专题 / 首次自由行" title="先解决眼前这一个问题" lead="机场晚到、酒店选区、车票、预约和旅伴体力，分开查更容易做决定。每篇都有操作步骤、出发前清单和官方核对入口。" />
+          <JapanTopicCards />
+        </section>
         <section aria-labelledby="start">
           <SectionHeading id="start" eyebrow="01 / 决策" title="先决定怎么走" lead="第一次去日本，不必把全国塞进一张车票。选择到达与离开的城市，再决定交通和酒店。" />
           <div className="japan-route-options">
             <div><strong>7 天 · 精简</strong><p>东京 3 晚 → 京都 2 晚 → 大阪 1 晚，关西离境。舍弃远途一日游，把城市核心走透。</p></div>
             <div><strong>10 天 · 推荐</strong><p>东京 4 晚 → 京都 3 晚 → 大阪 2 晚。奈良作转场半日；从大阪返程。下面给出逐日安排。</p></div>
-            <div><strong>14 天 · 延伸</strong><p>在 10 天基础上补箱根/富士周边 1 晚、广岛与宫岛 2 晚，再留 1 天机动。尽量从西部城市离境。</p></div>
+            <div><strong>14 天 · 延伸</strong><p>东京之后住箱根 1 晚，再去京都、大阪与广岛；最后回大阪住 1 晚，从关西机场返程。跨城回程计入预算。</p></div>
+          </div>
+          <div className="japan-planner-action">
+            <div><strong>把这条路线变成你的行程</strong><p>选择天数后，地点会先加入行程规划器，你可以再按航班、体力和预约情况调整。</p></div>
+            <div className="japan-planner-action__links"><Link href={`/trips/?destination=${japanTripDestinationId}&route=7-day`}>7 天 <CalendarDays size={15} /></Link><Link className="is-primary" href={`/trips/?destination=${japanTripDestinationId}&route=10-day`}>10 天推荐 <CalendarDays size={15} /></Link><Link href={`/trips/?destination=${japanTripDestinationId}&route=14-day`}>14 天 <CalendarDays size={15} /></Link></div>
           </div>
           <p>先看机票的<strong>入境机场、出境机场、托运额度和取消规则</strong>，不要只比较票面价格。东京进、大阪出通常少一次新干线折返；如果同城往返更便宜，把折返车费、时间和多一晚酒店一起算。日本与中国有 1 小时时差，日本快 1 小时。境内大段移动尽量放在白天，别把末班车当唯一退路。</p>
           <p className="japan-inline-action"><a href="#route">直接看 10 天路线 <ArrowRight size={16} /></a><a href="#budget">先算旅行预算 <ArrowRight size={16} /></a></p>
@@ -169,7 +181,7 @@ export default function JapanGuidePage() {
         <section aria-labelledby="variants">
           <SectionHeading id="variants" eyebrow="08 / 改行程" title="只有 7 天，或有 14 天" />
           <div className="japan-variant"><h3>7 天：删掉跨县一日游</h3><p>D1 到东京；D2 浅草/上野；D3 明治神宫/涩谷/新宿；D4 新干线到京都；D5 东山；D6 伏见或岚山后去大阪；D7 大阪返程。主题乐园、箱根与广岛留给下一次。少换酒店比多打卡一个城市更值。</p></div>
-          <div className="japan-variant"><h3>14 天：向西延伸，不来回拉扯</h3><p>主线东京 4 晚、箱根/富士周边 1 晚、京都 3 晚、大阪 2 晚、广岛 2 晚，余下 1 晚给出境城市或天气机动。宫岛以渡轮和潮汐为前提；从广岛继续西行或选择合适出境机场，比再折返东京省时。</p></div>
+          <div className="japan-variant"><h3>14 天：箱根放在东京与关西之间</h3><p>模板按东京 4 晚 → 箱根 1 晚 → 京都 3 晚 → 大阪 2 晚 → 广岛 2 晚 → 大阪 1 晚 → KIX 返程安排。最后返回大阪需要额外跨城交通，把它计入预算；若从广岛或其他西部机场离境，可相应改掉最后两天。富士周边与箱根不是同一个住宿点，想改去富士周边时需重新规划接京都的交通。</p></div>
           <p>带小孩、老人、轮椅或第一次跨国自由行，可把城市数减到两个，每次转场至少连续住两晚。季节限定景点是可替换模块，不要让花期或富士山能见度决定整个旅行成败。</p>
         </section>
 
@@ -203,7 +215,7 @@ export default function JapanGuidePage() {
           </tbody></table></div>
           <p>另加机场交通、保险、通信、住宿税或旺季溢价，并留 <strong>10%–15% 机动金</strong>。机票单独按出发地和日期询价；人民币总额按付款当天汇率换算。多人同行时先确认酒店标价是“每间房”还是“每人”，也要核对不含餐和地方住宿税的情况。</p>
           <Callout title="控制预算最有效的三件事">选择开口程避免折返；一日只跨一个片区；主题乐园和高价体验选最想去的一个。为了“回本”而买不合适的通票，经常比正常单买更贵。</Callout>
-          <p className="japan-citations">官方费用参考：<Source id="jr-pass" /> · <Source id="tourist-tax">国际观光旅客税</Source>。JNTO 页面目前列出 3,000 日元的出境税，通常会由承运环节处理；买票时再核对票价组成。</p>
+          <p className="japan-citations">官方费用参考：<Source id="jr-pass" /> · <Source id="tourist-tax">国际观光旅客税</Source>。出境税的适用金额和生效日期请核对官方说明及机票组成，避免把税额变更公告当作所有订单的统一收费。</p>
         </section>
 
         <section aria-labelledby="sleep">
@@ -269,7 +281,7 @@ export default function JapanGuidePage() {
         </section>
 
         <section aria-labelledby="sources">
-          <SectionHeading id="sources" eyebrow="19 / 核验记录" title="官方资料与继续核对的入口" lead={`内容人工核验于 ${japanGuideReviewedAt}。部分官方站点会限制自动访问；实际受理、票务和运行状态以你打开的实时页面为准。路线、住区和预算为 GlobeGuide 原创规划建议。`} />
+          <SectionHeading id="sources" eyebrow="19 / 核对入口" title="官方资料与继续核对的入口" lead={`总攻略资料整理于 ${japanGuideReviewedAt}；${japanTopicsUpdatedAt} 新增的实用专题另附逐项查阅记录。实际受理、票务和运行状态以出行日期的官方信息为准。路线、住区和预算为 Wayella 编辑规划建议。`} />
           <ol className="japan-sources">{japanSources.map((source) => <li key={source.id}><a href={source.url} target="_blank" rel="noopener noreferrer"><span>{source.label}</span><ExternalLink size={15} aria-hidden="true" /></a><small>{source.scope}</small></li>)}</ol>
         </section>
 

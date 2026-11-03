@@ -4,8 +4,8 @@ export const dynamic = 'force-static';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'GlobeGuide',
-    short_name: 'GlobeGuide',
+    name: 'Wayella',
+    short_name: 'Wayella',
     description: 'Explore destinations and plan your next journey.',
     start_url: '/',
     scope: '/',

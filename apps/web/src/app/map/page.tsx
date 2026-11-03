@@ -6,7 +6,7 @@ import './map.css';
 
 export const metadata: Metadata = {
   title: 'World map',
-  description: 'Explore GlobeGuide destinations on an interactive world map.',
+  description: 'Explore Wayella destinations on an interactive world map.',
 };
 
 export default function MapPage() {

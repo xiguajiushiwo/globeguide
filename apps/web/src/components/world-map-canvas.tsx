@@ -195,5 +195,5 @@ export function WorldMapCanvas({ destinations, selectedId, onSelect, onError, lo
     if (active) window.setTimeout(() => mapRef.current?.resize(), 50);
   }, [active]);
 
-  return <div className="map-canvas" ref={container} role="img" aria-label="Map of GlobeGuide destinations; use the adjacent list for keyboard access" />;
+  return <div className="map-canvas" ref={container} role="img" aria-label="Map of Wayella destinations; use the adjacent list for keyboard access" />;
 }

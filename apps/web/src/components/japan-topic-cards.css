@@ -1,0 +1,8 @@
+.jp-topic-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 24px 0; }
+.jp-topic-card { display: flex; flex-direction: column; padding: 23px; border: 1px solid var(--line); border-radius: 10px; background: #fff; transition: background .2s, border-color .2s; }
+.jp-topic-card:hover { background: var(--soft); border-color: var(--teal); }
+.jp-topic-card > span { color: var(--teal); font-size: 12px; font-weight: 700; }
+.jp-topic-card h3 { margin: 10px 0; font-size: 20px; line-height: 1.45; color: var(--ink); }
+.jp-topic-card p { margin: 0 0 18px !important; color: var(--muted); font-size: 14px; line-height: 1.8; }
+.jp-topic-card strong { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; color: var(--teal) !important; font-size: 13px; }
+@media (max-width: 600px) { .jp-topic-cards { grid-template-columns: 1fr; }.jp-topic-card { padding: 20px; } }

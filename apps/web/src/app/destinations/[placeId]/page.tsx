@@ -10,6 +10,7 @@ import { DestinationStories } from '@/components/destination-stories';
 import { copy } from '@/lib/copy';
 import { getGuide } from '@/lib/guides';
 import type { CityGuide, GuideItem } from '@/lib/guides';
+import { iranDestinationId } from '@/lib/iran-guide-index';
 import './destination-overview.css';
 
 type Props = { params: Promise<{ placeId: string }> };
@@ -50,6 +51,7 @@ export default async function DestinationPage({ params }: Props) {
   const guide = getGuide(destination.place.id);
 
   const place = destination.place;
+  const iran = place.id === iranDestinationId;
   const mapUrl = `/map/?city=${place.id}`;
 
   if (!guide) return <>
@@ -62,7 +64,7 @@ export default async function DestinationPage({ params }: Props) {
     <div className="shell place-content">
       <div className="place-content__heading">
         <div><p className="place-content__label">City overview</p><h2>Explore {place.name}</h2></div>
-        <div className="place-content__actions"><SaveButton place={place} /><Link className="trip-link" href={`/trips?destination=${place.id}`}><CalendarDays size={18} aria-hidden="true" />{copy.planTrip}</Link></div>
+        <div className="place-content__actions"><SaveButton place={place} /><Link className="trip-link" href={iran ? '/guides/iran/' : `/trips?destination=${place.id}`}><CalendarDays size={18} aria-hidden="true" />{iran ? '伊朗攻略与当前提醒' : copy.planTrip}</Link></div>
       </div>
       <p className="guide-intro">{destination.summary}</p>
       <div className="fact-grid" aria-label={copy.destinationBasics}>
@@ -72,8 +74,9 @@ export default async function DestinationPage({ params }: Props) {
       </div>
       <div className="destination-overview__map-action"><Link className="text-link" href={mapUrl}><MapPin size={18} aria-hidden="true" />View {place.name} on the map<ArrowUpRight size={16} aria-hidden="true" /></Link></div>
       <section className="destination-overview__guide-note" aria-labelledby="guide-status-title">
-        <h2 id="guide-status-title">City guide in progress</h2>
-        <p>Explore the map and traveler stories while we research a sourced city guide. Times, tickets, and routes are not yet verified for this destination.</p>
+        <h2 id="guide-status-title">{iran ? '伊朗国家攻略已更新' : 'City guide in progress'}</h2>
+        <p>{iran ? '已补充五城文化、入境与抵达、现金联网与礼仪。当前建议暂缓非必要旅游，请先阅读中国使领馆提醒；文化路线不代表现在可以按计划通行。' : 'Explore the map and traveler stories while we research a sourced city guide. Times, tickets, and routes are not yet verified for this destination.'}</p>
+        {iran && <Link className="text-link" href="/guides/iran/">阅读伊朗总攻略 <ArrowUpRight size={16} /></Link>}
       </section>
       <DestinationStories destinationId={place.id} />
       <p className="destination-overview__source">City-center coordinates: GeoNames cities15000 gazetteer, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. Map data attribution appears on the map.</p>

@@ -62,7 +62,7 @@ export function MapExplorer() {
 
   return <div className="shell map-page">
     <div className="map-page__heading">
-      <div><span className="map-page__eyebrow"><Globe2 size={17} aria-hidden="true" /> GlobeGuide atlas</span><h1>Explore the world</h1><p>Choose a city on the map or browse the destination list.</p></div>
+      <div><span className="map-page__eyebrow"><Globe2 size={17} aria-hidden="true" /> Wayella atlas</span><h1>Explore the world</h1><p>Choose a city on the map or browse the destination list.</p></div>
       <span className="map-page__count">{destinationCatalog.length} destinations</span>
     </div>
     <div className="map-toolbar">

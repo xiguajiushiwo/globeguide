@@ -1,10 +1,12 @@
 export type StoryType = 'guide' | 'moment';
+export type StoryFormat = 'text' | 'video' | 'gallery' | 'live';
 export type StoryStatus = 'draft' | 'pending' | 'published' | 'rejected' | 'removed';
 
 export type Story = {
   id: string;
   author: { id: string; displayName: string };
   type: StoryType;
+  format?: StoryFormat;
   title: string | null;
   body: string;
   language: string;
@@ -15,6 +17,9 @@ export type Story = {
   updatedAt: string;
   submittedAt: string | null;
   publishedAt: string | null;
+  mediaUrls?: string[];
+  liveUrl?: string | null;
+  liveStartsAt?: string | null;
   coverImage?: string;
   sourceLabel?: string;
   sourceUrl?: string;
@@ -22,11 +27,15 @@ export type Story = {
 
 export type StoryInput = {
   type: StoryType;
+  format?: StoryFormat;
   title: string | null;
   body: string;
   language: string;
   destinationId: string;
   visitedMonth: string | null;
+  mediaUrls?: string[];
+  liveUrl?: string | null;
+  liveStartsAt?: string | null;
 };
 
 export type StoryList = { items: Story[]; nextCursor: string | null };
@@ -63,10 +72,11 @@ function jsonInit(method: string, data: unknown): RequestInit {
   return { method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) };
 }
 
-export function listStories(filters: { destinationId?: string; type?: StoryType; authorId?: string; cursor?: string; feed?: 'for-you' | 'following' | 'saved' } = {}) {
+export function listStories(filters: { destinationId?: string; type?: StoryType; format?: StoryFormat; authorId?: string; cursor?: string; feed?: 'for-you' | 'following' | 'saved' } = {}) {
   const params = new URLSearchParams();
   if (filters.destinationId) params.set('destinationId', filters.destinationId);
   if (filters.type) params.set('type', filters.type);
+  if (filters.format) params.set('format', filters.format);
   if (filters.authorId) params.set('authorId', filters.authorId);
   if (filters.cursor) params.set('cursor', filters.cursor);
   if (filters.feed && filters.feed !== 'for-you') params.set('feed', filters.feed);
@@ -145,7 +155,8 @@ export function storyErrorMessage(error: unknown): string {
     invalid_server_response: 'The Travel Notes service is not ready yet.',
     login_required: 'Sign in to continue.',
     email_not_verified: 'Verify your email before publishing.',
-    invalid_post: 'Check the city, title and body. Only plain text is supported.',
+    invalid_post: 'Check the city, title, caption and media links.',
+    invalid_format: 'Check the media format and links.',
     invalid_report: 'Please add a reason of at least 10 characters.',
     already_reported: 'You have already reported this note.',
     report_limit: 'You have reached today’s report limit.',

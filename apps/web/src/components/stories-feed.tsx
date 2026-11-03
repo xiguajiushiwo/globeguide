@@ -9,11 +9,11 @@ import { destinationCatalog } from '@globeguide/domain';
 import { StoryCard } from './story-card';
 import { editorialExamples } from '@/lib/story-examples';
 import { getSession, listStories, storyErrorMessage } from '@/lib/story-api';
-import type { Story, StoryType } from '@/lib/story-api';
+import type { Story, StoryFormat, StoryType } from '@/lib/story-api';
 
-type Props = { authorId?: string; onItemsChange?: (items: Story[]) => void };
+type Props = { authorId?: string; format?: StoryFormat; onItemsChange?: (items: Story[]) => void };
 
-export function StoriesFeed({ authorId, onItemsChange }: Props) {
+export function StoriesFeed({ authorId, format, onItemsChange }: Props) {
   const params = useSearchParams();
   const initialDestinationId = params.get('destinationId') ?? '';
   const initialType = params.get('type');
@@ -30,7 +30,7 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
   useEffect(() => {
     let active = true;
     setLoading(true);
-    listStories({ ...(destinationId ? { destinationId } : {}), ...(type ? { type } : {}), ...(authorId ? { authorId } : {}), feed })
+    listStories({ ...(destinationId ? { destinationId } : {}), ...(type ? { type } : {}), ...(format ? { format } : {}), ...(authorId ? { authorId } : {}), feed })
       .then((data) => {
         if (!active) return;
         setItems(data.items);
@@ -46,7 +46,7 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
       })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [destinationId, type, authorId, feed, onItemsChange]);
+  }, [destinationId, type, format, authorId, feed, onItemsChange]);
 
   useEffect(() => { getSession().then((user) => setAuthenticated(Boolean(user))).catch(() => setAuthenticated(false)); }, []);
 
@@ -54,7 +54,7 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
     if (!cursor) return;
     setLoading(true);
     try {
-      const data = await listStories({ ...(destinationId ? { destinationId } : {}), ...(type ? { type } : {}), ...(authorId ? { authorId } : {}), feed, cursor });
+      const data = await listStories({ ...(destinationId ? { destinationId } : {}), ...(type ? { type } : {}), ...(format ? { format } : {}), ...(authorId ? { authorId } : {}), feed, cursor });
       setItems((current) => {
         const next = [...current, ...data.items];
         onItemsChange?.(next);
@@ -85,8 +85,8 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
     window.history.replaceState(window.history.state, '', url.pathname + url.search);
   }
 
-  const examples = useMemo(() => authorId || feed !== 'for-you' ? [] : editorialExamples.filter((story) =>
-    (!destinationId || story.destinationId === destinationId) && (!type || story.type === type)), [authorId, destinationId, type, feed]);
+  const examples = useMemo(() => authorId || feed !== 'for-you' || format ? [] : editorialExamples.filter((story) =>
+    (!destinationId || story.destinationId === destinationId) && (!type || story.type === type)), [authorId, destinationId, type, format, feed]);
   const featured = examples.slice(0, 2);
   const remainingExamples = examples.slice(2);
 
@@ -116,7 +116,7 @@ export function StoriesFeed({ authorId, onItemsChange }: Props) {
 
     {message && <p className="story-notice" role="status">{message}</p>}
     {featured.length > 0 && <section className="notes-featured" aria-labelledby="featured-notes-title">
-      <div className="notes-section-heading"><div><p className="stories-eyebrow">From the desk</p><h2 id="featured-notes-title">GlobeGuide editorial picks</h2></div><span>Original planning patterns and travel prompts</span></div>
+      <div className="notes-section-heading"><div><p className="stories-eyebrow">From the desk</p><h2 id="featured-notes-title">Wayella editorial picks</h2></div><span>Original planning patterns and travel prompts</span></div>
       <div className="notes-featured__grid">{featured.map((story) => <StoryCard key={story.id} story={story} example featured />)}</div>
     </section>}
 
