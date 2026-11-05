@@ -47,7 +47,20 @@ pnpm exec wrangler pages deploy ../web/out --project-name globeguide --branch ma
 | `MAIL_API_KEY` | 当前 Resend 邮件集成的 API key |
 | `MAIL_FROM` | 已验证的发件地址 |
 
-域名和 HTTPS 不会自动启用邮件。先在 Resend 验证发件域名并配置发送，再开放注册和找回密码。`GET /api/auth/config` 返回实际可用状态；测试用 `MAIL_SINK` 不部署到生产。
+2026-11-05 已启用生产邮件：Resend 已验证 `wayella.com`，区域为 Tokyo（`ap-northeast-1`），发件人为 `Wayella <noreply@wayella.com>`。专用 API key 仅有该域名的 Sending access，保存在 Cloudflare Pages 的 production Secret `MAIL_API_KEY` 中；`MAIL_FROM` 同样配置在生产环境。密钥不写入源码或本地运维记录。
+
+Cloudflare 中的邮件 DNS 记录如下，TTL 均为自动；两个 CNAME 必须使用 DNS only：
+
+| 类型 | 名称 | 内容 |
+| --- | --- | --- |
+| TXT | `resend._domainkey` | Resend 域名详情页提供的 DKIM 公钥 |
+| CNAME | `rsend` | `rsend-apne1.forge.rmta.net` |
+| CNAME | `send` | `send.forge.rmta.net` |
+| TXT | `_dmarc` | `v=DMARC1; p=none;` |
+
+DMARC 当前为观察策略，不要求收件方拒绝伪造邮件。以上记录用于发送邮件；此配置未开通 `@wayella.com` 收件邮箱。以后重建发信域名或更换服务时，以服务商当时提供的记录为准。
+
+更新 Pages Secret 后需要重新部署。`GET /api/auth/config` 的 `registrationAvailable` 和 `passwordResetAvailable` 应均为 `true`；这只说明发信参数已配置，实际投递还需从网站发出验证码并查看 Resend 的 Delivered 状态。2026-11-05 已通过正式网站的找回密码页面验证投递，注册、验证码及密码重置流程的 7 项测试通过。验证码只使用一次、10 分钟有效，测试用 `MAIL_SINK` 不部署到生产。
 
 首次创建管理员使用 `apps/edge/scripts/bootstrap-admin.mjs --remote`。通过环境变量提供 `ADMIN_BOOTSTRAP_EMAIL`、`ADMIN_BOOTSTRAP_PASSWORD`（16–128 字符）、可选 `ADMIN_BOOTSTRAP_NAME`，并设置 `ADMIN_BOOTSTRAP_CONFIRM=globeguide-beta`。脚本仅在没有管理员时插入；密码不要放入命令历史或文件。
 
